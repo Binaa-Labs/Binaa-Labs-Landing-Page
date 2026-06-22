@@ -355,7 +355,7 @@ export const en = {
     },
     product: "Wazen وازن — wazen.fit",
     location: "Dubai, UAE · DET Licensed",
-    copyright: "© 2025 Binaa Labs. All rights reserved.",
+    copyright: "© 2026 Binaa Labs. All rights reserved.",
     bottomNote: "Built by Binaa Labs",
   },
 };
@@ -704,7 +704,7 @@ export const ar: Dict = {
     },
     product: "Wazen وازن — wazen.fit",
     location: "دبي، الإمارات · مرخّص من دائرة الاقتصاد",
-    copyright: "© ٢٠٢٥ Binaa Labs. جميع الحقوق محفوظة.",
+    copyright: "© ٢٠٢٦ Binaa Labs. جميع الحقوق محفوظة.",
     bottomNote: "بُني بواسطة Binaa Labs",
   },
 };
