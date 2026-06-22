@@ -22,6 +22,7 @@ function CheckMark() {
 export default function TheGap() {
   const { t } = useSite();
   const g = t.theGap;
+
   return (
     <section id="the-gap" className="section bg">
       <div className="wrap">

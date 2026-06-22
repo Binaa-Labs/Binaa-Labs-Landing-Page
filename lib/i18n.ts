@@ -2,7 +2,9 @@ export type Lang = "en" | "ar";
 
 export const en = {
   nav: {
-    logoSubtext: "بناء",
+    logoSubtext: "بناء لابس",
+    brandName: "Binaa Labs",
+    brandSub: "Software Solutions",
     links: {
       theGap: "The Gap",
       whatWeBuild: "What We Build",
@@ -12,9 +14,27 @@ export const en = {
     },
     cta: "Free Analysis",
   },
+  ui: {
+    scroll: "Scroll",
+    stack: "STACK",
+    aria: {
+      home: "Binaa Labs home",
+      language: "Language",
+      toggleTheme: "Toggle color theme",
+      toggleMenu: "Toggle menu",
+      backToTop: "Back to top",
+    },
+    carousel: {
+      region: "Selected work carousel",
+      goToProject: "Go to project",
+      previous: "Previous project",
+      next: "Next project",
+      status: "Project {current} of {total}",
+    },
+  },
   hero: {
     badgeLocation: "Dubai, UAE · Built for the Gulf",
-    badgeArabic: "التحول الرقمي",
+    badgeArabic: "Digital Transformation",
     headline:
       "Run Your Business Online — Not Out of a WhatsApp Group and a Spreadsheet",
     subtext:
@@ -324,7 +344,7 @@ export const en = {
     },
   },
   footer: {
-    logoSubtext: "بناء",
+    logoSubtext: "بناء لابس",
     links: {
       theGap: "The Gap",
       whatWeBuild: "What We Build",
@@ -344,7 +364,9 @@ export type Dict = typeof en;
 
 export const ar: Dict = {
   nav: {
-    logoSubtext: "بناء",
+    logoSubtext: "بناء لابس",
+    brandName: "بناء لابس",
+    brandSub: "حلول برمجية",
     links: {
       theGap: "الفجوة",
       whatWeBuild: "ما نبنيه",
@@ -354,13 +376,31 @@ export const ar: Dict = {
     },
     cta: "تحليل مجاني",
   },
+  ui: {
+    scroll: "تابع",
+    stack: "التقنيات",
+    aria: {
+      home: "العودة إلى بداية بناء لابس",
+      language: "اللغة",
+      toggleTheme: "تبديل نمط الألوان",
+      toggleMenu: "تبديل القائمة",
+      backToTop: "العودة إلى الأعلى",
+    },
+    carousel: {
+      region: "معرض الأعمال المختارة",
+      goToProject: "انتقل إلى المشروع",
+      previous: "المشروع السابق",
+      next: "المشروع التالي",
+      status: "المشروع {current} من {total}",
+    },
+  },
   hero: {
     badgeLocation: "دبي، الإمارات · مصمّم للخليج",
     badgeArabic: "التحول الرقمي",
     headline: "أدِر شركتك أونلاين — لا من مجموعة واتساب وملف إكسل",
     subtext:
       "أغلب شركات الخليج لا تزال تُدار يدويًا. ننقل عملك بالكامل إلى الإنترنت ونؤتمت المهام المتكررة — ليعمل تشغيلك دون أن تطارده. مبنيّ خصيصًا لك، يُطلق بسرعة، وملكُه لك.",
-    ctaPrimary: "احجز تحليلك المجاني →",
+    ctaPrimary: "احجز تحليلك المجاني ←",
     ctaSecondary: "شاهد ما بنيناه",
   },
   statsBar: {
@@ -564,7 +604,7 @@ export const ar: Dict = {
         label: "خطوة أولى مجانية — بلا تكلفة",
         text: "احجز مكالمة ونرسم نظامك كاملاً، نريك بالضبط ما يمكن أتمتته وكيف سنبنيه — مع عرض توضيحي لترى شكل إعدادك الجديد. مجاناً، قبل أن تلتزم بأي شيء.",
       },
-      cta: "احجز تحليلك المجاني →",
+      cta: "احجز تحليلك المجاني ←",
     },
   },
   guarantee: {
@@ -645,15 +685,15 @@ export const ar: Dict = {
       phonePlaceholder: "رقم هاتفك",
       project: "ماذا تبني؟",
       projectPlaceholder: "أخبرنا عن عملك وما تريد بناءه أو أتمتته…",
-      cta: "احجز تحليلي المجاني →",
-      calendlyLink: "تفضّل اختيار وقت؟ احجز مباشرة →",
+      cta: "احجز تحليلي المجاني ←",
+      calendlyLink: "تفضّل اختيار وقت؟ احجز مباشرة ←",
       sentTitle: "تمّ استلام طلبك",
       sentText: "شكراً — سنتواصل معك خلال ٢٤ ساعة لترتيب تحليلك المجاني.",
-      sendAnother: "أرسل طلباً آخر →",
+      sendAnother: "أرسل طلباً آخر ←",
     },
   },
   footer: {
-    logoSubtext: "بناء",
+    logoSubtext: "بناء لابس",
     links: {
       theGap: "الفجوة",
       whatWeBuild: "ما نبنيه",

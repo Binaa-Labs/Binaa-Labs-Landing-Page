@@ -11,13 +11,29 @@ import Guarantee from "@/components/Guarantee";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ClientEffects from "@/components/ClientEffects";
+import Providers from "@/components/Providers";
+import type { Lang } from "@/lib/i18n";
 
-export default function Home() {
+type SearchParams = Record<string, string | string[] | undefined>;
+
+function getInitialLang(params?: SearchParams): Lang {
+  const raw = Array.isArray(params?.lang) ? params?.lang[0] : params?.lang;
+  return raw === "ar" ? "ar" : "en";
+}
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams?: Promise<SearchParams>;
+}) {
+  const params = searchParams ? await searchParams : undefined;
+  const initialLang = getInitialLang(params);
+
   return (
-    <>
+    <Providers initialLang={initialLang}>
       <div className="ambient-grid" aria-hidden="true" />
       <Nav />
-      <main id="top" style={{ position: "relative", zIndex: 1 }}>
+      <main id="top">
         <Hero />
         <Stats />
         <TheGap />
@@ -31,6 +47,6 @@ export default function Home() {
       </main>
       <Footer />
       <ClientEffects />
-    </>
+    </Providers>
   );
 }

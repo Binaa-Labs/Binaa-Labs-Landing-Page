@@ -4,6 +4,7 @@ import { useSite } from "./Providers";
 
 export default function Stats() {
   const { t } = useSite();
+
   return (
     <section className="stats-sec">
       <div className="stats-grid">

@@ -14,6 +14,7 @@ function CheckMark() {
 export default function Offer() {
   const { t } = useSite();
   const o = t.offer;
+
   return (
     <section id="offer" className="section bg">
       <div className="wrap">

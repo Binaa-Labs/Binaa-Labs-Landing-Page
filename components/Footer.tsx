@@ -6,6 +6,7 @@ import { LogoMark } from "./icons";
 export default function Footer() {
   const { t } = useSite();
   const f = t.footer;
+
   const links = [
     { href: "#the-gap", label: f.links.theGap },
     { href: "#what-we-build", label: f.links.whatWeBuild },
@@ -57,7 +58,7 @@ export default function Footer() {
           <p className="footer-copy">{f.copyright}</p>
           <div className="footer-bottom-end">
             <p className="footer-note">{f.bottomNote}</p>
-            <a href="#top" aria-label="Back to top" className="footer-top-link">
+            <a href="#top" aria-label={t.ui.aria.backToTop} className="footer-top-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 19V5M5 12l7-7 7 7" />
               </svg>

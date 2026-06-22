@@ -7,6 +7,7 @@ import { SectionLabel } from "./SectionLabel";
 export default function SelectedWork() {
   const { t, lang } = useSite();
   const sw = t.selectedWork;
+  const carousel = t.ui.carousel;
   const projects = sw.projects;
   const n = projects.length;
 
@@ -58,6 +59,9 @@ export default function SelectedWork() {
     setIndex((i) => (i - 1 + n) % n);
     start();
   };
+  const status = carousel.status
+    .replace("{current}", String(clamped + 1))
+    .replace("{total}", String(n));
 
   return (
     <section id="selected-work" className="section bg">
@@ -73,15 +77,29 @@ export default function SelectedWork() {
         <div
           className="work-wrap"
           data-reveal=""
+          role="region"
+          aria-roledescription="carousel"
+          aria-label={carousel.region}
           onMouseEnter={stop}
           onMouseLeave={start}
+          onFocus={stop}
+          onBlur={start}
         >
           <div className="work-viewport">
-            <div className="work-track" ref={trackRef}>
+            <div className="work-track" ref={trackRef} aria-live="polite">
               {projects.map((p, i) => {
                 const num = String(i + 1).padStart(2, "0");
                 return (
-                  <div className="work-slide" key={i}>
+                  <div
+                    className="work-slide"
+                    key={i}
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={carousel.status
+                      .replace("{current}", String(i + 1))
+                      .replace("{total}", String(n))}
+                    aria-hidden={i !== clamped}
+                  >
                     <div className="slide-grid">
                       <div className="slide-text">
                         <div className="slide-meta">
@@ -101,8 +119,9 @@ export default function SelectedWork() {
                             href={`https://${p.link}`}
                             target="_blank"
                             rel="noopener noreferrer"
+                            tabIndex={i === clamped ? undefined : -1}
                           >
-                            {p.link} ↗
+                            {p.link} <span aria-hidden="true" style={{display:'inline-block', transform: `scaleX(var(--arrowflip, 1))`}}>↗</span>
                           </a>
                         )}
                       </div>
@@ -127,7 +146,8 @@ export default function SelectedWork() {
                   type="button"
                   key={i}
                   className={"work-dot" + (i === clamped ? " active" : "")}
-                  aria-label={`Go to project ${i + 1}`}
+                  aria-label={`${carousel.goToProject} ${i + 1}`}
+                  aria-current={i === clamped ? "true" : undefined}
                   onClick={() => go(i)}
                 />
               ))}
@@ -136,7 +156,7 @@ export default function SelectedWork() {
               <button
                 type="button"
                 className="work-arrow"
-                aria-label="Previous"
+                aria-label={carousel.previous}
                 onClick={prev}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -146,7 +166,7 @@ export default function SelectedWork() {
               <button
                 type="button"
                 className="work-arrow"
-                aria-label="Next"
+                aria-label={carousel.next}
                 onClick={next}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -155,6 +175,9 @@ export default function SelectedWork() {
               </button>
             </div>
           </div>
+          <p className="sr-only" aria-live="polite">
+            {status}
+          </p>
         </div>
       </div>
     </section>

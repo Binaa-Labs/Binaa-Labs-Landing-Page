@@ -7,6 +7,7 @@ import { BuildIcon } from "./icons";
 export default function WhatWeBuild() {
   const { t } = useSite();
   const w = t.whatWeBuild;
+
   return (
     <section id="what-we-build" className="section bg-2 bt">
       <div className="wrap">
@@ -32,7 +33,7 @@ export default function WhatWeBuild() {
               <div className="build-foot">
                 <div className="build-foot-divider" />
                 <div className="stack-row">
-                  <span className="stack-label">STACK</span>
+                  <span className="stack-label">{t.ui.stack}</span>
                   {c.tags.map((tag, j) => (
                     <span className="stack-tag" key={j}>
                       {tag}

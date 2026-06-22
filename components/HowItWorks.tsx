@@ -6,6 +6,7 @@ import { SectionLabel } from "./SectionLabel";
 export default function HowItWorks() {
   const { t } = useSite();
   const h = t.howItWorks;
+
   return (
     <section className="section bg-2 bt">
       <div className="wrap">

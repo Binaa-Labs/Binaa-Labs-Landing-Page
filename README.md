@@ -6,7 +6,8 @@ the original Claude Design prototype.
 
 ## Features
 
-- **Bilingual EN / AR** with full right-to-left layout — toggled live in the nav, persisted in `localStorage`.
+- **Bilingual EN / AR** with full right-to-left layout — toggled in the nav and persisted in `localStorage`.
+- **URL-aware language rendering** — `/?lang=ar` renders the Arabic version on first load, while the nav keeps the live toggle behavior.
 - **Dark / light theme** via CSS variables, applied before paint (no flash), persisted in `localStorage`.
 - **Animated hero canvas** — an isometric node-cube that "builds in", then floats with traveling pulses (theme-aware).
 - **Motion & micro-interactions**: scroll-reveal, count-up stats, magnetic buttons, cursor-follow hero glow, scroll-progress bar, active-section nav highlighting.
@@ -27,6 +28,10 @@ Other scripts:
 ```bash
 npm run build        # production build
 npm run start        # serve the production build
+npm run typecheck    # TypeScript validation
+npm run lint         # ESLint validation
+npm run check        # typecheck + lint
+npm run test:e2e     # Playwright smoke tests
 ```
 
 Requires Node.js 18.18+ (Node 20+ recommended).

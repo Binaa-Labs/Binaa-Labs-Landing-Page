@@ -121,7 +121,8 @@ export default function HeroCanvas() {
       const dAlpha = light ? 0.55 : 0.4;
       ctx.clearRect(0, 0, W, H);
 
-      const cx = W * 0.62;
+      const isRtl = document.documentElement.dir === "rtl";
+      const cx = W * (isRtl ? 0.38 : 0.62);
       const cy = H * 0.5;
       const R = Math.min(W, H) * 0.26;
       const liveT = Math.max(time - INTRO_END, 0);

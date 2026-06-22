@@ -5,6 +5,7 @@ import { useSite } from "./Providers";
 export default function Guarantee() {
   const { t } = useSite();
   const g = t.guarantee;
+
   return (
     <section id="our-guarantee" className="guarantee-sec">
       <div className="guarantee-glow" aria-hidden="true" />

@@ -70,13 +70,13 @@ export default function Nav() {
     <header className={"nav-header" + (scrolled ? " scrolled" : "")}>
       <div ref={barRef} className="nav-progress" aria-hidden="true" />
       <nav className="nav-inner">
-        <a href="#top" aria-label="Binaa Labs home" className="brand">
+        <a href="#top" aria-label={t.ui.aria.home} className="brand">
           <span className="brand-mark" aria-hidden="true">
-            <LogoMark />
+            <LogoMark size={36} />
           </span>
           <span className="brand-text">
-            <span className="brand-name">Binaa Labs</span>
-            <span className="brand-sub">Software Solutions</span>
+            <span className="brand-name">{t.nav.brandName}</span>
+            <span className="brand-sub">{t.nav.brandSub}</span>
           </span>
         </a>
 
@@ -93,8 +93,8 @@ export default function Nav() {
           ))}
         </ul>
 
-        <div className="nav-actions">
-          <div className="lang-group" role="group" aria-label="Language">
+        <div className="nav-actions" style={{ marginInlineStart: "auto" }}>
+          <div className="lang-group" role="group" aria-label={t.ui.aria.language}>
             <button
               type="button"
               className={"lang-btn" + (lang === "en" ? " active" : "")}
@@ -120,7 +120,7 @@ export default function Nav() {
             type="button"
             className="icon-btn theme"
             onClick={toggleTheme}
-            aria-label="Toggle color theme"
+            aria-label={t.ui.aria.toggleTheme}
           >
             {theme === "dark" ? <MoonIcon /> : <SunIcon />}
           </button>
@@ -133,7 +133,7 @@ export default function Nav() {
             type="button"
             className="icon-btn burger nav-burger"
             onClick={() => setMenuOpen((o) => !o)}
-            aria-label="Toggle menu"
+            aria-label={t.ui.aria.toggleMenu}
             aria-expanded={menuOpen}
           >
             {menuOpen ? <CloseIcon /> : <MenuIcon />}

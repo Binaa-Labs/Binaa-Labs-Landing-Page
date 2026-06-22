@@ -6,7 +6,6 @@ import {
   Tajawal,
 } from "next/font/google";
 import "./globals.css";
-import Providers from "@/components/Providers";
 
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -67,9 +66,9 @@ export const viewport: Viewport = {
   ],
 };
 
-// Runs before paint: apply the saved theme and flag JS so reveal styles engage
-// without a flash of fully-shown content.
-const bootScript = `(function(){try{var t=localStorage.getItem('binaa-theme');if(t!=='light'&&t!=='dark'){t='dark';}document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.add('js');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`;
+// Runs before paint: apply saved theme/language and flag JS so reveal styles
+// engage without a flash of fully-shown content.
+const bootScript = `(function(){try{var t=localStorage.getItem('binaa-theme');if(t!=='light'&&t!=='dark'){t='dark';}var q=new URLSearchParams(location.search).get('lang');var l=(q==='ar'||q==='en')?q:localStorage.getItem('binaa-lang');if(l!=='ar'&&l!=='en'){l='en';}document.documentElement.setAttribute('data-theme',t);document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.classList.add('js');}catch(e){document.documentElement.setAttribute('data-theme','dark');document.documentElement.setAttribute('data-lang','en');}})();`;
 
 export default function RootLayout({
   children,
@@ -84,7 +83,7 @@ export default function RootLayout({
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   );

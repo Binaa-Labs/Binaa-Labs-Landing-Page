@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import { useSite } from "./Providers";
-import HeroCanvas from "./HeroCanvas";
+
+const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
 
 export default function Hero() {
-  const { t } = useSite();
+  const { t, lang } = useSite();
   const heroRef = useRef<HTMLElement>(null);
 
   // cursor-follow glow
@@ -22,7 +24,12 @@ export default function Hero() {
   }, []);
 
   // highlight "WhatsApp" / "Spreadsheet" in the headline
-  const parts = t.hero.headline.split(/(WhatsApp|Spreadsheet)/g).filter(Boolean);
+  const highlightTerms = lang === 'ar'
+    ? ['واتساب', 'إكسل']
+    : ['WhatsApp', 'Spreadsheet'];
+  const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const pattern = new RegExp(`(${highlightTerms.map(escapeRegex).join('|')})`, 'g');
+  const parts = t.hero.headline.split(pattern).filter(Boolean);
 
   return (
     <section ref={heroRef} className="hero">
@@ -42,7 +49,7 @@ export default function Hero() {
 
           <h1 className="hero-title" data-reveal="" data-reveal-delay="80">
             {parts.map((p, i) =>
-              p === "WhatsApp" || p === "Spreadsheet" ? (
+              highlightTerms.includes(p) ? (
                 <span key={i} className="hot">
                   {p}
                 </span>
@@ -70,7 +77,7 @@ export default function Hero() {
       </div>
 
       <div className="hero-scroll" aria-hidden="true">
-        <span className="hero-scroll-text">Scroll</span>
+        <span className="hero-scroll-text">{t.ui.scroll}</span>
         <span className="hero-scroll-line" />
       </div>
     </section>
