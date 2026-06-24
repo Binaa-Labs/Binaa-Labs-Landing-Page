@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSite } from "@/components/Providers";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
@@ -14,6 +14,7 @@ export default function SelectedWork() {
   const [index, setIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const autoRef = useRef<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
 
   const clamped = Math.max(0, Math.min(index, n - 1));
 
@@ -59,6 +60,27 @@ export default function SelectedWork() {
     setIndex((i) => (i - 1 + n) % n);
     start();
   };
+
+  // touch swipe (mobile): pause autoplay on touch, advance on a horizontal flick
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    stop();
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const startX = touchStartX.current;
+    touchStartX.current = null;
+    if (startX == null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) < 40) {
+      start();
+      return;
+    }
+    // swipe left -> next (reversed in RTL so it follows reading direction)
+    const goNext = lang === "ar" ? dx > 0 : dx < 0;
+    if (goNext) next();
+    else prev();
+  };
+
   const status = carousel.status
     .replace("{current}", String(clamped + 1))
     .replace("{total}", String(n));
@@ -85,7 +107,11 @@ export default function SelectedWork() {
           onFocus={stop}
           onBlur={start}
         >
-          <div className="work-viewport">
+          <div
+            className="work-viewport"
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+          >
             <div className="work-track" ref={trackRef}>
               {projects.map((p, i) => {
                 const num = String(i + 1).padStart(2, "0");

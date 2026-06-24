@@ -48,14 +48,19 @@ export default function Nav() {
     };
   }, []);
 
-  // close the mobile menu on Escape
+  // while the mobile menu is open: close on Escape and lock body scroll
   useEffect(() => {
     if (!menuOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false);
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
   }, [menuOpen]);
 
   // active link highlight

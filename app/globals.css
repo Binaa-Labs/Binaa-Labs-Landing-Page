@@ -469,7 +469,11 @@ svg {
 .lang-btn {
   border: none;
   cursor: pointer;
-  padding: 4px 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 10px;
   border-radius: 6px;
   transition: color 0.2s ease;
   color: var(--ink-3);
@@ -574,7 +578,9 @@ svg {
 .hero {
   position: relative;
   overflow: hidden;
+  /* dvh avoids the mobile-browser address-bar jump; vh is the fallback. */
   min-height: calc(100vh - 74px);
+  min-height: calc(100dvh - 74px);
   display: flex;
   align-items: center;
   background: radial-gradient(
