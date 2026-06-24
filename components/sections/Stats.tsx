@@ -1,6 +1,6 @@
 "use client";
 
-import { useSite } from "./Providers";
+import { useSite } from "@/components/Providers";
 
 export default function Stats() {
   const { t } = useSite();

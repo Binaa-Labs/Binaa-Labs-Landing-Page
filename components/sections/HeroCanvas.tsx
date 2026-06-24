@@ -226,15 +226,45 @@ export default function HeroCanvas() {
           ctx.stroke();
         }
       });
-
-      raf = requestAnimationFrame(draw);
     };
-    raf = requestAnimationFrame(draw);
+
+    // Only animate while the canvas is on-screen and the tab is visible —
+    // otherwise the rAF loop keeps burning CPU/battery off-screen.
+    let onScreen = true;
+    const isActive = () =>
+      onScreen && document.visibilityState === "visible";
+
+    const frame = (now: number) => {
+      draw(now);
+      raf = isActive() ? requestAnimationFrame(frame) : 0;
+    };
+    const startLoop = () => {
+      if (!raf && isActive()) raf = requestAnimationFrame(frame);
+    };
+
+    startLoop();
+
+    const io =
+      "IntersectionObserver" in window
+        ? new IntersectionObserver(
+            (entries) => {
+              onScreen = entries.some((e) => e.isIntersecting);
+              startLoop();
+            },
+            { threshold: 0 }
+          )
+        : null;
+    io?.observe(cv);
+
+    const onVisibility = () => startLoop();
+    document.addEventListener("visibilitychange", onVisibility);
 
     const onResize = () => size();
     window.addEventListener("resize", onResize);
     return () => {
       cancelAnimationFrame(raf);
+      io?.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("resize", onResize);
     };
   }, []);

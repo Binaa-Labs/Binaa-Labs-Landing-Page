@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSite } from "./Providers";
-import { SectionLabel } from "./SectionLabel";
+import { useSite } from "@/components/Providers";
+import { SectionLabel } from "@/components/ui/SectionLabel";
 
 export default function SelectedWork() {
   const { t, lang } = useSite();
@@ -86,7 +86,7 @@ export default function SelectedWork() {
           onBlur={start}
         >
           <div className="work-viewport">
-            <div className="work-track" ref={trackRef} aria-live="polite">
+            <div className="work-track" ref={trackRef}>
               {projects.map((p, i) => {
                 const num = String(i + 1).padStart(2, "0");
                 return (

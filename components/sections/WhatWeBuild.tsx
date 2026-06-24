@@ -1,8 +1,8 @@
 "use client";
 
-import { useSite } from "./Providers";
-import { SectionLabel } from "./SectionLabel";
-import { BuildIcon } from "./icons";
+import { useSite } from "@/components/Providers";
+import { SectionLabel } from "@/components/ui/SectionLabel";
+import { BuildIcon } from "@/components/ui/icons";
 
 export default function WhatWeBuild() {
   const { t } = useSite();

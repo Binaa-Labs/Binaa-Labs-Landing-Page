@@ -8,6 +8,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { useRouter } from "next/navigation";
 import { dictionaries, type Dict, type Lang } from "@/lib/i18n";
 
 type Theme = "dark" | "light";
@@ -29,7 +30,6 @@ export function useSite(): SiteContextValue {
   return ctx;
 }
 
-const LANG_KEY = "binaa-lang";
 const THEME_KEY = "binaa-theme";
 
 export default function Providers({
@@ -39,38 +39,27 @@ export default function Providers({
   children: React.ReactNode;
   initialLang?: Lang;
 }) {
-  // Defaults match the server-rendered markup to keep hydration stable.
-  const [lang, setLangState] = useState<Lang>(initialLang);
+  // Language is fixed by the route (`/` = en, `/ar` = ar) and rendered on the
+  // server, so it never changes within a mounted page — switching languages is
+  // a route navigation, handled in setLang below.
+  const lang = initialLang;
+  const dir: "ltr" | "rtl" = lang === "ar" ? "rtl" : "ltr";
+  const router = useRouter();
+
   const [theme, setTheme] = useState<Theme>("dark");
 
-  // After mount, adopt any preference set pre-paint (theme) or saved (lang).
+  // Adopt the pre-paint theme (set by the boot script) once mounted.
   useEffect(() => {
-    try {
-      const preTheme = document.documentElement.getAttribute("data-theme");
-      if (preTheme === "light" || preTheme === "dark") setTheme(preTheme);
-      const urlLang = new URLSearchParams(window.location.search).get("lang");
-      const savedLang = localStorage.getItem(LANG_KEY);
-      const preferredLang =
-        urlLang === "ar" || urlLang === "en" ? urlLang : savedLang;
-      if (preferredLang === "ar" || preferredLang === "en") {
-        setLangState(preferredLang);
-      }
-    } catch {
-      /* storage unavailable — keep defaults */
-    }
-  }, [initialLang]);
+    const preTheme = document.documentElement.getAttribute("data-theme");
+    if (preTheme === "light" || preTheme === "dark") setTheme(preTheme);
+  }, []);
 
-  const dir: "ltr" | "rtl" = lang === "ar" ? "rtl" : "ltr";
-
+  // Keep <html> attributes in sync. On a client navigation between `/` and
+  // `/ar` the root layout does not re-render, so the language route updates
+  // them here; this matches the server output on a fresh load.
   useEffect(() => {
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
-    document.documentElement.setAttribute("data-lang", lang);
-    try {
-      localStorage.setItem(LANG_KEY, lang);
-    } catch {
-      /* ignore */
-    }
   }, [lang, dir]);
 
   useEffect(() => {
@@ -82,26 +71,23 @@ export default function Providers({
     }
   }, [theme]);
 
-  const setLang = useCallback((l: Lang) => {
-    setLangState(l);
-    try {
-      localStorage.setItem(LANG_KEY, l);
-      const url = new URL(window.location.href);
-      if (l === "ar") {
-        url.searchParams.set("lang", "ar");
-      } else {
-        url.searchParams.delete("lang");
-      }
-      const nextUrl = url.pathname + url.search + url.hash;
-      const currentUrl =
-        window.location.pathname + window.location.search + window.location.hash;
-      if (nextUrl !== currentUrl) {
-        window.location.assign(nextUrl);
-      }
-    } catch {
-      /* ignore */
-    }
-  }, []);
+  const setLang = useCallback(
+    (l: Lang) => {
+      if (l === lang) return;
+      // Don't flip <html dir> eagerly here: the hero canvas reads it every
+      // frame and would jump ahead of the text. Let the effect below update
+      // lang/dir when the new render commits so the cube and copy switch as one.
+      // Keep any query (e.g. UTM params) and the section hash across the switch.
+      const target =
+        (l === "ar" ? "/ar" : "/") +
+        window.location.search +
+        window.location.hash;
+      // scroll: false preserves the reader's position across the switch.
+      router.push(target, { scroll: false });
+    },
+    [lang, router]
+  );
+
   const toggleTheme = useCallback(
     () => setTheme((prev) => (prev === "dark" ? "light" : "dark")),
     []

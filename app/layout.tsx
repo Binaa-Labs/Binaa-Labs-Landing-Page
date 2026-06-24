@@ -1,11 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import {
   Bricolage_Grotesque,
   Inter,
   JetBrains_Mono,
   Tajawal,
 } from "next/font/google";
+import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
 import "./globals.css";
+
+const LANG_HEADER = "x-binaa-lang";
 
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -33,6 +37,7 @@ const arabic = Tajawal({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Binaa Labs — Custom Software Studio for the Gulf",
   description:
     "Binaa Labs is a Dubai software studio that moves Gulf businesses fully online — custom web apps, mobile apps, process automation and system integrations, built Arabic-first.",
@@ -55,6 +60,28 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Binaa Labs — Custom Software Studio for the Gulf",
+    description:
+      "We move your business fully online and automate the busywork — custom-built, launched fast, and yours to keep.",
+  },
+};
+
+// Organization structured data for richer search results.
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Binaa Labs",
+  url: SITE_URL,
+  description:
+    "Dubai software studio building custom web apps, mobile apps, process automation and system integrations, Arabic-first.",
+  email: CONTACT_EMAIL,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Dubai",
+    addressCountry: "AE",
+  },
 };
 
 export const viewport: Viewport = {
@@ -66,23 +93,33 @@ export const viewport: Viewport = {
   ],
 };
 
-// Runs before paint: apply saved theme/language and flag JS so reveal styles
-// engage without a flash of fully-shown content.
-const bootScript = `(function(){try{var t=localStorage.getItem('binaa-theme');if(t!=='light'&&t!=='dark'){t='dark';}var q=new URLSearchParams(location.search).get('lang');var l=(q==='ar'||q==='en')?q:localStorage.getItem('binaa-lang');if(l!=='ar'&&l!=='en'){l='en';}document.documentElement.setAttribute('data-theme',t);document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.classList.add('js');}catch(e){document.documentElement.setAttribute('data-theme','dark');document.documentElement.setAttribute('data-lang','en');}})();`;
+// Runs before paint: apply the saved theme and flag JS so reveal styles engage
+// without a flash of fully-shown content. Language is set server-side from the
+// route (see middleware.ts), so the boot script no longer touches it.
+const bootScript = `(function(){try{var t=localStorage.getItem('binaa-theme');if(t!=='light'&&t!=='dark'){t='dark';}document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.add('js');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const requestHeaders = await headers();
+  const lang = requestHeaders.get(LANG_HEADER) === "ar" ? "ar" : "en";
+  const dir = lang === "ar" ? "rtl" : "ltr";
+
   return (
     <html
-      lang="en"
+      lang={lang}
+      dir={dir}
       suppressHydrationWarning
       className={`${display.variable} ${sans.variable} ${mono.variable} ${arabic.variable}`}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
         {children}
       </body>
     </html>

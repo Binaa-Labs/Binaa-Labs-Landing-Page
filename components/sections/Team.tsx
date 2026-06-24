@@ -1,7 +1,7 @@
 "use client";
 
-import { useSite } from "./Providers";
-import { SectionLabel } from "./SectionLabel";
+import { useSite } from "@/components/Providers";
+import { SectionLabel } from "@/components/ui/SectionLabel";
 
 export default function Team() {
   const { t } = useSite();

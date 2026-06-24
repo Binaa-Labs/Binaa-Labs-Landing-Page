@@ -55,6 +55,15 @@ export default function ClientEffects() {
             const d = parseInt(el.getAttribute("data-reveal-delay") || "0", 10);
             el.style.transitionDelay = d / 1000 + "s";
             el.setAttribute("data-revealed", "");
+            // Drop the compositor hint once the reveal transition is done so we
+            // don't keep a live layer per element for the page's lifetime.
+            el.addEventListener(
+              "transitionend",
+              () => {
+                el.style.willChange = "auto";
+              },
+              { once: true }
+            );
             io!.unobserve(el);
             el.querySelectorAll<HTMLElement>("[data-count]").forEach(countUp);
             if (el.hasAttribute("data-count")) countUp(el);

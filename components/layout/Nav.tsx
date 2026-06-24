@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSite } from "./Providers";
-import { LogoMark, SunIcon, MoonIcon, MenuIcon, CloseIcon } from "./icons";
+import { useSite } from "@/components/Providers";
+import { LogoMark, SunIcon, MoonIcon, MenuIcon, CloseIcon } from "@/components/ui/icons";
 
 const SECTION_IDS = [
   "the-gap",
@@ -47,6 +47,16 @@ export default function Nav() {
       cancelAnimationFrame(raf);
     };
   }, []);
+
+  // close the mobile menu on Escape
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   // active link highlight
   useEffect(() => {

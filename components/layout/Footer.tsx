@@ -1,7 +1,7 @@
 "use client";
 
-import { useSite } from "./Providers";
-import { LogoMark } from "./icons";
+import { useSite } from "@/components/Providers";
+import { LogoMark } from "@/components/ui/icons";
 
 export default function Footer() {
   const { t } = useSite();

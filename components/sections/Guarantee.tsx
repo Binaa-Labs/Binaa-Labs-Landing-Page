@@ -1,6 +1,6 @@
 "use client";
 
-import { useSite } from "./Providers";
+import { useSite } from "@/components/Providers";
 
 export default function Guarantee() {
   const { t } = useSite();

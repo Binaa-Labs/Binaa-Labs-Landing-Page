@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { useSite } from "./Providers";
-import { SectionLabel } from "./SectionLabel";
-
-// Where booking requests go for now — no backend; opens the visitor's mail app.
-const LEAD_INBOX = "admin@binaalabs.com";
+import { useSite } from "@/components/Providers";
+import { SectionLabel } from "@/components/ui/SectionLabel";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 export default function Contact() {
   const { t, lang } = useSite();
@@ -59,10 +57,13 @@ export default function Contact() {
       "Project:",
       project,
     ].join("\n");
-    window.location.href = `mailto:${LEAD_INBOX}?subject=${encodeURIComponent(
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;
     setError("");
+    // We can't tell whether the visitor actually sent the email (or even has a
+    // mail client), so the success state is optimistic. Replace with a real
+    // backend submission to confirm delivery.
     setSent(true);
   };
 
@@ -127,6 +128,8 @@ export default function Contact() {
                       name={fld.name}
                       type={fld.type}
                       placeholder={fld.ph}
+                      required={fld.req === "*"}
+                      aria-required={fld.req === "*" || undefined}
                     />
                   </div>
                 ))}
@@ -142,9 +145,15 @@ export default function Contact() {
                   name="project"
                   rows={4}
                   placeholder={c.form.projectPlaceholder}
+                  required
+                  aria-required="true"
                 />
               </div>
-              {error && <p className="form-error">{error}</p>}
+              {error && (
+                <p className="form-error" role="alert">
+                  {error}
+                </p>
+              )}
               <button
                 type="submit"
                 data-magnetic=""

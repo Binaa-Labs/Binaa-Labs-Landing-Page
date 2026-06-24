@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import { useSite } from "./Providers";
+import { useSite } from "@/components/Providers";
 
 const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
 
