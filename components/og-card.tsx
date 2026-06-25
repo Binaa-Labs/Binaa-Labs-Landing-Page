@@ -7,14 +7,12 @@ import { join } from "node:path";
 export const ogSize = { width: 1200, height: 630 };
 export const ogContentType = "image/png";
 
-const fontsDir = join(process.cwd(), "assets", "og");
-const tajawalRegular = readFileSync(join(fontsDir, "Tajawal-Regular.ttf"));
-const tajawalBold = readFileSync(join(fontsDir, "Tajawal-Bold.ttf"));
-const cubeBase64 = readFileSync(
-  join(process.cwd(), "app", "icon.svg")
-).toString("base64");
-const logo = `data:image/svg+xml;base64,${cubeBase64}`;
-
+// Read assets lazily, inside the renderer — never at module scope. Next.js
+// imports this module while generating page metadata (to read the `size` and
+// `contentType` exports above), and that import must not touch the filesystem:
+// on Vercel the `assets/og` files aren't in the page's serverless bundle, so a
+// top-level readFileSync throws and crashes every page's render. The OG routes
+// are statically generated at build time, where these reads run safely.
 export function renderOgImage({
   tagline,
   dir,
@@ -22,6 +20,14 @@ export function renderOgImage({
   tagline: string;
   dir: "ltr" | "rtl";
 }) {
+  const fontsDir = join(process.cwd(), "assets", "og");
+  const tajawalRegular = readFileSync(join(fontsDir, "Tajawal-Regular.ttf"));
+  const tajawalBold = readFileSync(join(fontsDir, "Tajawal-Bold.ttf"));
+  const cubeBase64 = readFileSync(
+    join(process.cwd(), "app", "icon.svg")
+  ).toString("base64");
+  const logo = `data:image/svg+xml;base64,${cubeBase64}`;
+
   const rtl = dir === "rtl";
   return new ImageResponse(
     (
