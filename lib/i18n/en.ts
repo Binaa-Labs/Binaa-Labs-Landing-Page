@@ -351,6 +351,7 @@ export const en = {
       offer: "Offer",
       guarantee: "Our Guarantee",
       contact: "Contact",
+      privacy: "Privacy Policy",
     },
     product: "Wazen وازن — wazen.fit",
     location: "Dubai, UAE · DET Licensed",

@@ -353,6 +353,7 @@ export const ar: Dict = {
       offer: "العرض",
       guarantee: "ضماننا",
       contact: "تواصل",
+      privacy: "سياسة الخصوصية",
     },
     product: "Wazen وازن — wazen.fit",
     location: "دبي، الإمارات · مرخصة من DET",

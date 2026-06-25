@@ -28,5 +28,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
       },
     },
+    {
+      url: `${SITE_URL}/privacy`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: {
+          en: `${SITE_URL}/privacy`,
+          ar: `${SITE_URL}/ar/privacy`,
+        },
+      },
+    },
+    {
+      url: `${SITE_URL}/ar/privacy`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: {
+          en: `${SITE_URL}/privacy`,
+          ar: `${SITE_URL}/ar/privacy`,
+        },
+      },
+    },
   ];
 }

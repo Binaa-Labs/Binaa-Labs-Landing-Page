@@ -4,7 +4,7 @@ import { useSite } from "@/components/Providers";
 import { LogoMark } from "@/components/ui/icons";
 
 export default function Footer() {
-  const { t } = useSite();
+  const { t, lang } = useSite();
   const f = t.footer;
 
   const links = [
@@ -14,6 +14,7 @@ export default function Footer() {
     { href: "#offer", label: f.links.offer },
     { href: "#our-guarantee", label: f.links.guarantee },
     { href: "#contact", label: f.links.contact },
+    { href: lang === "ar" ? "/ar/privacy" : "/privacy", label: f.links.privacy },
   ];
   const [productName, productLink] = (f.product || "").split(" — ");
 
