@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-13 · Status: **audit complete, strategy pass next**
+Last updated: 2026-07-13 · Status: **docs corrected; design pass next (opens with color-direction A/B render gate)**
 
 ---
 
@@ -158,37 +158,36 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 
 | # | Decision |
 |---|---|
-| **D1** | **Standing constraints (owner-set, non-negotiable):** **"Binaa Labs"** is the display name everywhere; **"Binaa Lab"** (legal name) appears in legal pages only. The company is described as a **"software company" / "product company"** — describing it as a "studio" (in any wording) is **BANNED everywhere**, including metadata, OG images, dictionaries, legal pages, and `package.json`. **No fabricated social proof** — Wazen and Almani Motors are the only claimable projects; every claim on the page must be true of the company today. **No women in any imagery**, including backgrounds. **Arabic + English are first-class, full RTL** — every visual pass is verified EN + AR × light + dark × desktop + mobile. **Latin digits in UI.** |
+| **D1** | **Standing constraints (owner-set, non-negotiable):** **"Binaa Labs"** is the display name everywhere; **"Binaa Lab"** (legal name) appears in legal pages only. *(Amended 2026-07-13:)* **"software studio" is approved positioning; the "Binaa Labs" display-name / "Binaa Lab" legal-pages-only rule is unchanged.** **No fabricated social proof** — Wazen and Almani Motors are the only claimable projects; every claim on the page must be true of the company today. **No women in any imagery**, including backgrounds. **Arabic + English are first-class, full RTL** — every visual pass is verified EN + AR × light + dark × desktop + mobile. **Latin digits in UI.** |
 | **D2** | **Redesign methodology: the Wazen Phase 2 process applies.** Audit → strategy → design pass with rendered mocks → implementation in small reviewed passes on a feature branch. Two-gate approvals (screenshot review is gate one; explicit commit instruction is gate two). Pre-build render gates for breakpoint-divergent compositions and any photographic placement. |
+| **D3** | *(2026-07-13, owner)* **"Software studio" positioning approved** — explicitly reverses the original brief's ban; no language purge will occur; the remaining "software studio" occurrences in source/metadata/OG are now compliant. |
+| **D4** | *(2026-07-13, owner)* **Refactor scope:** keep the architecture (i18n, theme, motion, SSR mechanisms); rebuild the presentation layer with a real token system (spacing/radius/elevation/motion scales); remove dead CSS section-by-section during the redesign. No big-bang rewrite. |
+| **D5** | *(2026-07-13, owner)* **Contact path:** the section UI is redesigned with honest submitting/success/failure states; the form handler/backend is developer-owned and out of Claude scope. **Vercel Analytics will be added** (implementation pass). |
+| **D6** | *(2026-07-13, owner)* **Claims kept:** "2 wks to demo," "24-hour response," and the four service capabilities stand — owner confirms all are deliverable. Copy direction for the redesign: frame around digital transformation / eliminating manual processes, with Wazen as proof of the gap-finding approach. |
+| **D7** | *(2026-07-13, owner)* **Almani Motors:** real visual assets will be provided later; design and build proceed with placeholder frames in the real layout. Not a blocker. |
+| **D8** | *(2026-07-13, owner)* **FAQ section added** to the page (5–6 questions; content in design pass). |
+| **D9** | *(2026-07-13, design-authority call, owner-delegated)* **Nav subtext:** "Software Studio" replaces "Software Solutions". |
+| **D10** | *(2026-07-13, owner)* **Arabic transliteration unified to "بناء لابس"** — `ar.ts`'s "بناء لابز" is the incorrect one and will be fixed in implementation. |
+| **D11** | *(2026-07-13, design-authority call, owner-delegated)* **Imagery strategy: UI-led, no human photography** — real Wazen product frames, Almani placeholders, abstract/typographic treatments elsewhere. |
+| **D12** | *(2026-07-13, owner)* **Dual-theme confirmed:** light and dark both survive the redesign; every pass verified in both. |
+| **D13** | *(2026-07-13, owner-reviewed)* **Section strategy:** Nav keep/restyle · Hero full redesign (must exist on mobile) · Stats merged into hero band · The Gap keep-concept/redesign-mechanic · What We Build redesign with UI vignettes · Selected Work full redesign as case panels, placeholder slide CUT · How It Works redesign as process rail · Offer keep-tier polish · Guarantee keep/elevate · Team keep/light restyle · Contact redesign UI · Footer keep-tier + a11y fixes · FAQ added. |
 
-*(New decisions get the next D-number with a one-line rationale. Nothing below
-in §4 is decided yet.)*
+*(New decisions get the next D-number with a one-line rationale.)*
 
 ---
 
 ## 4 · Open decisions (awaiting owner — explicitly NOT yet D-rows)
 
-1. **Color direction** — gold-led vs navy+gold vs navy-led. The logo SVG is navy
-   `#24324B` and is **held out of the repo until this is locked**.
-2. **Light-theme survival** — keep the dual-theme system or go dark-only.
-3. **Imagery strategy** — photography vs abstract/UI-screenshot visuals
-   (today the site has zero raster imagery).
-4. **Section list changes** — which of the 12 sections survive, merge, or die.
-5. **Stack decision** — proposal on the table: keep the hand-rolled systems
-   (CSS tokens, reveal engine, theme, i18n), introduce **no new frameworks**.
-6. **Arabic brand transliteration** — `en.ts` has "بناء لابس", `ar.ts` has
-   "بناء لابز" (sīn vs zāy). Must unify; owner picks the spelling.
-7. **Fate of the unverifiable claims flagged in the audit** — "24-hour
-   response", "2 weeks to a demo", native-mobile capability (Swift/Kotlin tags
-   with no shipped app). Keep, soften, or cut.
-8. **Contact-path architecture** — replace the `mailto:` form + the translated
-   but never-rendered Calendly string with a real backend and/or scheduler.
+1. **Color direction** — gold-led vs navy+gold. **A/B render proofs open the
+   design pass.** The logo SVG is navy `#24324B` and is **held out of the repo
+   until this is locked**.
 
 ---
 
 ## 5 · Redesign status & remaining work
 
-**Status: audit complete, strategy pass next.**
+**Status: docs corrected; design pass next (opens with color-direction A/B
+render gate).**
 
 Remaining work, seeded from the audit's five-gap ranking:
 
@@ -202,24 +201,24 @@ Remaining work, seeded from the audit's five-gap ranking:
 3. **Break the templated uniformity.** Six of ten sections are the same
    label/title/sub/card-grid stamp with identical reveal motion; after the hero
    (desktop-only) there is no second memorable visual moment.
-4. **Purge the banned brand language and unify the brand.** The banned
-   descriptor sits in the meta title, descriptions, keywords, both OG cards,
-   both dictionaries, the privacy pages, and `package.json`; the Arabic
-   transliteration is split (see open decision 6).
+4. **Unify the brand.** The Arabic transliteration is split — unified to
+   "بناء لابس" per D10, fix lands in implementation. (The descriptor language
+   is compliant as-is per D3 — no purge.)
 5. **Pay down the trust-surface polish debt.** Real a11y failures (footer
-   contrast, brand-link name mismatch, color-only links) and unverifiable
-   promises sitting next to a placeholder slide.
+   contrast, brand-link name mismatch, color-only links). (The flagged claims
+   are retained per D6; the placeholder slide is cut per D13.)
 
 ### Launch checklist (stub — grows during the redesign)
 
-- [ ] Banned-descriptor purge complete — copy, metadata, dictionaries, legal
-      pages, `package.json`, **and both OG cards** (the tagline is baked into
-      the rendered images)
+- [ ] Transliteration unification to "بناء لابس" (D10 — fix `ar.ts`)
 - [ ] Footer contrast a11y fix (`--ink-3` on `--bg` fails WCAG)
 - [ ] Brand-link aria fix (`label-content-name-mismatch` on `.brand`)
-- [ ] Contact path rebuilt (real submission + confirmation; Calendly decision)
+- [ ] Contact section rebuilt with honest submitting/success/failure states
+      (D5 — handler/backend developer-owned)
+- [ ] Vercel Analytics added (D5)
+- [ ] FAQ content finalized (D8 — 5–6 questions)
+- [ ] Nav subtext swap: "Software Studio" replaces "Software Solutions" (D9)
 - [ ] Logo asset integration (navy SVG, pending color-direction decision)
-- [ ] Analytics decision implemented (currently none installed)
 - [ ] Every visual pass verified EN + AR × light + dark × desktop + mobile
 - [ ] `npm run check` + Playwright green; Lighthouse re-run on preview
 

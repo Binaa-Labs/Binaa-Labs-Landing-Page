@@ -63,7 +63,7 @@ Rules baked into every prompt:
 ## 5 · Non-negotiable constraints (mirror of PROJECT.md D1 — always enforce)
 
 - **"Binaa Labs"** is the display name everywhere; **"Binaa Lab"** (legal name) appears in legal pages only.
-- The company is a **"software company" / "product company"** — describing it as a "studio" (in any wording) is **banned everywhere**, including metadata, OG images, dictionaries, legal pages, and `package.json`.
+- **"Software studio" is approved positioning** (D1 as amended 2026-07-13, see D3); the display-name / legal-pages-only rule above is unchanged.
 - **No fabricated social proof.** Wazen (wazen.fit) and Almani Motors are the only claimable projects; every claim on the page must be true of the company today.
 - **No women in any imagery**, including background subjects. Hard rule, regional market.
 - **Arabic + English are first-class, full RTL** — every visual pass verified EN + AR × light + dark × desktop + mobile.
