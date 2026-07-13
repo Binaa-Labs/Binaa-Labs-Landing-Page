@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-13 · Status: **docs corrected; design pass next (opens with color-direction A/B render gate)**
+Last updated: 2026-07-13 · Status: **color locked (D14); design pass continues — composition/section mocks next**
 
 ---
 
@@ -171,6 +171,7 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 | **D11** | *(2026-07-13, design-authority call, owner-delegated)* **Imagery strategy: UI-led, no human photography** — real Wazen product frames, Almani placeholders, abstract/typographic treatments elsewhere. |
 | **D12** | *(2026-07-13, owner)* **Dual-theme confirmed:** light and dark both survive the redesign; every pass verified in both. |
 | **D13** | *(2026-07-13, owner-reviewed)* **Section strategy:** Nav keep/restyle · Hero full redesign (must exist on mobile) · Stats merged into hero band · The Gap keep-concept/redesign-mechanic · What We Build redesign with UI vignettes · Selected Work full redesign as case panels, placeholder slide CUT · How It Works redesign as process rail · Offer keep-tier polish · Guarantee keep/elevate · Team keep/light restyle · Contact redesign UI · Footer keep-tier + a11y fixes · FAQ added. |
+| **D14** | *(2026-07-13, design-authority call, owner-approved)* **Color lock.** **Dark theme = Direction A:** the current charcoal system unchanged (`#1A1A1A`/`#141414`, gold `#D4A017` accent, gold logo mark), with `--ink-3` bumped to clear WCAG AA on both bands. **Light theme = hybrid:** `#FAFAFA` base / `#F1F2F4` band / white surfaces, navy-derived hairlines, ink scale `#24324B` / `#4E5A70` / `#616B80`, gold split — `#A87810` for accents/large text, `#8F660D` for button fills with white text — navy `#24324B` logo mark. The old warm light theme (`#FAFAF8`/`#F1F0EB`, `#A87810`-everything) is retired. Logo SVG cleanup (de-trace, strip background path, dual-color variants) enters the asset pass. Render proofs: `design/stage1-color/` (Stage 1 matrix + hybrid addendum, uncommitted). |
 
 *(New decisions get the next D-number with a one-line rationale.)*
 
@@ -178,16 +179,15 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 
 ## 4 · Open decisions (awaiting owner — explicitly NOT yet D-rows)
 
-1. **Color direction** — gold-led vs navy+gold. **A/B render proofs open the
-   design pass.** The logo SVG is navy `#24324B` and is **held out of the repo
-   until this is locked**.
+None currently open. *(Color direction resolved by D14; the logo SVG enters the
+repo via the asset pass — cleanup scope in D14.)*
 
 ---
 
 ## 5 · Redesign status & remaining work
 
-**Status: docs corrected; design pass next (opens with color-direction A/B
-render gate).**
+**Status: color locked (D14); design pass continues — composition/section
+mocks next.**
 
 Remaining work, seeded from the audit's five-gap ranking:
 
@@ -211,14 +211,19 @@ Remaining work, seeded from the audit's five-gap ranking:
 ### Launch checklist (stub — grows during the redesign)
 
 - [ ] Transliteration unification to "بناء لابس" (D10 — fix `ar.ts`)
-- [ ] Footer contrast a11y fix (`--ink-3` on `--bg` fails WCAG)
+- [ ] Footer contrast a11y fix (`--ink-3` on `--bg` fails WCAG — D14 mandates
+      the bump in both themes; light lands at `#616B80`, dark value chosen at
+      implementation)
 - [ ] Brand-link aria fix (`label-content-name-mismatch` on `.brand`)
 - [ ] Contact section rebuilt with honest submitting/success/failure states
       (D5 — handler/backend developer-owned)
 - [ ] Vercel Analytics added (D5)
 - [ ] FAQ content finalized (D8 — 5–6 questions)
 - [ ] Nav subtext swap: "Software Studio" replaces "Software Solutions" (D9)
-- [ ] Logo asset integration (navy SVG, pending color-direction decision)
+- [ ] Logo asset integration — asset pass per D14: de-trace, strip background
+      path, dual-color variants (gold for dark theme, navy for light)
+- [ ] Light theme retokenized to the D14 hybrid set (`#FAFAFA`/`#F1F2F4`,
+      navy ink scale, `#A87810`/`#8F660D` gold split); old warm set removed
 - [ ] Every visual pass verified EN + AR × light + dark × desktop + mobile
 - [ ] `npm run check` + Playwright green; Lighthouse re-run on preview
 

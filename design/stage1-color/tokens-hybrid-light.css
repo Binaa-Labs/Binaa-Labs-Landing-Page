@@ -1,0 +1,30 @@
+/* Hybrid light-theme candidate — Stage 1 addendum (dark theme is decided:
+   Direction A unchanged; this sheet defines the light theme only).
+   Neutral off-white base (#FAFAFA, warm cast dropped), navy ink scale from the
+   logo navy #24324B, navy-tinted hairlines, gold #A87810 reserved for
+   text/accents, darker gold #8F660D for button fills with white text (clears
+   AA 4.5). Gold alphas trimmed one step vs. Direction B light (.12→.11,
+   .32→.30) — the neutral base is marginally brighter/cooler, so the same tint
+   reads slightly stronger. Logo mark: native navy. */
+
+:root[data-theme="light"] {
+  --bg: #fafafa;
+  --bg-2: #f1f2f4;
+  --bg-nav: rgba(250, 250, 250, 0.82);
+  --surface: #ffffff;
+  --surface-2: #f5f6f8;
+  --line: rgba(36, 50, 75, 0.1);
+  --line-2: rgba(36, 50, 75, 0.18);
+  --ink: #24324b;
+  --ink-2: #4e5a70;
+  --ink-3: #667085;
+  --gold: #a87810;
+  --gold-btn: #8f660d;
+  --gold-ink: #ffffff;
+  --gold-soft: rgba(212, 160, 23, 0.11);
+  --gold-line: rgba(168, 120, 16, 0.3);
+  --rose: #bc5346;
+  --logo: #24324b;
+  --logo-v1: #24324b;
+  --logo-v2: #24324b;
+}

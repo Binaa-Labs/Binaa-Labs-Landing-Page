@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — Guarantee</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens-draft.css" />
+    <link rel="stylesheet" href="stage2-base.css" />
+    <style>
+      .section {
+        position: relative;
+        overflow: hidden;
+        background: var(--bg-2);
+        border-block: 1px solid var(--line);
+        padding: var(--sp-9) 0;
+        text-align: center;
+      }
+      /* the page's ONLY radial-glow treatment */
+      .section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--glow-radial);
+        pointer-events: none;
+      }
+      .inner {
+        position: relative;
+        max-width: 720px;
+        margin: 0 auto;
+        padding-inline: var(--sp-5);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .seal {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        display: grid;
+        place-items: center;
+        box-shadow: var(--glow-gold);
+        margin-bottom: var(--sp-5);
+      }
+      .seal svg {
+        width: 28px;
+        height: 28px;
+      }
+      .label-c {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.64rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: var(--sp-4);
+      }
+      h2 {
+        max-width: 20ch;
+      }
+      .pull-ar {
+        font-family: "Tajawal", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--gold);
+        margin-top: var(--sp-4);
+        direction: rtl;
+      }
+      .body {
+        color: var(--ink-2);
+        font-size: 1rem;
+        max-width: 58ch;
+        margin-top: var(--sp-5);
+      }
+      .secondary {
+        color: var(--ink-3);
+        font-size: 0.88rem;
+        max-width: 62ch;
+        margin-top: var(--sp-4);
+      }
+      /* the three terms of the promise, moved out of the body prose into mono chips */
+      .terms {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--sp-2);
+        margin-top: var(--sp-5);
+      }
+      .terms li {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-2);
+        border: 1px solid var(--gold-line);
+        border-radius: var(--r-pill);
+        padding: 6px 12px;
+      }
+      .terms li::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+      .sig {
+        margin-top: var(--sp-6);
+        padding-top: var(--sp-5);
+        border-top: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .sig b {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      .sig span {
+        font-size: 0.78rem;
+        color: var(--ink-3);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="section">
+      <div class="inner">
+        <span class="seal" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </span>
+        <p class="label-c mono">Our Guarantee</p>
+        <h2 class="display">You Approve Every Step — Before You Pay for It</h2>
+        <p class="pull-ar">اعتمد قبل أن تدفع</p>
+        <!-- copy diet: 37 + 58 words → 26 + 21. This section slows down, but it
+             does not repeat itself; the three terms move into mono chips. -->
+        <p class="body">
+          You never pay for work you have not seen. We show you a visual demo of every stage, and only bill that
+          milestone once you approve it.
+        </p>
+        <p class="secondary">
+          If the free analysis shows you nothing worth building, you walk away owing nothing.
+        </p>
+        <ul class="terms mono">
+          <li>See it first</li>
+          <li>Approve it</li>
+          <li>Then we build</li>
+        </ul>
+        <div class="sig">
+          <b class="display">Naser Shadid</b>
+          <span>Founder &amp; Product Lead · Binaa Labs · Dubai</span>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

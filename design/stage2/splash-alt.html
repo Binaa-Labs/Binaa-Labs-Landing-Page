@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — Intro Splash ALT (scrim + reveal-from-the-mark)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens-draft.css" />
+    <link rel="stylesheet" href="stage2-base.css" />
+    <style>
+      /* ALT choreography: no panels. An opaque brand-dark scrim sits over the
+         hero from first paint; the cube draws, the lockup fades in, then the
+         whole scrim is clipped away by a circle collapsing INTO the mark —
+         the page appears to come out of the logo. Total ~3.0s (vs 3.7s). */
+
+      :root {
+        --alt-hex-delay: 100ms;  --alt-hex-dur: 850ms;
+        --alt-inner-delay: 650ms; --alt-inner-dur: 700ms;
+        --alt-text-delay: 1450ms; --alt-text-dur: 550ms;
+        --alt-skip-delay: 1000ms;
+        --alt-exit-delay: 2400ms; --alt-exit-dur: 600ms;
+        --spl-panel: #141414;
+        --spl-ink: #fafaf8;
+        --spl-ink-2: #a2a29c;
+        --spl-gold: #d4a017;
+        --spl-gold-line: rgba(212, 160, 23, 0.34);
+      }
+
+      /* ————— condensed hero placeholder beneath ————— */
+      .hero { position: relative; overflow: hidden; padding: var(--sp-9) 0; }
+      .hero::before { content: ""; position: absolute; inset: 0; background: var(--hero-light); pointer-events: none; }
+      .hero-inner {
+        position: relative; max-width: 1160px; margin: 0 auto; padding-inline: var(--sp-5);
+        display: grid; grid-template-columns: 1.04fr 0.96fr; gap: var(--sp-8); align-items: center;
+      }
+      h1 { font-size: clamp(2rem, 4.4vw, 3.15rem); line-height: 1.12; letter-spacing: -0.015em; font-weight: 700; max-width: 16ch; }
+      h1 em { font-style: normal; color: var(--gold); }
+      .sub { color: var(--ink-2); font-size: 1.02rem; max-width: 52ch; margin-top: var(--sp-5); }
+      .cta-row { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-6); }
+      .app { display: grid; grid-template-columns: 108px 1fr; min-height: 280px; direction: ltr; }
+      .app-side { border-right: 1px solid var(--line); padding: 12px 10px; display: flex; flex-direction: column; gap: 3px; }
+      .app-nav { font-size: 0.6rem; color: var(--ink-3); padding: 6px 8px; border-radius: var(--r-1); }
+      .app-nav.on { background: var(--gold-soft); border: 1px solid var(--gold-line); color: var(--gold); }
+      .app-main { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+      .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .tile { border: 1px solid var(--line); border-radius: var(--r-2); padding: 8px 10px; }
+      .tile b { font-size: 0.82rem; font-weight: 600; color: var(--gold); display: block; line-height: 1.2; }
+      .tile span { font-size: 0.5rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; }
+      .rowi { display: flex; align-items: center; justify-content: space-between; padding: 6px 2px; border-top: 1px solid var(--line); font-size: 0.6rem; color: var(--ink-2); }
+      .rowi .st { font-size: 0.5rem; color: var(--gold); background: var(--gold-soft); border: 1px solid var(--gold-line); border-radius: var(--r-pill); padding: 1px 7px; }
+
+      /* ————— the scrim ————— */
+      #splash {
+        position: fixed; inset: 0; z-index: 50; background: var(--spl-panel);
+        animation: alt-reveal var(--alt-exit-dur) var(--ease-hover) var(--alt-exit-delay) forwards;
+      }
+      #splash.skipping { opacity: 0; pointer-events: none; transition: opacity var(--dur-base) var(--ease-hover); }
+      /* the circle collapses into the cube's on-screen position (center, ~44% down) */
+      @keyframes alt-reveal {
+        from { clip-path: circle(135% at 50% 44%); }
+        to { clip-path: circle(0% at 50% 44%); }
+      }
+
+      .stage {
+        position: absolute; inset: 0; display: grid; place-content: center;
+        justify-items: center; text-align: center; gap: var(--sp-4);
+        animation: alt-out 250ms var(--ease-hover) var(--alt-exit-delay) forwards;
+      }
+      @keyframes alt-out { to { opacity: 0; } }
+
+      .cube { width: 148px; height: 148px; filter: drop-shadow(0 0 26px rgba(212, 160, 23, 0.35)); }
+      .cube path { fill: none; stroke: var(--spl-gold); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+      .cube .hex { stroke-dasharray: 1; stroke-dashoffset: 1; animation: alt-draw var(--alt-hex-dur) var(--ease-hover) var(--alt-hex-delay) both; }
+      .cube .inner { opacity: 0.55; stroke-dasharray: 1; stroke-dashoffset: 1; animation: alt-draw var(--alt-inner-dur) var(--ease-hover) var(--alt-inner-delay) both; }
+      @keyframes alt-draw { to { stroke-dashoffset: 0; } }
+      .cube circle { fill: var(--spl-gold); transform-origin: center; transform-box: fill-box; }
+      .cube .nd { animation: alt-node 280ms var(--ease-enter) both; }
+      .cube .n1 { animation-delay: 1150ms; }
+      .cube .n2 { animation-delay: 1250ms; }
+      .cube .n3 { animation-delay: 1350ms; }
+      @keyframes alt-node { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
+
+      .s-title, .s-ar, .s-tag { animation: alt-text var(--alt-text-dur) var(--ease-enter) both; }
+      .s-title { animation-delay: var(--alt-text-delay); font-size: 1.9rem; font-weight: 700; letter-spacing: -0.01em; color: var(--spl-ink); margin-top: var(--sp-3); }
+      .s-ar { animation-delay: calc(var(--alt-text-delay) + 110ms); font-family: "Tajawal", sans-serif; font-size: 1.22rem; font-weight: 500; color: var(--spl-gold); direction: rtl; }
+      .s-tag { animation-delay: calc(var(--alt-text-delay) + 220ms); font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--spl-ink-2); }
+      @keyframes alt-text { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+      .skip {
+        position: absolute; bottom: var(--sp-6); inset-inline-end: var(--sp-6);
+        background: none; border: 1px solid rgba(250, 250, 248, 0.16); border-radius: var(--r-pill);
+        color: var(--spl-ink-2); font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
+        padding: 10px 18px; cursor: pointer; min-height: 40px;
+        animation:
+          alt-text var(--dur-base) var(--ease-enter) var(--alt-skip-delay) both,
+          alt-out var(--dur-fast) var(--ease-hover) var(--alt-exit-delay) forwards;
+      }
+      .skip:hover { color: var(--spl-ink); border-color: var(--spl-gold-line); }
+      .skip:focus-visible { outline: 2px solid var(--spl-gold); outline-offset: 2px; }
+
+      @media (prefers-reduced-motion: reduce) {
+        #splash { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="hero">
+      <div class="hero-inner">
+        <div>
+          <h1 class="display">Run Your Business Online — Not Out of a <em>WhatsApp Group</em> and a <em>Spreadsheet</em></h1>
+          <p class="sub">We move your operation fully online and automate the busywork — custom-built, launched fast, yours to keep.</p>
+          <div class="cta-row">
+            <span class="btn btn-primary">Book Your Free Analysis →</span>
+            <span class="btn btn-ghost">See What We’ve Built</span>
+          </div>
+        </div>
+        <div class="frame" aria-hidden="true">
+          <div class="frame-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="frame-url mono">app.wazen.fit</span>
+          </div>
+          <div class="app">
+            <div class="app-side">
+              <span class="app-nav on">Dashboard</span>
+              <span class="app-nav">Clients</span>
+              <span class="app-nav">Plans</span>
+              <span class="app-nav">Check-ins</span>
+            </div>
+            <div class="app-main">
+              <div class="tiles">
+                <div class="tile"><b class="mono">128</b><span>Active clients</span></div>
+                <div class="tile"><b class="mono">96%</b><span>Check-in rate</span></div>
+                <div class="tile"><b class="mono">24</b><span>Plans updated</span></div>
+              </div>
+              <div class="rowi"><span>Ahmad K. — Cut phase · wk 6</span><span class="st mono">Checked in</span></div>
+              <div class="rowi"><span>Omar S. — Strength · wk 3</span><span class="st mono">Checked in</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="splash">
+      <div class="stage">
+        <svg class="cube" viewBox="0 0 100 100" aria-hidden="true">
+          <path class="hex" pathLength="1" d="M50 24 L74 38 L74 64 L50 78 L26 64 L26 38 Z" />
+          <path class="inner" pathLength="1" d="M50 24 L50 51 M50 51 L74 38 M50 51 L26 38" />
+          <circle class="nd n1" cx="50" cy="24" r="6" />
+          <circle class="nd n2" cx="26" cy="38" r="6" />
+          <circle class="nd n3" cx="74" cy="64" r="6" />
+        </svg>
+        <div>
+          <p class="s-title display">Welcome to Binaa Labs</p>
+          <p class="s-ar">بناء لابس</p>
+          <p class="s-tag mono">Software Studio · Dubai</p>
+        </div>
+      </div>
+      <button class="skip mono" id="skip" type="button">Skip →</button>
+    </div>
+
+    <script>
+      (function () {
+        var KEY = "binaa-splash-seen";
+        var splash = document.getElementById("splash");
+        var seek = new URLSearchParams(location.search).get("t");
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (seek === null) {
+          var seen = false;
+          try { seen = sessionStorage.getItem(KEY) === "1"; } catch (e) {}
+          if (reduce || seen) { splash.remove(); return; }
+          try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
+        }
+
+        var done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          splash.classList.add("skipping");
+          setTimeout(function () { splash.remove(); }, 320);
+        }
+        document.getElementById("skip").addEventListener("click", finish);
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape") finish(); });
+        splash.addEventListener("animationend", function (e) {
+          if (e.animationName === "alt-reveal" && seek === null && !done) {
+            done = true;
+            splash.remove();
+          }
+        });
+        if (seek !== null) {
+          var t = Math.max(0, parseFloat(seek));
+          requestAnimationFrame(function () {
+            document.getAnimations().forEach(function (a) { a.pause(); a.currentTime = t; });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

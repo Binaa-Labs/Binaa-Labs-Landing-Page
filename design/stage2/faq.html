@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — FAQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens-draft.css" />
+    <link rel="stylesheet" href="stage2-base.css" />
+    <style>
+      .section {
+        padding: var(--sp-8) 0;
+      }
+      .faq-wrap {
+        max-width: 760px;
+        margin: var(--sp-7) auto 0;
+      }
+      .qa {
+        border: 1px solid var(--line);
+        border-radius: var(--r-3);
+        background: var(--surface);
+        overflow: hidden;
+      }
+      .qa + .qa {
+        margin-top: var(--sp-3);
+      }
+      .q {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-4);
+        padding: var(--sp-4) var(--sp-5);
+        font-size: 0.98rem;
+        font-weight: 600;
+        min-height: 56px; /* ≥40px tap target */
+      }
+      .chev {
+        flex: 0 0 auto;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 1px solid var(--line-2);
+        display: grid;
+        place-items: center;
+        color: var(--ink-3);
+        font-size: 0.7rem;
+      }
+      .qa.open {
+        border-color: var(--gold-line);
+        box-shadow: var(--elev-1);
+      }
+      .qa.open .chev {
+        color: var(--gold);
+        border-color: var(--gold-line);
+        transform: rotate(180deg);
+      }
+      .a {
+        display: none;
+        padding: 0 var(--sp-5) var(--sp-5);
+        color: var(--ink-2);
+        font-size: 0.9rem;
+        max-width: 62ch;
+      }
+      .qa.open .a {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="section">
+      <div class="wrap">
+        <p class="label mono">Common Questions</p>
+        <h2 class="display">Before You Ask</h2>
+        <p class="section-sub">The questions every serious client asks us — answered straight.</p>
+
+        <!-- answers dieted ~40%; Q7 (stack) added — tech credibility moved here when
+             the stack tags came off the What We Build cards -->
+        <div class="faq-wrap">
+          <div class="qa open">
+            <div class="q"><span>Who owns the code when the project is done?</span><span class="chev">▾</span></div>
+            <p class="a">
+              You do — 100%, from handover. Source, repositories, infrastructure accounts and documentation all
+              transfer to you. No license fee, no lock-in.
+            </p>
+          </div>
+          <div class="qa">
+            <div class="q"><span>What does the process actually look like?</span><span class="chev">▾</span></div>
+            <p class="a">
+              Three steps: a free analysis with a visual demo, a build you watch through a working link, then launch
+              with 12 months of support. You approve each stage before it is billed.
+            </p>
+          </div>
+          <div class="qa">
+            <div class="q"><span>How does the fixed price work?</span><span class="chev">▾</span></div>
+            <p class="a">
+              We scope the whole build up front and commit to one price. Overruns are our cost, not yours. Changes
+              beyond that scope are quoted before any work starts.
+            </p>
+          </div>
+          <div class="qa">
+            <div class="q"><span>Is Arabic really first-class, or translated at the end?</span><span class="chev">▾</span></div>
+            <p class="a">
+              First-class. We design right-to-left from the first wireframe — layouts, forms and payment flows built
+              bilingual from day one. This site itself runs full RTL.
+            </p>
+          </div>
+          <div class="qa">
+            <div class="q"><span>What happens after launch?</span><span class="chev">▾</span></div>
+            <p class="a">
+              Twelve months included: hosting, backups, fixes and a direct line to the people who built it. After that,
+              stay on a plan or take it in-house — it is your code either way.
+            </p>
+          </div>
+          <div class="qa">
+            <div class="q"><span>Do you build native apps or web apps?</span><span class="chev">▾</span></div>
+            <p class="a">
+              Whichever your problem actually needs — and we will tell you honestly. A fast web app or PWA beats native
+              for many operations; native earns its cost for deep device integration or app-store presence.
+            </p>
+          </div>
+          <div class="qa">
+            <div class="q"><span>What do you build with?</span><span class="chev">▾</span></div>
+            <p class="a">
+              Modern, boring-on-purpose tools: React, React Native, Node.js, PostgreSQL, Next.js — proven stacks any
+              competent team can maintain after handover, not exotic tech that locks you to us.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

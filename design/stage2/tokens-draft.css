@@ -1,0 +1,97 @@
+/* Stage 2 draft token system — D14-locked palette + presentation-layer scales
+   (D4). Proposed for implementation; used by every Stage 2 mock.
+   Dark = Direction A charcoal, --ink-3 bumped to #8A8A84 (clears AA on both
+   bands: 5.01 on --bg, 5.30 on --bg-2). Light = D14 hybrid. */
+
+/* ---------- color: dark (Direction A, D14) ---------- */
+
+:root[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --bg-2: #141414;
+  --bg-nav: rgba(26, 26, 26, 0.82);
+  --surface: #202020;
+  --surface-2: #272727;
+  --line: rgba(250, 250, 248, 0.08);
+  --line-2: rgba(250, 250, 248, 0.16);
+  --ink: #fafaf8;
+  --ink-2: #a2a29c;
+  --ink-3: #8a8a84; /* D14 bump from #6A6A64 */
+  --gold: #d4a017;
+  --gold-btn: var(--gold);
+  --gold-ink: #1a1a1a;
+  --gold-soft: rgba(212, 160, 23, 0.13);
+  --gold-line: rgba(212, 160, 23, 0.34);
+  --rose: #d67a6e;
+  --rose-soft: rgba(214, 122, 110, 0.1);
+  --rose-line: rgba(214, 122, 110, 0.3);
+  --logo: var(--gold);
+
+  /* elevation (3 surface levels + gold glow) */
+  --elev-1: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --elev-2: 0 10px 28px -10px rgba(0, 0, 0, 0.5);
+  --elev-3: 0 28px 56px -16px rgba(0, 0, 0, 0.6);
+  --glow-gold: 0 0 90px -20px rgba(212, 160, 23, 0.4);
+  --glow-radial: radial-gradient(ellipse 50% 42% at 50% 38%, rgba(212, 160, 23, 0.14), transparent 70%);
+  --hero-light: radial-gradient(ellipse 42% 55% at 68% 40%, rgba(212, 160, 23, 0.1), transparent 68%);
+}
+
+/* ---------- color: light (D14 hybrid) ---------- */
+
+:root[data-theme="light"] {
+  --bg: #fafafa;
+  --bg-2: #f1f2f4;
+  --bg-nav: rgba(250, 250, 250, 0.82);
+  --surface: #ffffff;
+  --surface-2: #f5f6f8;
+  --line: rgba(36, 50, 75, 0.1);
+  --line-2: rgba(36, 50, 75, 0.18);
+  --ink: #24324b;
+  --ink-2: #4e5a70;
+  --ink-3: #616b80; /* D14 */
+  --gold: #a87810;
+  --gold-btn: #8f660d; /* button fills, white text (D14 gold split) */
+  --gold-ink: #ffffff;
+  --gold-soft: rgba(212, 160, 23, 0.11);
+  --gold-line: rgba(168, 120, 16, 0.3);
+  --rose: #bc5346;
+  --rose-soft: rgba(188, 83, 70, 0.08);
+  --rose-line: rgba(188, 83, 70, 0.28);
+  --logo: #24324b;
+
+  --elev-1: 0 1px 2px rgba(36, 50, 75, 0.08);
+  --elev-2: 0 10px 28px -10px rgba(36, 50, 75, 0.14);
+  --elev-3: 0 28px 56px -16px rgba(36, 50, 75, 0.18);
+  --glow-gold: 0 0 90px -20px rgba(168, 120, 16, 0.22);
+  --glow-radial: radial-gradient(ellipse 50% 42% at 50% 38%, rgba(212, 160, 23, 0.1), transparent 70%);
+  --hero-light: none;
+}
+
+/* ---------- scales (theme-independent) ---------- */
+
+:root {
+  /* spacing — 4-base */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+  --sp-10: 128px;
+
+  /* radius — 4 steps + pill (replaces the ~15 ad-hoc values) */
+  --r-1: 6px; /* tags, small chips */
+  --r-2: 10px; /* buttons, inputs */
+  --r-3: 16px; /* cards, frames */
+  --r-4: 24px; /* feature cells, panels */
+  --r-pill: 999px;
+
+  /* motion */
+  --dur-fast: 150ms; /* hovers, toggles */
+  --dur-base: 300ms; /* reveals, accordion */
+  --dur-slow: 600ms; /* entrances, line draw */
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1); /* decisive settle */
+  --ease-hover: cubic-bezier(0.4, 0, 0.2, 1); /* symmetric */
+}
