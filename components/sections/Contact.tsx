@@ -44,10 +44,34 @@ export default function Contact() {
   const formRef = useRef<HTMLFormElement>(null);
 
   const fields = [
-    { name: "name", label: c.form.name, ph: c.form.namePlaceholder, type: "text", req: true },
-    { name: "email", label: c.form.email, ph: c.form.emailPlaceholder, type: "email", req: true },
-    { name: "company", label: c.form.company, ph: c.form.companyPlaceholder, type: "text", req: false },
-    { name: "phone", label: c.form.phone, ph: c.form.phonePlaceholder, type: "tel", req: false },
+    {
+      name: "name",
+      label: c.form.name,
+      ph: c.form.namePlaceholder,
+      type: "text",
+      req: true,
+    },
+    {
+      name: "email",
+      label: c.form.email,
+      ph: c.form.emailPlaceholder,
+      type: "email",
+      req: true,
+    },
+    {
+      name: "company",
+      label: c.form.company,
+      ph: c.form.companyPlaceholder,
+      type: "text",
+      req: false,
+    },
+    {
+      name: "phone",
+      label: c.form.phone,
+      ph: c.form.phonePlaceholder,
+      type: "tel",
+      req: false,
+    },
   ];
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -92,7 +116,11 @@ export default function Contact() {
             <h2 className="section-title" data-reveal="" data-reveal-delay="60">
               {c.headline}
             </h2>
-            <div className="contact-steps" data-reveal="" data-reveal-delay="120">
+            <div
+              className="contact-steps"
+              data-reveal=""
+              data-reveal-delay="120"
+            >
               {c.steps.map((s, i) => (
                 <div className="cstep" key={i}>
                   <span className="cstep-n" aria-hidden="true">
@@ -158,13 +186,21 @@ export default function Contact() {
                   </div>
 
                   {validationError && (
-                    <p className="form-error" role="alert" style={{ marginTop: "var(--sp-3)" }}>
+                    <p
+                      className="form-error"
+                      role="alert"
+                      style={{ marginTop: "var(--sp-3)" }}
+                    >
                       {validationError}
                     </p>
                   )}
 
                   {status === "failure" && (
-                    <div className="form-err" role="alert" style={{ marginTop: "var(--sp-4)" }}>
+                    <div
+                      className="form-err"
+                      role="alert"
+                      style={{ marginTop: "var(--sp-4)" }}
+                    >
                       <b>{c.form.failTitle}</b> {c.form.failText}{" "}
                       {c.form.failEmailPrefix}{" "}
                       <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr">

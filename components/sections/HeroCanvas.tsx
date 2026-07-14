@@ -36,7 +36,11 @@ function hexA(c: string, a: number): string {
  * brand-dark palette in both themes). The splash never mounts under reduced
  * motion, but the matchMedia static path is kept as belt-and-braces.
  */
-export default function HeroCanvas({ startDelayMs = 0 }: { startDelayMs?: number }) {
+export default function HeroCanvas({
+  startDelayMs = 0,
+}: {
+  startDelayMs?: number;
+}) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -45,8 +49,10 @@ export default function HeroCanvas({ startDelayMs = 0 }: { startDelayMs?: number
     const ctx = cv.getContext("2d");
     if (!ctx) return;
 
-    const motion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const getVar = (n: string) => getComputedStyle(cv).getPropertyValue(n).trim();
+    const motion = !window.matchMedia("(prefers-reduced-motion: reduce)")
+      .matches;
+    const getVar = (n: string) =>
+      getComputedStyle(cv).getPropertyValue(n).trim();
     const delay = startDelayMs / 1000;
 
     let W = 0;
@@ -133,7 +139,10 @@ export default function HeroCanvas({ startDelayMs = 0 }: { startDelayMs?: number
       const liveT = Math.max(time - INTRO_END, 0);
       const motionGain = built ? easeInOut(Math.min(liveT / 1.2, 1)) : 0;
       const floatY = motion ? Math.sin(liveT * 0.6) * 8 * motionGain : 0;
-      const pts = baseHex.map(([x, y]) => ({ x: cx + x * R, y: cy + y * R + floatY }));
+      const pts = baseHex.map(([x, y]) => ({
+        x: cx + x * R,
+        y: cy + y * R + floatY,
+      }));
       pts.push({ x: cx, y: cy + floatY }); // center node = index 6
 
       // ambient dust
@@ -174,7 +183,10 @@ export default function HeroCanvas({ startDelayMs = 0 }: { startDelayMs?: number
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(ex, ey);
         const drawing = !built && prog < 1;
-        ctx.strokeStyle = hexA(gold, drawing ? Math.min(eAlpha + 0.3, 0.85) : eAlpha);
+        ctx.strokeStyle = hexA(
+          gold,
+          drawing ? Math.min(eAlpha + 0.3, 0.85) : eAlpha
+        );
         ctx.stroke();
       });
 

@@ -6,9 +6,29 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 function BranchIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M6 3v13a3 3 0 0 0 3 3h9" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="6" cy="4" r="2" fill="none" stroke="var(--gold)" strokeWidth="2" />
-      <circle cx="18" cy="19" r="2" fill="none" stroke="var(--gold)" strokeWidth="2" />
+      <path
+        d="M6 3v13a3 3 0 0 0 3 3h9"
+        fill="none"
+        stroke="var(--gold)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <circle
+        cx="6"
+        cy="4"
+        r="2"
+        fill="none"
+        stroke="var(--gold)"
+        strokeWidth="2"
+      />
+      <circle
+        cx="18"
+        cy="19"
+        r="2"
+        fill="none"
+        stroke="var(--gold)"
+        strokeWidth="2"
+      />
     </svg>
   );
 }

@@ -2,7 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSite } from "@/components/Providers";
-import { LogoMark, SunIcon, MoonIcon, MenuIcon, CloseIcon } from "@/components/ui/icons";
+import {
+  LogoMark,
+  SunIcon,
+  MoonIcon,
+  MenuIcon,
+  CloseIcon,
+} from "@/components/ui/icons";
 
 // Anchor plan per STAGE2-DESIGN §2: the merged section owns #how-we-work
 // (and carries an invisible #offer alias for old deep links).
@@ -28,8 +34,7 @@ export default function Nav() {
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        const max =
-          document.documentElement.scrollHeight - window.innerHeight;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
         const p = max > 0 ? (window.scrollY / max) * 100 : 0;
         if (barRef.current) barRef.current.style.width = p + "%";
         setScrolled(window.scrollY > 6);
@@ -107,7 +112,11 @@ export default function Nav() {
         </ul>
 
         <div className="nav-actions" style={{ marginInlineStart: "auto" }}>
-          <div className="lang-group" role="group" aria-label={t.ui.aria.language}>
+          <div
+            className="lang-group"
+            role="group"
+            aria-label={t.ui.aria.language}
+          >
             <button
               type="button"
               className={"lang-btn" + (lang === "en" ? " active" : "")}
@@ -138,7 +147,11 @@ export default function Nav() {
             {theme === "dark" ? <MoonIcon /> : <SunIcon />}
           </button>
 
-          <a href="#contact" data-magnetic="" className="btn-primary btn-sm nav-cta">
+          <a
+            href="#contact"
+            data-magnetic=""
+            className="btn-primary btn-sm nav-cta"
+          >
             {t.nav.cta}
           </a>
 

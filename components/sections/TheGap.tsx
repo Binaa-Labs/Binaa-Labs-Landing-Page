@@ -5,7 +5,16 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 
 function XMark() {
   return (
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" aria-hidden="true">
+    <svg
+      width="11"
+      height="11"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.6"
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
       <path d="M6 6l12 12M18 6L6 18" />
     </svg>
   );
@@ -13,7 +22,17 @@ function XMark() {
 
 function CheckMark() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
       <path d="M5 12l5 5L20 6" />
     </svg>
   );
@@ -55,7 +74,11 @@ export default function TheGap() {
           </div>
 
           <div className="gap-spine">
-            <span className="spine-node" data-reveal="fade" data-reveal-delay="200">
+            <span
+              className="spine-node"
+              data-reveal="fade"
+              data-reveal-delay="200"
+            >
               {g.spineLabel}
             </span>
           </div>

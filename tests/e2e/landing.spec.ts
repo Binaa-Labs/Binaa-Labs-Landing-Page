@@ -21,7 +21,7 @@ test("renders the English landing page", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Run Your Business Online"
   );
-  // case panels replaced the carousel
+  // the proof section now renders two fixed case panels
   await expect(page.locator("#work")).toContainText("Wazen وازن");
   await expect(page.locator("#work")).toContainText("Almani Motors");
   await expect(page.locator("#work .case-link")).toHaveAttribute(

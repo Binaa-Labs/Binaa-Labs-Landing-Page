@@ -85,7 +85,10 @@ export default function SelectedWork() {
                     <div className="ui-side">
                       <span className="ui-brand">{wf.brand}</span>
                       {wf.nav.map((n, i) => (
-                        <span key={i} className={"ui-nav" + (i === 0 ? " on" : "")}>
+                        <span
+                          key={i}
+                          className={"ui-nav" + (i === 0 ? " on" : "")}
+                        >
                           {n}
                         </span>
                       ))}
@@ -143,7 +146,9 @@ export default function SelectedWork() {
                   </div>
                 </div>
               </CaseVideo>
-              {WAZEN_LOOP_SRC && <span className="loop-chip">{sw.loopChip}</span>}
+              {WAZEN_LOOP_SRC && (
+                <span className="loop-chip">{sw.loopChip}</span>
+              )}
             </div>
           </article>
 
@@ -191,7 +196,10 @@ export default function SelectedWork() {
                   <div className="ui-side">
                     <span className="ui-brand">{af.brand}</span>
                     {af.nav.map((n, i) => (
-                      <span key={i} className={"ui-nav" + (i === 0 ? " on" : "")}>
+                      <span
+                        key={i}
+                        className={"ui-nav" + (i === 0 ? " on" : "")}
+                      >
                         {n}
                       </span>
                     ))}
@@ -256,23 +264,64 @@ function PartGlyph({ i }: { i: number }) {
   if (i === 0) {
     return (
       <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="7" fill="none" stroke="var(--ink-3)" strokeWidth="1.6" />
-        <circle cx="12" cy="12" r="2.5" fill="none" stroke="var(--ink-3)" strokeWidth="1.6" />
+        <circle
+          cx="12"
+          cy="12"
+          r="7"
+          fill="none"
+          stroke="var(--ink-3)"
+          strokeWidth="1.6"
+        />
+        <circle
+          cx="12"
+          cy="12"
+          r="2.5"
+          fill="none"
+          stroke="var(--ink-3)"
+          strokeWidth="1.6"
+        />
       </svg>
     );
   }
   if (i === 1) {
     return (
       <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="5" y="7" width="14" height="10" rx="2" fill="none" stroke="var(--ink-3)" strokeWidth="1.6" />
-        <path d="M9 7V5h6v2M8 17v2M16 17v2" fill="none" stroke="var(--ink-3)" strokeWidth="1.6" strokeLinecap="round" />
+        <rect
+          x="5"
+          y="7"
+          width="14"
+          height="10"
+          rx="2"
+          fill="none"
+          stroke="var(--ink-3)"
+          strokeWidth="1.6"
+        />
+        <path
+          d="M9 7V5h6v2M8 17v2M16 17v2"
+          fill="none"
+          stroke="var(--ink-3)"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
       </svg>
     );
   }
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M6 15V9l4-2 4 2v6l-4 2z" fill="none" stroke="var(--ink-3)" strokeWidth="1.6" strokeLinejoin="round" />
-      <path d="M14 11h4M16 9v4" fill="none" stroke="var(--ink-3)" strokeWidth="1.6" strokeLinecap="round" />
+      <path
+        d="M6 15V9l4-2 4 2v6l-4 2z"
+        fill="none"
+        stroke="var(--ink-3)"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14 11h4M16 9v4"
+        fill="none"
+        stroke="var(--ink-3)"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

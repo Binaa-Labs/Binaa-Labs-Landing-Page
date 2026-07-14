@@ -61,8 +61,16 @@ export const en = {
         { value: "24", label: "Plans updated" },
       ],
       rows: [
-        { name: "Ahmad K. — Cut phase · wk 6", status: "Checked in", muted: false },
-        { name: "Omar S. — Strength · wk 3", status: "Checked in", muted: false },
+        {
+          name: "Ahmad K. — Cut phase · wk 6",
+          status: "Checked in",
+          muted: false,
+        },
+        {
+          name: "Omar S. — Strength · wk 3",
+          status: "Checked in",
+          muted: false,
+        },
         { name: "Khalid M. — Onboarding", status: "Plan due", muted: true },
       ],
     },
@@ -195,7 +203,14 @@ export const en = {
     wazenFrame: {
       url: "app.wazen.fit",
       brand: "Wazen",
-      nav: ["Dashboard", "Clients", "Plans", "Check-ins", "Templates", "Messages"],
+      nav: [
+        "Dashboard",
+        "Clients",
+        "Plans",
+        "Check-ins",
+        "Templates",
+        "Messages",
+      ],
       title: "Coach Dashboard",
       period: "Week 24 · Jun",
       kpis: [
@@ -210,7 +225,12 @@ export const en = {
       tableHead: ["Client", "Plan", "Status"],
       tableRows: [
         { a: "Ahmad K.", b: "Cut · wk 6", status: "Checked in", muted: false },
-        { a: "Omar S.", b: "Strength · wk 3", status: "Checked in", muted: false },
+        {
+          a: "Omar S.",
+          b: "Strength · wk 3",
+          status: "Checked in",
+          muted: false,
+        },
         { a: "Khalid M.", b: "Onboarding", status: "Plan due", muted: true },
       ],
     },
@@ -228,13 +248,33 @@ export const en = {
         { label: "Used", on: false },
       ],
       parts: [
-        { name: "Brake disc — front", price: "SAR 320", pill: "New", muted: false },
-        { name: "Alternator — 12V", price: "Make offer", pill: "Used", muted: true },
-        { name: "Oil filter — set of 4", price: "SAR 95", pill: "New", muted: false },
+        {
+          name: "Brake disc — front",
+          price: "SAR 320",
+          pill: "New",
+          muted: false,
+        },
+        {
+          name: "Alternator — 12V",
+          price: "Make offer",
+          pill: "Used",
+          muted: true,
+        },
+        {
+          name: "Oil filter — set of 4",
+          price: "SAR 95",
+          pill: "New",
+          muted: false,
+        },
       ],
       tableHead: ["Recent offer", "Listing", "State"],
       tableRows: [
-        { a: "SAR 480", b: "Gearbox — used", status: "Countered", muted: false },
+        {
+          a: "SAR 480",
+          b: "Gearbox — used",
+          status: "Countered",
+          muted: false,
+        },
         { a: "SAR 210", b: "Headlamp — used", status: "Pending", muted: true },
       ],
     },
@@ -316,7 +356,8 @@ export const en = {
       },
     ],
     disciplinesLabel: "Disciplines",
-    disciplines: "Web apps · Mobile apps · Process automation · System integration",
+    disciplines:
+      "Web apps · Mobile apps · Process automation · System integration",
     proposal: {
       label: "Fixed Price Proposal",
       title: "The Complete Build",

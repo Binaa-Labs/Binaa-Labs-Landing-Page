@@ -45,8 +45,16 @@
   --elev-2: 0 10px 28px -10px rgba(0, 0, 0, 0.5);
   --elev-3: 0 28px 56px -16px rgba(0, 0, 0, 0.6);
   --glow-gold: 0 0 90px -20px rgba(212, 160, 23, 0.4);
-  --glow-radial: radial-gradient(ellipse 50% 42% at 50% 38%, rgba(212, 160, 23, 0.14), transparent 70%);
-  --hero-light: radial-gradient(ellipse 42% 55% at 68% 40%, rgba(212, 160, 23, 0.1), transparent 68%);
+  --glow-radial: radial-gradient(
+    ellipse 50% 42% at 50% 38%,
+    rgba(212, 160, 23, 0.14),
+    transparent 70%
+  );
+  --hero-light: radial-gradient(
+    ellipse 42% 55% at 68% 40%,
+    rgba(212, 160, 23, 0.1),
+    transparent 68%
+  );
 }
 /* Light = D14 hybrid: #FAFAFA/#F1F2F4, white surfaces, navy hairlines,
    navy ink scale, gold split (accent #A87810 / button fill #8F660D). */
@@ -75,7 +83,11 @@
   --elev-2: 0 10px 28px -10px rgba(36, 50, 75, 0.14);
   --elev-3: 0 28px 56px -16px rgba(36, 50, 75, 0.18);
   --glow-gold: 0 0 90px -20px rgba(168, 120, 16, 0.22);
-  --glow-radial: radial-gradient(ellipse 50% 42% at 50% 38%, rgba(212, 160, 23, 0.1), transparent 70%);
+  --glow-radial: radial-gradient(
+    ellipse 50% 42% at 50% 38%,
+    rgba(212, 160, 23, 0.1),
+    transparent 70%
+  );
   --hero-light: none;
 }
 
@@ -134,7 +146,9 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
 }
 ::selection {
   background: var(--gold);
@@ -213,42 +227,80 @@ ul {
 
 /* ---- keyframes ---- */
 @keyframes binSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 @keyframes splCloseL {
-  from { transform: translateX(-101%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(-101%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 @keyframes splCloseR {
-  from { transform: translateX(101%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(101%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 @keyframes splPartL {
-  from { transform: translateX(0); }
-  to { transform: translateX(-101%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-101%);
+  }
 }
 @keyframes splPartR {
-  from { transform: translateX(0); }
-  to { transform: translateX(101%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(101%);
+  }
 }
 @keyframes splFadeOut {
-  to { opacity: 0; }
+  to {
+    opacity: 0;
+  }
 }
 @keyframes splRise {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes scnFrom {
-  from { color: var(--ink-2); }
-  to { color: var(--ink-3); }
+  from {
+    color: var(--ink-2);
+  }
+  to {
+    color: var(--ink-3);
+  }
 }
 @keyframes scnStrike {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 @keyframes scnIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Reduced-motion kill-switch, layer 1 (layer 2 = matchMedia checks wherever
@@ -266,7 +318,8 @@ ul {
 .js [data-reveal] {
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity var(--dur-base) var(--ease-enter),
+  transition:
+    opacity var(--dur-base) var(--ease-enter),
     transform var(--dur-base) var(--ease-enter);
   will-change: opacity, transform;
 }
@@ -309,9 +362,15 @@ ul {
 .section {
   padding-block: var(--sp-8);
 }
-.bg { background: var(--bg); }
-.bg-2 { background: var(--bg-2); }
-.bt { border-top: 1px solid var(--line); }
+.bg {
+  background: var(--bg);
+}
+.bg-2 {
+  background: var(--bg-2);
+}
+.bt {
+  border-top: 1px solid var(--line);
+}
 
 /* invisible anchor target (e.g. the #offer alias on the merged section) */
 .anchor-alias {
@@ -388,11 +447,20 @@ ul {
   z-index: 0;
   pointer-events: none;
   opacity: 0.5;
-  background-image: linear-gradient(var(--line) 1px, transparent 1px),
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
   background-size: 46px 46px;
-  -webkit-mask-image: radial-gradient(ellipse 100% 60% at 50% 0%, #000 0%, transparent 75%);
-  mask-image: radial-gradient(ellipse 100% 60% at 50% 0%, #000 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 100% 60% at 50% 0%,
+    #000 0%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    ellipse 100% 60% at 50% 0%,
+    #000 0%,
+    transparent 75%
+  );
 }
 
 /* ---- buttons (D14 gold split: fills use --gold-btn) ---- */
@@ -445,7 +513,9 @@ ul {
   padding: 14px var(--sp-5);
   border-radius: var(--r-2);
   cursor: pointer;
-  transition: border-color var(--dur-fast) var(--ease-hover), color var(--dur-fast) var(--ease-hover);
+  transition:
+    border-color var(--dur-fast) var(--ease-hover),
+    color var(--dur-fast) var(--ease-hover);
 }
 .btn-ghost:hover {
   border-color: var(--gold-line);
@@ -467,7 +537,9 @@ ul {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid transparent;
-  transition: border-color var(--dur-base) var(--ease-hover), background-color var(--dur-base) var(--ease-hover);
+  transition:
+    border-color var(--dur-base) var(--ease-hover),
+    background-color var(--dur-base) var(--ease-hover);
 }
 .nav-header.scrolled {
   border-bottom-color: var(--line);
@@ -584,7 +656,9 @@ ul {
   border: none;
   cursor: pointer;
   border-radius: var(--r-2);
-  transition: color var(--dur-fast) var(--ease-hover), background-color var(--dur-fast) var(--ease-hover);
+  transition:
+    color var(--dur-fast) var(--ease-hover),
+    background-color var(--dur-fast) var(--ease-hover);
 }
 .icon-btn.theme {
   color: var(--ink-2);
@@ -627,9 +701,15 @@ ul {
   text-decoration: none;
 }
 @media (min-width: 920px) {
-  .nav-links { display: flex; }
-  .nav-cta { display: inline-flex; }
-  .nav-burger { display: none; }
+  .nav-links {
+    display: flex;
+  }
+  .nav-cta {
+    display: inline-flex;
+  }
+  .nav-burger {
+    display: none;
+  }
 }
 
 /* ============================================================
@@ -678,14 +758,18 @@ html:not(.js) #splash {
 .spl-l {
   left: 0;
   border-right: 1px solid rgba(212, 160, 23, 0.22);
-  animation: splCloseL var(--spl-close-dur) var(--ease-enter) both,
-    splPartL var(--spl-exit-dur) var(--ease-hover) var(--spl-exit-delay) forwards;
+  animation:
+    splCloseL var(--spl-close-dur) var(--ease-enter) both,
+    splPartL var(--spl-exit-dur) var(--ease-hover) var(--spl-exit-delay)
+      forwards;
 }
 .spl-r {
   right: 0;
   border-left: 1px solid rgba(212, 160, 23, 0.22);
-  animation: splCloseR var(--spl-close-dur) var(--ease-enter) both,
-    splPartR var(--spl-exit-dur) var(--ease-hover) var(--spl-exit-delay) forwards;
+  animation:
+    splCloseR var(--spl-close-dur) var(--ease-enter) both,
+    splPartR var(--spl-exit-dur) var(--ease-hover) var(--spl-exit-delay)
+      forwards;
 }
 .spl-stage {
   position: absolute;
@@ -695,7 +779,8 @@ html:not(.js) #splash {
   justify-items: center;
   text-align: center;
   gap: var(--sp-2);
-  animation: splFadeOut var(--dur-base) var(--ease-hover) var(--spl-exit-delay) forwards;
+  animation: splFadeOut var(--dur-base) var(--ease-hover) var(--spl-exit-delay)
+    forwards;
 }
 /* the ported HeroCanvas cube — the centerpiece, ~55–65vh */
 .spl-canvas {
@@ -757,7 +842,8 @@ html:not(.js) #splash {
   padding: 10px 18px;
   min-height: 40px;
   cursor: pointer;
-  animation: splRise var(--dur-base) var(--ease-enter) var(--spl-skip-delay) both,
+  animation:
+    splRise var(--dur-base) var(--ease-enter) var(--spl-skip-delay) both,
     splFadeOut var(--dur-fast) var(--ease-hover) var(--spl-exit-delay) forwards;
 }
 [dir="rtl"] .spl-skip {
@@ -1202,7 +1288,9 @@ html:not(.js) #splash {
   flex-direction: column;
   box-shadow: var(--elev-1);
   overflow: hidden;
-  transition: border-color var(--dur-base) var(--ease-hover), box-shadow var(--dur-base) var(--ease-hover);
+  transition:
+    border-color var(--dur-base) var(--ease-hover),
+    box-shadow var(--dur-base) var(--ease-hover);
 }
 .scn-card:hover {
   border-color: var(--gold-line);
@@ -1661,7 +1749,8 @@ html:not(.js) #splash {
   height: 34px;
   border-radius: var(--r-1);
   border: 1px solid var(--line);
-  background: radial-gradient(circle at 50% 50%, var(--surface-2) 38%, transparent 39%),
+  background:
+    radial-gradient(circle at 50% 50%, var(--surface-2) 38%, transparent 39%),
     repeating-linear-gradient(45deg, var(--surface) 0 4px, var(--bg-2) 4px 8px);
   display: grid;
   place-items: center;
@@ -1730,7 +1819,8 @@ html:not(.js) #splash {
 }
 .js .journey .jnode,
 .js .journey .artifact {
-  transition: opacity var(--dur-base) var(--ease-enter),
+  transition:
+    opacity var(--dur-base) var(--ease-enter),
     transform var(--dur-base) var(--ease-enter);
 }
 .js .journey:not([data-revealed]) .jnode {
@@ -1741,12 +1831,24 @@ html:not(.js) #splash {
   opacity: 0;
   transform: translateY(8px);
 }
-.js .journey[data-revealed] .jstep:nth-child(1) .jnode { transition-delay: 0.1s; }
-.js .journey[data-revealed] .jstep:nth-child(1) .artifact { transition-delay: 0.3s; }
-.js .journey[data-revealed] .jstep:nth-child(2) .jnode { transition-delay: 0.3s; }
-.js .journey[data-revealed] .jstep:nth-child(2) .artifact { transition-delay: 0.5s; }
-.js .journey[data-revealed] .jstep:nth-child(3) .jnode { transition-delay: 0.55s; }
-.js .journey[data-revealed] .jstep:nth-child(3) .artifact { transition-delay: 0.75s; }
+.js .journey[data-revealed] .jstep:nth-child(1) .jnode {
+  transition-delay: 0.1s;
+}
+.js .journey[data-revealed] .jstep:nth-child(1) .artifact {
+  transition-delay: 0.3s;
+}
+.js .journey[data-revealed] .jstep:nth-child(2) .jnode {
+  transition-delay: 0.3s;
+}
+.js .journey[data-revealed] .jstep:nth-child(2) .artifact {
+  transition-delay: 0.5s;
+}
+.js .journey[data-revealed] .jstep:nth-child(3) .jnode {
+  transition-delay: 0.55s;
+}
+.js .journey[data-revealed] .jstep:nth-child(3) .artifact {
+  transition-delay: 0.75s;
+}
 .jstep {
   position: relative;
 }
@@ -2323,7 +2425,8 @@ html:not(.js) #splash {
   border-radius: var(--r-3);
   background: var(--surface);
   overflow: hidden;
-  transition: border-color var(--dur-fast) var(--ease-hover),
+  transition:
+    border-color var(--dur-fast) var(--ease-hover),
     box-shadow var(--dur-fast) var(--ease-hover);
 }
 .qa + .qa {
@@ -2357,7 +2460,8 @@ html:not(.js) #splash {
   place-items: center;
   color: var(--ink-3);
   font-size: 0.7rem;
-  transition: transform var(--dur-fast) var(--ease-hover),
+  transition:
+    transform var(--dur-fast) var(--ease-hover),
     color var(--dur-fast) var(--ease-hover),
     border-color var(--dur-fast) var(--ease-hover);
 }
@@ -2752,7 +2856,9 @@ html:not(.js) #splash {
   border-radius: var(--r-2);
   color: var(--ink-2);
   text-decoration: none;
-  transition: color var(--dur-fast) var(--ease-hover), border-color var(--dur-fast) var(--ease-hover);
+  transition:
+    color var(--dur-fast) var(--ease-hover),
+    border-color var(--dur-fast) var(--ease-hover);
 }
 .footer-top-link:hover {
   color: var(--gold);
@@ -2925,7 +3031,9 @@ html:not(.js) #splash {
   border: 1px solid var(--line-2);
   padding: 8px 14px;
   border-radius: 8px;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 .legal-lang-switch:hover {
   color: var(--gold);
