@@ -1,7 +1,7 @@
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
+import Splash from "@/components/Splash";
 import Hero from "@/components/sections/Hero";
-import Stats from "@/components/sections/Stats";
 import TheGap from "@/components/sections/TheGap";
 import WhatWeBuild from "@/components/sections/WhatWeBuild";
 import SelectedWork from "@/components/sections/SelectedWork";
@@ -25,10 +25,10 @@ export default function Landing({ lang }: { lang: Lang }) {
         {t.ui.skipToContent}
       </a>
       <div className="ambient-grid" aria-hidden="true" />
+      <Splash />
       <Nav />
       <main id="top">
         <Hero />
-        <Stats />
         <TheGap />
         <WhatWeBuild />
         <SelectedWork />

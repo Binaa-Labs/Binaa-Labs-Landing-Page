@@ -89,14 +89,16 @@ export const viewport: Viewport = {
   initialScale: 1,
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#1a1a1a" },
-    { media: "(prefers-color-scheme: light)", color: "#fafaf8" },
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
   ],
 };
 
 // Runs before paint: apply the saved theme and flag JS so reveal styles engage
 // without a flash of fully-shown content. Language is set server-side from the
 // route (see middleware.ts), so the boot script no longer touches it.
-const bootScript = `(function(){try{var t=localStorage.getItem('binaa-theme');if(t!=='light'&&t!=='dark'){t='dark';}document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.add('js');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`;
+// Also flags an already-seen intro splash (sessionStorage, once per session)
+// so repeat loads hide the overlay before paint — no flash, no layout shift.
+const bootScript = `(function(){try{var t=localStorage.getItem('binaa-theme');if(t!=='light'&&t!=='dark'){t='dark';}document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.add('js');}catch(e){document.documentElement.setAttribute('data-theme','dark');}try{if(sessionStorage.getItem('binaa-splash-seen')==='1'){document.documentElement.classList.add('splash-seen');}}catch(e){}})();`;
 
 export default async function RootLayout({
   children,

@@ -1,84 +1,114 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
 import { useSite } from "@/components/Providers";
 
-const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
-
 export default function Hero() {
-  const { t, lang } = useSite();
-  const heroRef = useRef<HTMLElement>(null);
+  const { t } = useSite();
+  const h = t.hero;
 
-  // cursor-follow glow
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-    const onMove = (e: MouseEvent) => {
-      const r = hero.getBoundingClientRect();
-      hero.style.setProperty("--mx", ((e.clientX - r.left) / r.width) * 100 + "%");
-      hero.style.setProperty("--my", ((e.clientY - r.top) / r.height) * 100 + "%");
-    };
-    hero.addEventListener("mousemove", onMove);
-    return () => hero.removeEventListener("mousemove", onMove);
-  }, []);
-
-  // highlight "WhatsApp" / "Spreadsheet" in the headline
-  const highlightTerms = lang === 'ar'
-    ? ['واتساب', 'إكسل']
-    : ['WhatsApp', 'Spreadsheet'];
-  const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const pattern = new RegExp(`(${highlightTerms.map(escapeRegex).join('|')})`, 'g');
-  const parts = t.hero.headline.split(pattern).filter(Boolean);
+  // highlight terms come from the dictionary (both locales) — never
+  // hard-coded here (PROJECT.md §6 violation, fixed this pass)
+  const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(
+    `(${h.highlights.map(escapeRegex).join("|")})`,
+    "g"
+  );
+  const parts = h.headline.split(pattern).filter(Boolean);
 
   return (
-    <section ref={heroRef} className="hero">
-      <div className="hero-canvas-wrap" aria-hidden="true">
-        <HeroCanvas />
-      </div>
-
+    <section className="hero">
       <div className="hero-inner">
-        <div>
-          <div className="hero-badges" data-reveal="">
-            <span className="badge-loc">
-              <span className="badge-dot" />
-              {t.hero.badgeLocation}
-            </span>
-            <span className="badge-ar">{t.hero.badgeArabic}</span>
-          </div>
+        <div className="hero-copy">
+          <p className="hero-badge" data-reveal="">
+            <span className="badge-dot" aria-hidden="true" />
+            {h.badgeLocation}
+          </p>
 
-          <h1 className="hero-title" data-reveal="" data-reveal-delay="80">
+          <h1 className="hero-title" data-reveal="" data-reveal-delay="60">
             {parts.map((p, i) =>
-              highlightTerms.includes(p) ? (
-                <span key={i} className="hot">
-                  {p}
-                </span>
+              h.highlights.includes(p) ? (
+                <em key={i}>{p}</em>
               ) : (
                 <span key={i}>{p}</span>
               )
             )}
           </h1>
 
-          <p className="hero-sub" data-reveal="" data-reveal-delay="160">
-            {t.hero.subtext}
+          <p className="hero-sub" data-reveal="" data-reveal-delay="120">
+            {h.subtext}
           </p>
 
-          <div className="hero-cta-row" data-reveal="" data-reveal-delay="240">
-            <a href="#contact" data-magnetic="" className="btn-primary glow">
-              {t.hero.ctaPrimary}
+          <div className="hero-ctas" data-reveal="" data-reveal-delay="180">
+            <a href="#contact" data-magnetic="" className="btn-primary">
+              {h.ctaPrimary}
             </a>
-            <a href="#selected-work" className="btn-ghost">
-              {t.hero.ctaSecondary}
+            <a href="#work" className="btn-ghost">
+              {h.ctaSecondary}
             </a>
+          </div>
+
+          <div className="proof-band" data-reveal="" data-reveal-delay="240">
+            {h.proof.map((p, i) => (
+              <div className="proof" key={i}>
+                <b data-count={p.value}>{p.value}</b>
+                <span>{p.label}</span>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="hero-visual" />
-      </div>
-
-      <div className="hero-scroll" aria-hidden="true">
-        <span className="hero-scroll-text">{t.ui.scroll}</span>
-        <span className="hero-scroll-line" />
+        {/* Layered frame stack — a product schematic at the fidelity floor.
+            At the asset pass, a real capture replaces the .app schematic
+            inside the same .frame (an <img> or <video> slots straight in). */}
+        <div
+          className="hero-stack"
+          data-reveal=""
+          data-reveal-delay="150"
+          aria-hidden="true"
+          dir="ltr"
+        >
+          <div className="frame">
+            <div className="frame-bar">
+              <span className="dot" />
+              <span className="dot" />
+              <span className="dot" />
+              <span className="frame-url">{h.frame.url}</span>
+            </div>
+            <div className="app">
+              <div className="app-side">
+                {h.frame.nav.map((n, i) => (
+                  <span key={i} className={"app-nav" + (i === 0 ? " on" : "")}>
+                    {n}
+                  </span>
+                ))}
+              </div>
+              <div className="app-main">
+                <div className="app-head">
+                  <span className="app-title">{h.frame.title}</span>
+                  <span className="app-date">{h.frame.period}</span>
+                </div>
+                <div className="tiles">
+                  {h.frame.tiles.map((tile, i) => (
+                    <div className="tile" key={i}>
+                      <b>{tile.value}</b>
+                      <span>{tile.label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="rows">
+                  {h.frame.rows.map((r, i) => (
+                    <div className="rowi" key={i}>
+                      <span>{r.name}</span>
+                      <span className={"st" + (r.muted ? " mut" : "")}>
+                        {r.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

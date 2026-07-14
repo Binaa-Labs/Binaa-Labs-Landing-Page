@@ -22,15 +22,21 @@ function hexA(c: string, a: number): string {
         .map((s) => s.trim());
       return `rgba(${p.join(",")},${a})`;
     });
-  return `rgba(227,174,58,${a})`;
+  return `rgba(212,160,23,${a})`;
 }
 
 /**
- * Animated isometric node-cube that "builds in" (nodes pop outward, edges draw
- * themselves), then floats with traveling pulses. Theme-aware and respects
- * prefers-reduced-motion (renders the finished cube, statically).
+ * The original animated isometric node-cube, ported to the splash (v2): it
+ * "builds in" (nodes pop outward, edges draw themselves), then stays alive —
+ * floating, with traveling pulses and ambient particle dust. Centered in its
+ * box; the build is compressed to ~1.5s so it fits the splash beat between
+ * the panel close and the lockup rise.
+ *
+ * Colors come from the CSS custom properties in scope (`#splash` pins the
+ * brand-dark palette in both themes). The splash never mounts under reduced
+ * motion, but the matchMedia static path is kept as belt-and-braces.
  */
-export default function HeroCanvas() {
+export default function HeroCanvas({ startDelayMs = 0 }: { startDelayMs?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -41,8 +47,7 @@ export default function HeroCanvas() {
 
     const motion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const getVar = (n: string) => getComputedStyle(cv).getPropertyValue(n).trim();
-    const isLight = () =>
-      document.documentElement.getAttribute("data-theme") === "light";
+    const delay = startDelayMs / 1000;
 
     let W = 0;
     let H = 0;
@@ -93,47 +98,47 @@ export default function HeroCanvas() {
     }));
     const t0 = performance.now();
 
-    // intro timing — center node first, then ring nodes radiating out
+    // intro timing — center node first, then ring nodes radiating out.
+    // Compressed vs the original hero values so the whole build lands ~1.5s.
     const nodeOrder = [6, 0, 1, 2, 3, 4, 5];
     const nodeAt: Record<number, number> = {};
     nodeOrder.forEach((idx, o) => {
       nodeAt[idx] = o;
     });
-    const NODE_STAGGER = 0.085;
-    const NODE_GROW = 0.34;
+    const NODE_STAGGER = 0.05;
+    const NODE_GROW = 0.24;
     const NODES_DONE = motion ? nodeOrder.length * NODE_STAGGER + NODE_GROW : 0;
-    const EDGE_DRAW = 0.5;
-    const EDGE_DUR = motion ? (allEdges.length + 2) * 0.11 + EDGE_DRAW : 0;
-    const INTRO_END = NODES_DONE + EDGE_DUR;
+    const EDGE_DRAW = 0.3;
+    const EDGE_DUR = motion ? (allEdges.length + 2) * 0.055 + EDGE_DRAW : 0;
+    const INTRO_END = NODES_DONE + EDGE_DUR; // ≈ 1.5s
     const easeOut = (p: number) => 1 - Math.pow(1 - p, 3);
     const easeInOut = (p: number) =>
       p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-    const edgeDelay = (i: number) => NODES_DONE + i * 0.11;
+    const edgeDelay = (i: number) => NODES_DONE + i * 0.055;
 
     const draw = (now: number) => {
-      const light = isLight();
-      const time = (now - t0) / 1000;
+      // hold at t=0 until the panels finish closing
+      const time = Math.max(0, (now - t0) / 1000 - delay);
       const intro = motion ? Math.min(time / Math.max(INTRO_END, 0.001), 1) : 1;
       const built = intro >= 1;
       const gold = getVar("--gold") || "#D4A017";
-      const ink = getVar("--ink-3") || "#6A6A64";
-      const eAlpha = light ? 0.5 : 0.3;
-      const dAlpha = light ? 0.55 : 0.4;
+      const ink = getVar("--ink-3") || "#8A8A84";
+      const eAlpha = 0.3;
+      const dAlpha = 0.4;
       ctx.clearRect(0, 0, W, H);
 
-      const isRtl = document.documentElement.dir === "rtl";
-      const cx = W * (isRtl ? 0.38 : 0.62);
+      const cx = W * 0.5;
       const cy = H * 0.5;
-      const R = Math.min(W, H) * 0.26;
+      const R = Math.min(W, H) * 0.32;
       const liveT = Math.max(time - INTRO_END, 0);
       const motionGain = built ? easeInOut(Math.min(liveT / 1.2, 1)) : 0;
       const floatY = motion ? Math.sin(liveT * 0.6) * 8 * motionGain : 0;
       const pts = baseHex.map(([x, y]) => ({ x: cx + x * R, y: cy + y * R + floatY }));
       pts.push({ x: cx, y: cy + floatY }); // center node = index 6
 
-      // ambient dots
+      // ambient dust
       ctx.save();
-      const ambAlpha = dAlpha * (motion ? easeOut(Math.min(time / 1.4, 1)) : 1);
+      const ambAlpha = dAlpha * (motion ? easeOut(Math.min(time / 1.2, 1)) : 1);
       ambient.forEach((p) => {
         if (motion && built) {
           p.x += p.sx;
@@ -173,7 +178,7 @@ export default function HeroCanvas() {
         ctx.stroke();
       });
 
-      // traveling pulses (only after fully built)
+      // traveling pulses (only after fully built — the "stays alive" beat)
       if (motion && built) {
         const pAlpha = motionGain;
         allEdges.forEach((e, i) => {
@@ -231,8 +236,7 @@ export default function HeroCanvas() {
     // Only animate while the canvas is on-screen and the tab is visible —
     // otherwise the rAF loop keeps burning CPU/battery off-screen.
     let onScreen = true;
-    const isActive = () =>
-      onScreen && document.visibilityState === "visible";
+    const isActive = () => onScreen && document.visibilityState === "visible";
 
     const frame = (now: number) => {
       draw(now);
@@ -267,7 +271,7 @@ export default function HeroCanvas() {
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, [startDelayMs]);
 
-  return <canvas ref={ref} className="hero-canvas" />;
+  return <canvas ref={ref} />;
 }
