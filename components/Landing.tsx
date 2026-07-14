@@ -8,6 +8,7 @@ import SelectedWork from "@/components/sections/SelectedWork";
 import HowWeWork from "@/components/sections/HowWeWork";
 import Guarantee from "@/components/sections/Guarantee";
 import Team from "@/components/sections/Team";
+import Faq from "@/components/sections/Faq";
 import Contact from "@/components/sections/Contact";
 import ClientEffects from "@/components/ClientEffects";
 import Providers from "@/components/Providers";
@@ -34,6 +35,7 @@ export default function Landing({ lang }: { lang: Lang }) {
         <HowWeWork />
         <Guarantee />
         <Team />
+        <Faq />
         <Contact />
       </main>
       <Footer />
