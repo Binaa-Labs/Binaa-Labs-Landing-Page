@@ -1,20 +1,30 @@
+// English dictionary — defines the Dict shape (ar.ts must match it exactly).
+// Stage 2 copy diet: one headline + one supporting line per section; facts
+// live in chips, meta rows and artifact fragments, not sentences.
+//
+// Frame-interior strings (hero frame, case-panel posters) are product
+// schematics: a browser chrome is an LTR artifact, so they stay Latin in
+// BOTH locales (STAGE2-DESIGN §3/§6). ar.ts reuses these objects verbatim.
+
 export const en = {
   nav: {
-    logoSubtext: "بناء لابس",
     brandName: "Binaa Labs",
-    brandSub: "Software Solutions",
+    brandSub: "Software Studio",
     links: {
       theGap: "The Gap",
       whatWeBuild: "What We Build",
       selectedWork: "Selected Work",
-      offer: "Offer",
-      guarantee: "Our Guarantee",
+      howWeWork: "How We Work",
     },
     cta: "Free Analysis",
   },
+  splash: {
+    title: "Binaa Labs",
+    arabicName: "بناء لابس",
+    slogan: "Where your software gets built",
+    skip: "Skip →",
+  },
   ui: {
-    scroll: "Scroll",
-    stack: "STACK",
     skipToContent: "Skip to content",
     aria: {
       home: "Binaa Labs home",
@@ -23,39 +33,49 @@ export const en = {
       toggleMenu: "Toggle menu",
       backToTop: "Back to top",
     },
-    carousel: {
-      region: "Selected work carousel",
-      goToProject: "Go to project",
-      previous: "Previous project",
-      next: "Next project",
-      status: "Project {current} of {total}",
-    },
   },
   hero: {
     badgeLocation: "Dubai, UAE · Built for the Gulf",
-    badgeArabic: "Digital Transformation",
     headline:
       "Run Your Business Online — Not Out of a WhatsApp Group and a Spreadsheet",
+    highlights: ["WhatsApp Group", "Spreadsheet"],
     subtext:
-      "Most Gulf businesses are still run by hand. We move yours fully online and automate the busywork — so your operation runs without you chasing it. Custom-built, launched fast, and yours to keep.",
+      "We move your operation fully online and automate the busywork — custom-built, launched fast, yours to keep.",
     ctaPrimary: "Book Your Free Analysis →",
-    ctaSecondary: "See What We've Built",
-  },
-  statsBar: {
-    stats: [
+    ctaSecondary: "See What We’ve Built",
+    proof: [
       { value: "100%", label: "Code and ownership stays yours" },
       { value: "AR + EN", label: "Bilingual, built for the Gulf" },
-      { value: "1:1", label: "Work direct with the builders" },
       { value: "2 wks", label: "To a demo and clear plan" },
+      { value: "24h", label: "Response, direct from the builders" },
     ],
+    // product schematic — Latin/LTR in both locales
+    frame: {
+      url: "app.wazen.fit",
+      nav: ["Dashboard", "Clients", "Plans", "Check-ins", "Messages"],
+      title: "Coach Dashboard",
+      period: "This week",
+      tiles: [
+        { value: "128", label: "Active clients" },
+        { value: "96%", label: "Check-in rate" },
+        { value: "24", label: "Plans updated" },
+      ],
+      rows: [
+        { name: "Ahmad K. — Cut phase · wk 6", status: "Checked in", muted: false },
+        { name: "Omar S. — Strength · wk 3", status: "Checked in", muted: false },
+        { name: "Khalid M. — Onboarding", status: "Plan due", muted: true },
+      ],
+    },
   },
   theGap: {
     label: "The Software Studio Trap",
-    headline: "Anyone Can Say 'We'll Automate It.' Few Can Actually Build It.",
+    headline: "Anyone Can Say ‘We’ll Automate It.’ Few Can Actually Build It.",
     subtext:
-      "Now that AI makes it easy to claim, everyone is an automation expert. But a WhatsApp bot and a no-code patch are not a system. We are a real software studio — proper engineering, built Arabic-first, made to hold up as you grow.",
-    usualOption: {
+      "A WhatsApp bot and a no-code patch are not a system. Everything below is the difference.",
+    spineLabel: "The Gap",
+    usual: {
       title: "The Usual Option",
+      tag: "What you get elsewhere",
       items: [
         {
           title: "Off-the-Shelf and No-Code Patches",
@@ -79,9 +99,9 @@ export const en = {
         },
       ],
     },
-    studioModel: {
+    studio: {
       title: "Binaa Labs",
-      badge: "The Studio Model",
+      tag: "The Studio Model",
       items: [
         {
           title: "A Real Software Studio",
@@ -107,149 +127,210 @@ export const en = {
     },
   },
   whatWeBuild: {
-    label: "Four Disciplines. One Studio.",
-    headline: "Everything It Takes to Put Your Business Online",
-    subtext:
-      "We do not do everything. We build the core systems that put your operations online, automate the repetitive work, and connect the tools you already use — so the whole thing runs as one.",
+    label: "What We Build",
+    headline: "Picture It Already Working",
+    subtext: "Four everyday operations — rebuilt as software that runs itself.",
+    // Scenarios are illustrations of capability, never claims of delivered
+    // clients (D1). The only delivery claims on the page are in Selected Work.
     cards: [
       {
-        title: "Web Applications",
-        description:
-          "Custom platforms — customer portals, dashboards, booking and ordering systems — built to handle real volume, with security baked in, not bolted on.",
-        tags: ["React", "Node.js", "PostgreSQL"],
+        headline: "A clinic that books itself",
+        build:
+          "A booking system your patients use directly — appointments, reminders and records in one place.",
+        from: "phone tag and a paper calendar",
+        to: "slots that book, confirm and remind on their own",
       },
       {
-        title: "Mobile Apps",
-        description:
-          "Native iOS and Android apps your customers actually want to use. Arabic-first, fast, and tuned for the way the Gulf shops and pays.",
-        tags: ["React Native", "Swift", "Kotlin"],
+        headline: "A warehouse that knows every part it holds",
+        build:
+          "An inventory system tracking every part, price and location in real time.",
+        from: "a storeroom only one person understands",
+        to: "live stock every device can see",
       },
       {
-        title: "Process Automation",
-        description:
-          "The repetitive work eating your team's day — data entry, follow-ups, reports — mapped, automated, and connected to AI assistants so it runs itself.",
-        tags: ["API Integration", "AI Assistants", "Custom Tools"],
+        headline: "Reports that write themselves",
+        build:
+          "Automation that pulls your numbers and assembles the report the moment it is due.",
+        from: "a night of copy-paste every month",
+        to: "it is already in your inbox",
       },
       {
-        title: "System Integration",
-        description:
-          "Your CRM, accounting, payment gateways and ERP, finally talking to each other. One connected system instead of ten disconnected tools.",
-        tags: ["REST APIs", "Webhooks", "ERP & CRM"],
+        headline: "Ten tools that finally talk",
+        build:
+          "Integration wiring your CRM, accounting and payments into one connected flow.",
+        from: "ten disconnected tools",
+        to: "one connected operation",
       },
     ],
   },
   selectedWork: {
     label: "Selected Work",
     headline: "Real Work, Shipped and Running",
-    subtext: "A look at what we have built and shipped — and what is coming next.",
-    projects: [
-      {
-        name: "Almani Motors",
-        cat: "Auto Parts E-Commerce",
-        badge: "Live in Saudi Arabia",
-        description:
-          "A Saudi spare-parts warehouse, moved online. We built the system that puts their full catalog on the web — new parts sold like any store, and used parts with their own flow for negotiable, no-fixed-price listings.",
-        tags: ["Next.js"],
-        link: "",
-      },
-      {
-        name: "Wazen وازن",
-        cat: "Coaching SaaS",
-        badge: "Binaa Labs Product",
-        description:
-          "Our own coaching platform that replaces the WhatsApp-and-spreadsheets grind. Coaches manage clients, plans, check-ins, messages and progress analytics in one place — with reusable nutrition, workout and medication templates they attach and tweak per client.",
-        tags: ["React", "Node.js", "PostgreSQL"],
-        link: "wazen.fit",
-      },
-      {
-        name: "More Work Landing Soon",
-        cat: "In Development",
-        badge: "",
-        description:
-          "We are heads-down building the next one. This spot is reserved for it.",
-        tags: [],
-        link: "",
-      },
-    ],
+    subtext: "Two products, live and in daily use — one of them our own.",
+    meta: { role: "Role", stack: "Stack", status: "Status" },
+    loopChip: "Silent loop",
+    wazen: {
+      badge: "Binaa Labs Product",
+      name: "Wazen وازن",
+      cat: "Coaching SaaS",
+      description:
+        "Our own coaching platform — the WhatsApp-and-spreadsheets grind, replaced. Clients, plans, check-ins and progress analytics in one place.",
+      role: "Product · Design · Build",
+      stack: "React · Node.js · PostgreSQL",
+      status: "Live",
+      link: "wazen.fit",
+      linkLabel: "Visit wazen.fit",
+    },
+    almani: {
+      badge: "Live in Saudi Arabia",
+      name: "Almani Motors",
+      cat: "Auto Parts E-Commerce",
+      description:
+        "A Saudi spare-parts warehouse, moved online — new parts sold like any store, used parts with their own negotiable-price flow.",
+      role: "Design · Build · Launch",
+      stack: "Next.js",
+      status: "Live (no public link)",
+    },
+    // case-frame schematics — Latin/LTR in both locales
+    wazenFrame: {
+      url: "app.wazen.fit",
+      brand: "Wazen",
+      nav: ["Dashboard", "Clients", "Plans", "Check-ins", "Templates", "Messages"],
+      title: "Coach Dashboard",
+      period: "Week 24 · Jun",
+      kpis: [
+        { value: "128", label: "Active clients" },
+        { value: "96%", label: "Check-in rate" },
+        { value: "24", label: "Plans updated" },
+      ],
+      chartCap: "Check-ins this week",
+      chartVal: "112 / 128",
+      chartBars: [52, 68, 44, 80, 96, 61, 38],
+      chartAxis: ["M", "T", "W", "T", "F", "S", "S"],
+      tableHead: ["Client", "Plan", "Status"],
+      tableRows: [
+        { a: "Ahmad K.", b: "Cut · wk 6", status: "Checked in", muted: false },
+        { a: "Omar S.", b: "Strength · wk 3", status: "Checked in", muted: false },
+        { a: "Khalid M.", b: "Onboarding", status: "Plan due", muted: true },
+      ],
+    },
+    almaniFrame: {
+      url: "almani-motors — placeholder",
+      brand: "Almani",
+      nav: ["Catalog", "Used parts", "Offers", "Orders", "Inventory"],
+      title: "Parts catalog",
+      period: "1,240 listings",
+      filters: [
+        { label: "All brands", on: true },
+        { label: "Model", on: false },
+        { label: "Year", on: false },
+        { label: "New", on: true },
+        { label: "Used", on: false },
+      ],
+      parts: [
+        { name: "Brake disc — front", price: "SAR 320", pill: "New", muted: false },
+        { name: "Alternator — 12V", price: "Make offer", pill: "Used", muted: true },
+        { name: "Oil filter — set of 4", price: "SAR 95", pill: "New", muted: false },
+      ],
+      tableHead: ["Recent offer", "Listing", "State"],
+      tableRows: [
+        { a: "SAR 480", b: "Gearbox — used", status: "Countered", muted: false },
+        { a: "SAR 210", b: "Headlamp — used", status: "Pending", muted: true },
+      ],
+    },
   },
-  howItWorks: {
-    label: "How It Works",
-    headline: "Three Steps to Working Software",
+  howWeWork: {
+    label: "How We Work & What You Get",
+    headline: "From First Call to Code That’s Yours",
     subtext:
-      "No bloated process, no account managers. Here is exactly how we go from first call to launch.",
+      "Three steps, one fixed price — and at each one, something real lands in your hands.",
+    youReceive: "You receive",
     steps: [
       {
-        number: "01",
-        title: "Tell Us What You're Building",
-        description:
-          "Book a call and tell us how your business runs today. We map your whole system, show you where it can be automated, and hand you a free analysis with a visual demo — so you see your new setup before you spend a thing.",
+        num: "01",
+        title: "Free analysis",
+        line: "We map your operation, show you a visual demo, and put one fixed price on the table.",
       },
       {
-        number: "02",
-        title: "Watch It Come Together",
-        description:
-          "You're never in the dark. You get a working link to click through as we build, plus a direct line to the people building it — so you shape it before launch, not after.",
+        num: "02",
+        title: "You watch it build",
+        line: "Click through a working link as we go, with a direct line to the people writing the code.",
       },
       {
-        number: "03",
-        title: "Launch and Own It",
-        description:
-          "We deploy, set up hosting and backups, hand over full ownership of the code, and stay on for 12 months of support. It's yours.",
+        num: "03",
+        title: "Launch and own it",
+        line: "We deploy, hand over the repository, and stay on for twelve months of support.",
       },
     ],
-  },
-  offer: {
-    label: "Everything You Get",
-    headline: "One Fixed Price. Everything It Takes to Launch.",
-    subtext:
-      "From the first plan to a year of support after launch, here is exactly what is included in your build — no add-ons, no surprise line items.",
+    // artifact fragments — deliberately generic (your-app, your-company):
+    // no invented client names anywhere (D1)
+    quoteDoc: {
+      title: "Fixed-Price Proposal",
+      version: "v1",
+      rows: [
+        { item: "Discovery & system map", included: "included" },
+        { item: "Build — 5 modules, AR + EN", included: "included" },
+        { item: "Launch & 12-mo support", included: "included" },
+      ],
+      totalLabel: "Total",
+      totalValue: "One fixed price",
+    },
+    demo: {
+      url: "preview.binaalabs.dev/your-app",
+      live: "Live",
+      meta1: "Build 0.6 · Booking module",
+      meta2: "Updated 2h ago",
+    },
+    repo: {
+      name: "your-company/platform",
+      owner: "Yours",
+      rows: ["Source + history", "Infra & DNS accounts", "Docs & runbook"],
+      done: "transferred ✓",
+    },
+    deliverablesHead: "Everything included in the build",
     deliverables: [
       {
-        number: "01",
-        title: "A Clear Plan Before Any Code",
-        description:
-          "We map your whole operation — every screen, database and connection — into a blueprint you approve before we build. No surprises later.",
+        num: "01",
+        title: "A clear plan before any code",
+        line: "Every screen, database and connection mapped into a blueprint you approve first.",
       },
       {
-        number: "02",
-        title: "Arabic-First Design, Done Right",
-        description:
-          "Bilingual interfaces built right-to-left from the start, with checkout and flows tuned for how the Gulf actually uses them.",
+        num: "02",
+        title: "Arabic-first design, done right",
+        line: "Bilingual interfaces built right-to-left from the first wireframe — not translated at the end.",
       },
       {
-        number: "03",
-        title: "The Full Build, Done Properly",
-        description:
-          "Clean, documented front-end and back-end built to your exact spec — tested across real devices, not thrown over the wall.",
+        num: "03",
+        title: "The full build, done properly",
+        line: "Clean, documented front-end and back-end, tested on real devices.",
       },
       {
-        number: "04",
-        title: "Connected to the Tools You Use",
-        description:
-          "Plugged into your payment gateways, CRM, accounting and ERP, so everything talks to each other from day one.",
+        num: "04",
+        title: "Connected to the tools you use",
+        line: "Payment gateways, CRM, accounting and ERP, talking to each other from day one.",
       },
       {
-        number: "05",
-        title: "Support After Launch",
-        description:
-          "Hosting, automatic backups, fixes and a direct line to us for 12 months. You are never left stranded.",
+        num: "05",
+        title: "Support after launch",
+        line: "Hosting, backups, fixes and a direct line to us for twelve months.",
       },
     ],
+    disciplinesLabel: "Disciplines",
+    disciplines: "Web apps · Mobile apps · Process automation · System integration",
     proposal: {
       label: "Fixed Price Proposal",
       title: "The Complete Build",
       intro:
-        "Everything above, for one fixed price — scoped to your project, agreed up front.",
+        "Everything in the list, for one price — scoped to your project, agreed up front.",
       checks: [
         "Scoped to your exact needs",
         "One price, no hourly surprises",
         "You own 100% of the code",
         "Backed by our delivery guarantee",
       ],
-      freeBox: {
-        label: "Free First Step — No Cost",
-        text: "Book a call and we map your whole system, show you exactly what we can automate and how we would build it — plus a visual demo so you can see how your new setup will look. Yours free, before you commit to anything.",
-      },
+      freeLabel: "Free first step — no cost",
+      freeText:
+        "We map your system and show you a visual demo of your new setup, free, before you commit to anything.",
       cta: "Book Your Free Analysis →",
     },
   },
@@ -257,9 +338,10 @@ export const en = {
     label: "Our Guarantee",
     headline: "You Approve Every Step — Before You Pay for It",
     arabicSubline: "اعتمد قبل أن تدفع",
-    body: "You never pay for work you have not seen. Before we build any stage, we show you a visual demo of exactly what it will look like — and we only process that milestone once you approve it.",
+    body: "You never pay for work you have not seen. We show you a visual demo of every stage, and only bill that milestone once you approve it.",
     secondary:
-      "If the demo from your free analysis does not show you something worth building, you walk away owing nothing. Once we start, we do not stop until it works the way we agreed — we fix anything in scope, free, until it is right. No surprise bills. No paying for promises. You see it, you approve it, then we build it.",
+      "If the free analysis shows you nothing worth building, you walk away owing nothing.",
+    terms: ["See it first", "Approve it", "Then we build"],
     signName: "Naser Shadid",
     signRole: "Founder & Product Lead",
     signOrg: "Binaa Labs · Dubai",
@@ -300,29 +382,51 @@ export const en = {
       },
     ],
   },
+  faq: {
+    label: "Common Questions",
+    headline: "Before You Ask",
+    subtext: "The questions every serious client asks us — answered straight.",
+    items: [
+      {
+        q: "Who owns the code when the project is done?",
+        a: "You do — 100%, from handover. Source, repositories, infrastructure accounts and documentation all transfer to you. No license fee, no lock-in.",
+      },
+      {
+        q: "What does the process actually look like?",
+        a: "Three steps: a free analysis with a visual demo, a build you watch through a working link, then launch with 12 months of support. You approve each stage before it is billed.",
+      },
+      {
+        q: "How does the fixed price work?",
+        a: "We scope the whole build up front and commit to one price. Overruns are our cost, not yours. Changes beyond that scope are quoted before any work starts.",
+      },
+      {
+        q: "Is Arabic really first-class, or translated at the end?",
+        a: "First-class. We design right-to-left from the first wireframe — layouts, forms and payment flows built bilingual from day one. This site itself runs full RTL.",
+      },
+      {
+        q: "What happens after launch?",
+        a: "Twelve months included: hosting, backups, fixes and a direct line to the people who built it. After that, stay on a plan or take it in-house — it is your code either way.",
+      },
+      {
+        q: "Do you build native apps or web apps?",
+        a: "Whichever your problem actually needs — and we will tell you honestly. A fast web app or PWA beats native for many operations; native earns its cost for deep device integration or app-store presence.",
+      },
+      {
+        q: "What do you build with?",
+        a: "Modern, boring-on-purpose tools: React, React Native, Node.js, PostgreSQL, Next.js — proven stacks any competent team can maintain after handover, not exotic tech that locks you to us.",
+      },
+    ],
+  },
   contact: {
     label: "Free Analysis",
     headline: "Get Your Free System Analysis",
-    subtext:
-      "Book a call. We will map how your business runs today, show you what we can automate, and give you a visual demo of your new system — free, before you commit to anything.",
     steps: [
-      {
-        title: "Tell us how your business runs",
-        description: "Share how things work today and where they slow you down",
-      },
-      {
-        title: "We analyze and show you a demo",
-        description:
-          "We map your system, find what to automate, and build a visual demo of how it will look",
-      },
-      {
-        title: "You get a plan and fixed price",
-        description:
-          "A clear proposal, backed by our approve-before-you-pay guarantee. No commitment",
-      },
+      "Tell us how your business runs today.",
+      "We map it and show you a visual demo.",
+      "You get a plan and a fixed price.",
     ],
-    trustLine: "We respond within 24 hours. No commitment required.",
     form: {
+      cap: "Book your call",
       name: "Name",
       namePlaceholder: "Your name",
       email: "Email",
@@ -335,11 +439,19 @@ export const en = {
       projectPlaceholder:
         "Tell us about your business and what you want to build or automate…",
       cta: "Book My Free Analysis →",
-      calendlyLink: "Prefer to pick a time? Book directly →",
+      submitting: "Sending…",
       sentTitle: "Request received",
       sentText:
-        "Thanks — we'll be in touch within 24 hours to set up your free analysis.",
+        "We’ll be in touch within 24 hours to set up your free analysis.",
       sendAnother: "Send another →",
+      failTitle: "Couldn’t send.",
+      failText: "Nothing was lost — your message is still below.",
+      failRetry: "Try again",
+      failEmailPrefix: "Or email us directly at",
+      errRequired: "Please fill in the required fields.",
+      errEmail: "Please enter a valid email.",
+      receiptCap: "What happens next",
+      receiptChips: ["24h response", "Free analysis", "No commitment"],
     },
   },
   footer: {
@@ -348,7 +460,7 @@ export const en = {
       theGap: "The Gap",
       whatWeBuild: "What We Build",
       selectedWork: "Selected Work",
-      offer: "Offer",
+      howWeWork: "How We Work",
       guarantee: "Our Guarantee",
       contact: "Contact",
       privacy: "Privacy Policy",
