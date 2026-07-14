@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-13 · Status: **color locked (D14); design pass continues — composition/section mocks next**
+Last updated: 2026-07-14 · Status: **Stage 2 redesign IMPLEMENTED (stages A–E on `feat/site-redesign`, checkpoint commits) — owner review pending; nothing pushed**
 
 ---
 
@@ -172,6 +172,8 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 | **D12** | *(2026-07-13, owner)* **Dual-theme confirmed:** light and dark both survive the redesign; every pass verified in both. |
 | **D13** | *(2026-07-13, owner-reviewed)* **Section strategy:** Nav keep/restyle · Hero full redesign (must exist on mobile) · Stats merged into hero band · The Gap keep-concept/redesign-mechanic · What We Build redesign with UI vignettes · Selected Work full redesign as case panels, placeholder slide CUT · How It Works redesign as process rail · Offer keep-tier polish · Guarantee keep/elevate · Team keep/light restyle · Contact redesign UI · Footer keep-tier + a11y fixes · FAQ added. |
 | **D14** | *(2026-07-13, design-authority call, owner-approved)* **Color lock.** **Dark theme = Direction A:** the current charcoal system unchanged (`#1A1A1A`/`#141414`, gold `#D4A017` accent, gold logo mark), with `--ink-3` bumped to clear WCAG AA on both bands. **Light theme = hybrid:** `#FAFAFA` base / `#F1F2F4` band / white surfaces, navy-derived hairlines, ink scale `#24324B` / `#4E5A70` / `#616B80`, gold split — `#A87810` for accents/large text, `#8F660D` for button fills with white text — navy `#24324B` logo mark. The old warm light theme (`#FAFAF8`/`#F1F0EB`, `#A87810`-everything) is retired. Logo SVG cleanup (de-trace, strip background path, dual-color variants) enters the asset pass. Render proofs: `design/stage1-color/` (Stage 1 matrix + hybrid addendum, uncommitted). |
+| **D15** | *(2026-07-14, owner)* **Splash v2 adopted; its D2 mock gate waived.** The intro splash ships as specified in the implementation brief, superseding STAGE2-DESIGN §1's SVG line-draw storyboard (and checklist items 1–2): panels close over the painted page (gold hairline seam) → the **original HeroCanvas node-cube**, centered at ~60vh, builds in ~1.5s and **stays alive** (traveling pulses, particle dust, float) → "Binaa Labs" rises → بناء لابس (+120ms) → slogan **"Where your software gets built"** / **«حيث تُبنى برمجياتك»** (+240ms) → ~0.4s hold → panels part (total ~3.7s, ≤4s). Session-once (`sessionStorage` + pre-paint boot-script class); Skip at ~1s; **any** wheel/touchmove/scroll/pointerdown/keydown skips instantly; reduced motion never mounts it (CSS + matchMedia); zero layout shift. The §1.3 LCP fallback ladder stands — measure on the Vercel preview before merging. |
+| **D16** | *(2026-07-14, owner)* **D2's small-reviewed-passes rule waived for the Stage 2 implementation.** The full redesign landed in one pass as per-stage checkpoint commits (A: tokens+dictionaries · B: splash/nav/hero · C: gap/scenarios/merged section · D: work/guarantee/team/FAQ/contact/footer · E: docs+verification) on `feat/site-redesign`; the owner accepts single-pass review. Screenshot review and the explicit push instruction remain the gates — nothing is pushed without them. Owner also ruled the open checklist items: nav shows the proposed four links (The Gap · What We Build · Selected Work · How We Work), the hero floating chip is **dropped** (D1 — no placeholder metric), and case-panel Role rows ship as mocked. |
 
 *(New decisions get the next D-number with a one-line rationale.)*
 
@@ -186,46 +188,75 @@ repo via the asset pass — cleanup scope in D14.)*
 
 ## 5 · Redesign status & remaining work
 
-**Status: color locked (D14); design pass continues — composition/section
-mocks next.**
+**Status: Stage 2 implemented in full on `feat/site-redesign` (2026-07-14,
+five checkpoint commits per D16); owner review pending; NOTHING pushed.**
 
-Remaining work, seeded from the audit's five-gap ranking:
+### Shipped in the Stage 2 implementation pass
 
-1. **Rebuild the lead path and add measurement.** The contact form is a
-   `mailto:` handoff with a fake success screen; the Calendly path is dead copy;
-   there is zero analytics. The page's one job is currently broken and unmeasured.
-2. **Add visual proof.** Zero screenshots or product imagery anywhere; the work
-   carousel is typographic ghosts plus a "coming soon" placeholder; Almani
-   Motors ships without a link. The proof-driven pitch has no proof a visitor
-   can see.
-3. **Break the templated uniformity.** Six of ten sections are the same
-   label/title/sub/card-grid stamp with identical reveal motion; after the hero
-   (desktop-only) there is no second memorable visual moment.
-4. **Unify the brand.** The Arabic transliteration is split — unified to
-   "بناء لابس" per D10, fix lands in implementation. (The descriptor language
-   is compliant as-is per D3 — no purge.)
-5. **Pay down the trust-surface polish debt.** Real a11y failures (footer
-   contrast, brand-link name mismatch, color-only links). (The flagged claims
-   are retained per D6; the placeholder slide is cut per D13.)
+- **Token system (D4/D14):** `globals.css` fully rewritten — D14 palettes
+  (dark `--ink-3` → `#8A8A84`; light hybrid with navy inks/hairlines and the
+  gold button split), spacing/radius/elevation/motion scales, splash timeline
+  tokens, reveal variants. Old warm light theme deleted; legal-page block kept.
+- **Splash v2** (D15) — page-level, session-once, both reduced-motion layers.
+- **All twelve sections** per STAGE2-DESIGN 2b: nav (4 links, Software Studio,
+  aria fix) · hero (proof band replaces Stats, layered product frame, dieted
+  copy, dictionary-driven highlights) · gap split-screen · four scenario cards
+  with from→to lines · case panels (carousel cut; Wazen video slot with lazy
+  silent-loop contract, `lib/work-video.ts` single-source src, poster
+  schematic; Almani dashed schematic, D7 note internal-only per owner ruling) ·
+  merged How We Work & What You Get (journey rail + artifact fragments +
+  sticky proposal, `#offer` alias kept) · guarantee radial-glow stage with
+  term chips · compact team strip · 7-question FAQ accordion (D8) · contact
+  form-as-star with honest idle/submitting/success/failure states wired to a
+  clearly-marked `/api/lead` stub (D5) · footer with persistent-underline
+  links.
+- **Dictionaries** rewritten to the copy diet (EN and AR equally); D10
+  transliteration unified; frame-interior schematics deliberately Latin/LTR
+  in both locales.
+- **Verification:** `npm run check` clean · Playwright 18/18 (chromium +
+  mobile-chrome; spec updated — carousel/stats/anchor selectors replaced,
+  splash + FAQ specs added, tests seed the splash session flag) · full
+  screenshot matrix + splash filmstrip + reduced-motion/skip proofs in
+  `design/impl-review/` (uncommitted) · Lighthouse on the local prod build:
+  **Performance 100 · Accessibility 100 · Best Practices 100 · SEO 91**
+  (the SEO deduction is the known meta-description measurement artifact —
+  the tag is verified present in the served HTML), LCP 0.7s, CLS 0.001.
+- **Known metric miss, reported honestly:** the rewritten `globals.css` is
+  3,041 lines vs. the 1,738 target ceiling. Prettier-normalized, the OLD
+  sheet was 2,082 lines (it predated formatting); the growth is the five new
+  systems (splash, video slot, journey artifacts, FAQ, form states, two dense
+  frame schematics), not legacy carry-over — zero dead rules remain.
 
-### Launch checklist (stub — grows during the redesign)
+### Remaining work
 
-- [ ] Transliteration unification to "بناء لابس" (D10 — fix `ar.ts`)
-- [ ] Footer contrast a11y fix (`--ink-3` on `--bg` fails WCAG — D14 mandates
-      the bump in both themes; light lands at `#616B80`, dark value chosen at
-      implementation)
-- [ ] Brand-link aria fix (`label-content-name-mismatch` on `.brand`)
-- [ ] Contact section rebuilt with honest submitting/success/failure states
-      (D5 — handler/backend developer-owned)
+1. **Asset pass:** Wazen 20–30s silent capture (seeded demo data only) →
+   `lib/work-video.ts`; real Almani frames (D7); logo SVG de-trace +
+   dual-color variants (D14); real Wazen metric if the hero chip is revived
+   (D16 dropped it).
+2. **Lead backend:** implement `/api/lead` (or swap the marked stub in
+   `Contact.tsx`) — until then submissions land in the honest failure state
+   with the mailto fallback. **Vercel Analytics** (D5).
+3. **Pre-merge measurement:** LCP/Lighthouse on the Vercel preview — apply
+   the D15/§1.3 splash fallback ladder if it regresses. Calendly link stays
+   out until one exists (checklist 13).
+
+### Launch checklist
+
+- [x] Transliteration unification to "بناء لابس" (D10)
+- [x] Footer contrast a11y fix (`--ink-3` → `#8A8A84` dark / `#616B80` light)
+- [x] Brand-link aria fix (`label-content-name-mismatch` on `.brand`)
+- [x] Contact section rebuilt with honest submitting/success/failure states
+      (D5 — `/api/lead` handler still developer-owned)
 - [ ] Vercel Analytics added (D5)
-- [ ] FAQ content finalized (D8 — 5–6 questions)
-- [ ] Nav subtext swap: "Software Studio" replaces "Software Solutions" (D9)
+- [x] FAQ content finalized (D8 — 7 questions, doc §10 wording)
+- [x] Nav subtext swap: "Software Studio" replaces "Software Solutions" (D9)
 - [ ] Logo asset integration — asset pass per D14: de-trace, strip background
       path, dual-color variants (gold for dark theme, navy for light)
-- [ ] Light theme retokenized to the D14 hybrid set (`#FAFAFA`/`#F1F2F4`,
-      navy ink scale, `#A87810`/`#8F660D` gold split); old warm set removed
-- [ ] Every visual pass verified EN + AR × light + dark × desktop + mobile
-- [ ] `npm run check` + Playwright green; Lighthouse re-run on preview
+- [x] Light theme retokenized to the D14 hybrid set; old warm set removed
+- [x] Visual pass verified EN + AR × light + dark × 1440 + 390
+      (`design/impl-review/` matrix, 2026-07-14)
+- [x] `npm run check` + Playwright green · Lighthouse on local prod build
+      (100/100/100/91) — [ ] re-run on the Vercel preview before merge
 
 ---
 
@@ -247,3 +278,26 @@ Remaining work, seeded from the audit's five-gap ranking:
   `middleware.ts` sets `x-binaa-lang`; the root layout awaits `headers()` to
   render `<html lang dir>` server-side. Any new Arabic route must be added to
   the middleware `matcher` or its `<html>` renders as English.
+- **The splash contract must survive as shipped (D15):** session-once =
+  `sessionStorage['binaa-splash-seen']` **plus** the boot-script
+  `html.splash-seen` class (pre-paint, no flash); reduced motion never mounts
+  it (CSS `display:none` **and** the matchMedia unmount); `html:not(.js)`
+  hides it for no-JS visitors; any input skips instantly. E2E covers all of
+  this — and every new e2e test must seed the session flag or the overlay
+  intercepts its clicks.
+- **`#offer` must stay as an invisible alias anchor** on the merged
+  How We Work section — old deep links and the no-JS e2e test depend on it.
+- **Frame interiors stay Latin/LTR in both locales** (browser chrome is an
+  LTR artifact — STAGE2-DESIGN §3/§6). `ar.ts` reuses the `en.ts` frame
+  objects on purpose; do not "fix" them by translating.
+- **`lib/work-video.ts` is the single source for the Wazen loop src.** The
+  capture must be silent (no audio track), seamless, and shot on seeded demo
+  accounts — never real client data (§6.1).
+- **The scenario cards are capability illustrations, not client claims (D1).**
+  Only Selected Work names delivered products; never add customer names or
+  implied deliveries to What We Build or the journey artifacts.
+- **Tooling: `html { scroll-behavior: smooth }` breaks programmatic
+  `window.scrollTo` loops** (each call becomes a superseded animation — the
+  page never reaches the bottom, and IO reveals silently don't fire).
+  Screenshot/scroll harnesses must set `scroll-behavior: auto` first
+  (see `design/impl-review/shots.mjs`).
