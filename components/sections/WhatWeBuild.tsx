@@ -2,46 +2,46 @@
 
 import { useSite } from "@/components/Providers";
 import { SectionLabel } from "@/components/ui/SectionLabel";
-import { BuildIcon } from "@/components/ui/icons";
+import { ScenarioIcon } from "@/components/ui/icons";
 
+// Scenario cards: the world after we build it. Illustrations of capability,
+// never delivery claims (D1) — the only delivered work named on the page is
+// in Selected Work. No stack tags, no category titles (those live in the
+// merged section's Disciplines line and FAQ Q7).
 export default function WhatWeBuild() {
   const { t } = useSite();
   const w = t.whatWeBuild;
 
   return (
-    <section id="what-we-build" className="section bg-2 bt">
+    <section id="build" className="section bg">
       <div className="wrap">
         <SectionLabel>{w.label}</SectionLabel>
-        <h2 className="section-title mw-18" data-reveal="" data-reveal-delay="60">
+        <h2 className="section-title" data-reveal="" data-reveal-delay="60">
           {w.headline}
         </h2>
         <p className="section-sub" data-reveal="" data-reveal-delay="120">
           {w.subtext}
         </p>
 
-        <div className="grid-2">
+        <div className="scn-grid">
           {w.cards.map((c, i) => (
-            <div className="build-card" data-reveal="" key={i}>
-              <span className="build-num" aria-hidden="true">
+            <article className="scn-card" data-reveal="" key={i}>
+              <span className="scn-idx" aria-hidden="true">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span className="build-icon">
-                <BuildIcon i={i} />
+              <span className="scn-chip">
+                <ScenarioIcon i={i} />
               </span>
-              <h3 className="card-title">{c.title}</h3>
-              <p className="card-desc">{c.description}</p>
-              <div className="build-foot">
-                <div className="build-foot-divider" />
-                <div className="stack-row">
-                  <span className="stack-label">{t.ui.stack}</span>
-                  {c.tags.map((tag, j) => (
-                    <span className="stack-tag" key={j}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
+              <h3 className="scn-head">{c.headline}</h3>
+              <p className="scn-build">{c.build}</p>
+              <p className="fromto">
+                <span className="from">{c.from}</span>
+                <span className="arr" aria-hidden="true">
+                  →
+                </span>
+                <span className="to">{c.to}</span>
+              </p>
+            </article>
           ))}
         </div>
       </div>

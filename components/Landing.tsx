@@ -5,8 +5,7 @@ import Hero from "@/components/sections/Hero";
 import TheGap from "@/components/sections/TheGap";
 import WhatWeBuild from "@/components/sections/WhatWeBuild";
 import SelectedWork from "@/components/sections/SelectedWork";
-import HowItWorks from "@/components/sections/HowItWorks";
-import Offer from "@/components/sections/Offer";
+import HowWeWork from "@/components/sections/HowWeWork";
 import Guarantee from "@/components/sections/Guarantee";
 import Team from "@/components/sections/Team";
 import Contact from "@/components/sections/Contact";
@@ -32,8 +31,7 @@ export default function Landing({ lang }: { lang: Lang }) {
         <TheGap />
         <WhatWeBuild />
         <SelectedWork />
-        <HowItWorks />
-        <Offer />
+        <HowWeWork />
         <Guarantee />
         <Team />
         <Contact />
