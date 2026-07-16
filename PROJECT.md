@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-16 · Status: **Stage 2 implemented + refinement pass 1 (brand mark, em-dash purge, splash v3) on `feat/site-redesign` — owner shot review pending; nothing pushed**
+Last updated: 2026-07-16 · Status: **Stage 2 + refinement pass 1 PUSHED for preview review (`feat/site-redesign` → Vercel preview); owner reviews the preview, then rules on merge**
 
 ---
 
@@ -301,8 +301,8 @@ five checkpoint commits per D16); owner review pending; NOTHING pushed.**
 - **Copy stays em-dash-free (D17).** No `—` in dictionaries, metadata, OG
   strings or rendered JSX literals; rephrase with comma, colon, period or
   middot. Grep guard: `grep -c "—"` = 0 on `lib/i18n/*.ts`, layout/page
-  metadata and the OG files. Privacy-page titles still carry one (out of
-  scope this pass; two-line follow-up needs an owner OK).
+  metadata, the OG files and both privacy pages (cleaned in the push-prep
+  pass; privacy titles now inherit the `%s · Binaa Labs` template).
 - **The splash unmount is anchored to the bloom** (`animationend` of
   `splBloom` covers both natural and skipped exits); don't rename that
   keyframe without updating `Splash.tsx`.
