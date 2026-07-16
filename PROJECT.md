@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-14 · Status: **Stage 2 redesign IMPLEMENTED (stages A–E on `feat/site-redesign`, checkpoint commits) — owner review pending; nothing pushed**
+Last updated: 2026-07-16 · Status: **Stage 2 implemented + refinement pass 1 (brand mark, em-dash purge, splash v3) on `feat/site-redesign` — owner shot review pending; nothing pushed**
 
 ---
 
@@ -175,6 +175,8 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 | **D15** | *(2026-07-14, owner)* **Splash v2 adopted; its D2 mock gate waived.** The intro splash ships as specified in the implementation brief, superseding STAGE2-DESIGN §1's SVG line-draw storyboard (and checklist items 1–2): panels close over the painted page (gold hairline seam) → the **original HeroCanvas node-cube**, centered at ~60vh, builds in ~1.5s and **stays alive** (traveling pulses, particle dust, float) → "Binaa Labs" rises → بناء لابس (+120ms) → slogan **"Where your software gets built"** / **«حيث تُبنى برمجياتك»** (+240ms) → ~0.4s hold → panels part (total ~3.7s, ≤4s). Session-once (`sessionStorage` + pre-paint boot-script class); Skip at ~1s; **any** wheel/touchmove/scroll/pointerdown/keydown skips instantly; reduced motion never mounts it (CSS + matchMedia); zero layout shift. The §1.3 LCP fallback ladder stands — measure on the Vercel preview before merging. |
 | **D16** | *(2026-07-14, owner)* **D2's small-reviewed-passes rule waived for the Stage 2 implementation.** The full redesign landed in one pass as per-stage checkpoint commits (A: tokens+dictionaries · B: splash/nav/hero · C: gap/scenarios/merged section · D: work/guarantee/team/FAQ/contact/footer · E: docs+verification) on `feat/site-redesign`; the owner accepts single-pass review. Screenshot review and the explicit push instruction remain the gates — nothing is pushed without them. Owner also ruled the open checklist items: nav shows the proposed four links (The Gap · What We Build · Selected Work · How We Work), the hero floating chip is **dropped** (D1 — no placeholder metric), and case-panel Role rows ship as mocked. |
 
+| **D17** | *(2026-07-16, owner, refinement pass 1)* **Brand mark integrated · em-dash rule · splash v3.** (a) The real logo (owner-placed trace, now `assets/brand/logo-source.{svg,png}`) is de-traced into clean stroke geometry (partial isometric wireframe cube, circuit gaps, three hollow ring nodes) and replaces the placeholder everywhere: `LogoMark` on `var(--logo)`, `app/icon.svg` gold-on-dark, regenerated `apple-icon.png`/`favicon.ico`, OG card mark; tab title is exactly **"Binaa Labs"** (template `%s · Binaa Labs`). The splash keeps the generic full cube (owner ruling). (b) **House copy rule: zero em dashes in rendered copy** (dictionaries, metadata, OG); rephrase with comma/colon/period/middot. Headline is now "Run Your Business Online, Not Out of a WhatsApp Group and a Spreadsheet". (c) **Splash v3 "singularity"** supersedes v2's panel choreography (D15 beats retired): cover at first paint → breathing gold glow + inward dust (~0.6s) → flare + CENTER-OUT cube birth (~1.4s) + pulses + outward dust → masked lockup rise (+120/+240ms, slogan letter-spaced resolve) → radial bloom dissolves the cover, hero revealed out of the brightness (~3.8s). Dismissal = accelerated 350ms bloom; session-once/reduced-motion/no-JS/zero-CLS contracts unchanged. |
+
 *(New decisions get the next D-number with a one-line rationale.)*
 
 ---
@@ -250,8 +252,8 @@ five checkpoint commits per D16); owner review pending; NOTHING pushed.**
 - [ ] Vercel Analytics added (D5)
 - [x] FAQ content finalized (D8 — 7 questions, doc §10 wording)
 - [x] Nav subtext swap: "Software Studio" replaces "Software Solutions" (D9)
-- [ ] Logo asset integration — asset pass per D14: de-trace, strip background
-      path, dual-color variants (gold for dark theme, navy for light)
+- [x] Logo asset integration (D17): de-traced, background stripped, dual-color
+      via `var(--logo)` (gold dark / navy light); favicon set + OG regenerated
 - [x] Light theme retokenized to the D14 hybrid set; old warm set removed
 - [x] Visual pass verified EN + AR × light + dark × 1440 + 390
       (`design/impl-review/` matrix, 2026-07-14)
@@ -296,6 +298,14 @@ five checkpoint commits per D16); owner review pending; NOTHING pushed.**
 - **The scenario cards are capability illustrations, not client claims (D1).**
   Only Selected Work names delivered products; never add customer names or
   implied deliveries to What We Build or the journey artifacts.
+- **Copy stays em-dash-free (D17).** No `—` in dictionaries, metadata, OG
+  strings or rendered JSX literals; rephrase with comma, colon, period or
+  middot. Grep guard: `grep -c "—"` = 0 on `lib/i18n/*.ts`, layout/page
+  metadata and the OG files. Privacy-page titles still carry one (out of
+  scope this pass; two-line follow-up needs an owner OK).
+- **The splash unmount is anchored to the bloom** (`animationend` of
+  `splBloom` covers both natural and skipped exits); don't rename that
+  keyframe without updating `Splash.tsx`.
 - **Tooling: `html { scroll-behavior: smooth }` breaks programmatic
   `window.scrollTo` loops** (each call becomes a superseded animation — the
   page never reaches the bottom, and IO reveals silently don't fire).
