@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     template: "%s · Binaa Labs",
   },
   description:
-    "Binaa Labs is a Dubai software studio that moves Gulf businesses fully online — custom web apps, mobile apps, process automation and system integrations, built Arabic-first.",
+    "Binaa Labs is a Dubai software studio that moves Gulf businesses fully online with custom web apps, mobile apps, process automation and system integrations, built Arabic-first.",
   keywords: [
     "software studio",
     "Dubai",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Binaa Labs · Custom Software Studio for the Gulf",
     description:
-      "We move your business fully online and automate the busywork — custom-built, launched fast, and yours to keep.",
+      "We move your business fully online and automate the busywork. Custom-built, launched fast, and yours to keep.",
     siteName: "Binaa Labs",
     locale: "en_US",
     type: "website",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Binaa Labs · Custom Software Studio for the Gulf",
     description:
-      "We move your business fully online and automate the busywork — custom-built, launched fast, and yours to keep.",
+      "We move your business fully online and automate the busywork. Custom-built, launched fast, and yours to keep.",
   },
 };
 
@@ -100,7 +100,7 @@ export const viewport: Viewport = {
 // without a flash of fully-shown content. Language is set server-side from the
 // route (see middleware.ts), so the boot script no longer touches it.
 // Also flags an already-seen intro splash (sessionStorage, once per session)
-// so repeat loads hide the overlay before paint — no flash, no layout shift.
+// so repeat loads hide the overlay before paint: no flash, no layout shift.
 const bootScript = `(function(){try{var t=localStorage.getItem('binaa-theme');if(t!=='light'&&t!=='dark'){t='dark';}document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.add('js');}catch(e){document.documentElement.setAttribute('data-theme','dark');}try{if(sessionStorage.getItem('binaa-splash-seen')==='1'){document.documentElement.classList.add('splash-seen');}}catch(e){}})();`;
 
 export default async function RootLayout({

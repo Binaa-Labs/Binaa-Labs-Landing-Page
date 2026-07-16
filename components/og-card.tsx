@@ -7,7 +7,7 @@ import { join } from "node:path";
 export const ogSize = { width: 1200, height: 630 };
 export const ogContentType = "image/png";
 
-// Read assets lazily, inside the renderer — never at module scope. Next.js
+// Read assets lazily, inside the renderer, never at module scope. Next.js
 // imports this module while generating page metadata (to read the `size` and
 // `contentType` exports above), and that import must not touch the filesystem:
 // on Vercel the `assets/og` files aren't in the page's serverless bundle, so a

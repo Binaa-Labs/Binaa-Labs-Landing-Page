@@ -19,7 +19,6 @@ export default function Footer() {
       label: f.links.privacy,
     },
   ];
-  const [productName, productLink] = (f.product || "").split(" — ");
 
   return (
     <footer className="footer">
@@ -47,13 +46,13 @@ export default function Footer() {
 
         <div className="footer-meta">
           <p className="footer-product">
-            {productName} —{" "}
+            {f.productName} ·{" "}
             <a
               href="https://wazen.fit"
               target="_blank"
               rel="noopener noreferrer"
             >
-              {productLink || "wazen.fit"}
+              {f.productLink}
             </a>
           </p>
           <p className="footer-loc">

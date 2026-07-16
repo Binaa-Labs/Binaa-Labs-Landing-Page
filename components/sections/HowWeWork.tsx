@@ -141,7 +141,7 @@ export default function HowWeWork() {
               </div>
             ))}
             <p className="disciplines">
-              {h.disciplinesLabel} — <b>{h.disciplines}</b>
+              {h.disciplinesLabel}: <b>{h.disciplines}</b>
             </p>
           </div>
 

@@ -1,6 +1,8 @@
-// English dictionary — defines the Dict shape (ar.ts must match it exactly).
+// English dictionary: defines the Dict shape (ar.ts must match it exactly).
 // Stage 2 copy diet: one headline + one supporting line per section; facts
 // live in chips, meta rows and artifact fragments, not sentences.
+// House copy rule (refinement pass 1): no em dashes anywhere in rendered
+// copy; rephrase with commas, colons, periods or middots instead.
 //
 // Frame-interior strings (hero frame, case-panel posters) are product
 // schematics: a browser chrome is an LTR artifact, so they stay Latin in
@@ -37,10 +39,10 @@ export const en = {
   hero: {
     badgeLocation: "Dubai, UAE · Built for the Gulf",
     headline:
-      "Run Your Business Online — Not Out of a WhatsApp Group and a Spreadsheet",
+      "Run Your Business Online, Not Out of a WhatsApp Group and a Spreadsheet",
     highlights: ["WhatsApp Group", "Spreadsheet"],
     subtext:
-      "We move your operation fully online and automate the busywork — custom-built, launched fast, yours to keep.",
+      "We move your operation fully online and automate the busywork. Custom-built, launched fast, yours to keep.",
     ctaPrimary: "Book Your Free Analysis →",
     ctaSecondary: "See What We’ve Built",
     proof: [
@@ -49,7 +51,7 @@ export const en = {
       { value: "2 wks", label: "To a demo and clear plan" },
       { value: "24h", label: "Response, direct from the builders" },
     ],
-    // product schematic — Latin/LTR in both locales
+    // product schematic: Latin/LTR in both locales
     frame: {
       url: "app.wazen.fit",
       nav: ["Dashboard", "Clients", "Plans", "Check-ins", "Messages"],
@@ -62,16 +64,16 @@ export const en = {
       ],
       rows: [
         {
-          name: "Ahmad K. — Cut phase · wk 6",
+          name: "Ahmad K. · Cut phase · wk 6",
           status: "Checked in",
           muted: false,
         },
         {
-          name: "Omar S. — Strength · wk 3",
+          name: "Omar S. · Strength · wk 3",
           status: "Checked in",
           muted: false,
         },
-        { name: "Khalid M. — Onboarding", status: "Plan due", muted: true },
+        { name: "Khalid M. · Onboarding", status: "Plan due", muted: true },
       ],
     },
   },
@@ -137,14 +139,14 @@ export const en = {
   whatWeBuild: {
     label: "What We Build",
     headline: "Picture It Already Working",
-    subtext: "Four everyday operations — rebuilt as software that runs itself.",
+    subtext: "Four everyday operations, rebuilt as software that runs itself.",
     // Scenarios are illustrations of capability, never claims of delivered
     // clients (D1). The only delivery claims on the page are in Selected Work.
     cards: [
       {
         headline: "A clinic that books itself",
         build:
-          "A booking system your patients use directly — appointments, reminders and records in one place.",
+          "A booking system your patients use directly: appointments, reminders and records in one place.",
         from: "phone tag and a paper calendar",
         to: "slots that book, confirm and remind on their own",
       },
@@ -174,7 +176,7 @@ export const en = {
   selectedWork: {
     label: "Selected Work",
     headline: "Real Work, Shipped and Running",
-    subtext: "Two products, live and in daily use — one of them our own.",
+    subtext: "Two products, live and in daily use. One of them is our own.",
     meta: { role: "Role", stack: "Stack", status: "Status" },
     loopChip: "Silent loop",
     wazen: {
@@ -182,7 +184,7 @@ export const en = {
       name: "Wazen وازن",
       cat: "Coaching SaaS",
       description:
-        "Our own coaching platform — the WhatsApp-and-spreadsheets grind, replaced. Clients, plans, check-ins and progress analytics in one place.",
+        "Our own coaching platform: the WhatsApp-and-spreadsheets grind, replaced. Clients, plans, check-ins and progress analytics in one place.",
       role: "Product · Design · Build",
       stack: "React · Node.js · PostgreSQL",
       status: "Live",
@@ -194,12 +196,12 @@ export const en = {
       name: "Almani Motors",
       cat: "Auto Parts E-Commerce",
       description:
-        "A Saudi spare-parts warehouse, moved online — new parts sold like any store, used parts with their own negotiable-price flow.",
+        "A Saudi spare-parts warehouse, moved online. New parts sold like any store, used parts with their own negotiable-price flow.",
       role: "Design · Build · Launch",
       stack: "Next.js",
       status: "Live (no public link)",
     },
-    // case-frame schematics — Latin/LTR in both locales
+    // case-frame schematics: Latin/LTR in both locales
     wazenFrame: {
       url: "app.wazen.fit",
       brand: "Wazen",
@@ -235,7 +237,7 @@ export const en = {
       ],
     },
     almaniFrame: {
-      url: "almani-motors — placeholder",
+      url: "almani-motors · placeholder",
       brand: "Almani",
       nav: ["Catalog", "Used parts", "Offers", "Orders", "Inventory"],
       title: "Parts catalog",
@@ -249,19 +251,19 @@ export const en = {
       ],
       parts: [
         {
-          name: "Brake disc — front",
+          name: "Front brake disc",
           price: "SAR 320",
           pill: "New",
           muted: false,
         },
         {
-          name: "Alternator — 12V",
+          name: "Alternator 12V",
           price: "Make offer",
           pill: "Used",
           muted: true,
         },
         {
-          name: "Oil filter — set of 4",
+          name: "Oil filter, set of 4",
           price: "SAR 95",
           pill: "New",
           muted: false,
@@ -271,11 +273,11 @@ export const en = {
       tableRows: [
         {
           a: "SAR 480",
-          b: "Gearbox — used",
+          b: "Gearbox, used",
           status: "Countered",
           muted: false,
         },
-        { a: "SAR 210", b: "Headlamp — used", status: "Pending", muted: true },
+        { a: "SAR 210", b: "Headlamp, used", status: "Pending", muted: true },
       ],
     },
   },
@@ -283,7 +285,7 @@ export const en = {
     label: "How We Work & What You Get",
     headline: "From First Call to Code That’s Yours",
     subtext:
-      "Three steps, one fixed price — and at each one, something real lands in your hands.",
+      "Three steps, one fixed price. At each one, something real lands in your hands.",
     youReceive: "You receive",
     steps: [
       {
@@ -302,14 +304,14 @@ export const en = {
         line: "We deploy, hand over the repository, and stay on for twelve months of support.",
       },
     ],
-    // artifact fragments — deliberately generic (your-app, your-company):
+    // artifact fragments are deliberately generic (your-app, your-company):
     // no invented client names anywhere (D1)
     quoteDoc: {
       title: "Fixed-Price Proposal",
       version: "v1",
       rows: [
         { item: "Discovery & system map", included: "included" },
-        { item: "Build — 5 modules, AR + EN", included: "included" },
+        { item: "Build · 5 modules, AR + EN", included: "included" },
         { item: "Launch & 12-mo support", included: "included" },
       ],
       totalLabel: "Total",
@@ -337,7 +339,7 @@ export const en = {
       {
         num: "02",
         title: "Arabic-first design, done right",
-        line: "Bilingual interfaces built right-to-left from the first wireframe — not translated at the end.",
+        line: "Bilingual interfaces built right-to-left from the first wireframe, not translated at the end.",
       },
       {
         num: "03",
@@ -362,14 +364,14 @@ export const en = {
       label: "Fixed Price Proposal",
       title: "The Complete Build",
       intro:
-        "Everything in the list, for one price — scoped to your project, agreed up front.",
+        "Everything in the list, for one price, scoped to your project and agreed up front.",
       checks: [
         "Scoped to your exact needs",
         "One price, no hourly surprises",
         "You own 100% of the code",
         "Backed by our delivery guarantee",
       ],
-      freeLabel: "Free first step — no cost",
+      freeLabel: "Free first step, no cost",
       freeText:
         "We map your system and show you a visual demo of your new setup, free, before you commit to anything.",
       cta: "Book Your Free Analysis →",
@@ -377,7 +379,7 @@ export const en = {
   },
   guarantee: {
     label: "Our Guarantee",
-    headline: "You Approve Every Step — Before You Pay for It",
+    headline: "You Approve Every Step Before You Pay for It",
     arabicSubline: "اعتمد قبل أن تدفع",
     body: "You never pay for work you have not seen. We show you a visual demo of every stage, and only bill that milestone once you approve it.",
     secondary:
@@ -426,11 +428,11 @@ export const en = {
   faq: {
     label: "Common Questions",
     headline: "Before You Ask",
-    subtext: "The questions every serious client asks us — answered straight.",
+    subtext: "The questions every serious client asks us, answered straight.",
     items: [
       {
         q: "Who owns the code when the project is done?",
-        a: "You do — 100%, from handover. Source, repositories, infrastructure accounts and documentation all transfer to you. No license fee, no lock-in.",
+        a: "You do: 100%, from handover. Source, repositories, infrastructure accounts and documentation all transfer to you. No license fee, no lock-in.",
       },
       {
         q: "What does the process actually look like?",
@@ -442,19 +444,19 @@ export const en = {
       },
       {
         q: "Is Arabic really first-class, or translated at the end?",
-        a: "First-class. We design right-to-left from the first wireframe — layouts, forms and payment flows built bilingual from day one. This site itself runs full RTL.",
+        a: "First-class. We design right-to-left from the first wireframe: layouts, forms and payment flows built bilingual from day one. This site itself runs full RTL.",
       },
       {
         q: "What happens after launch?",
-        a: "Twelve months included: hosting, backups, fixes and a direct line to the people who built it. After that, stay on a plan or take it in-house — it is your code either way.",
+        a: "Twelve months included: hosting, backups, fixes and a direct line to the people who built it. After that, stay on a plan or take it in-house; it is your code either way.",
       },
       {
         q: "Do you build native apps or web apps?",
-        a: "Whichever your problem actually needs — and we will tell you honestly. A fast web app or PWA beats native for many operations; native earns its cost for deep device integration or app-store presence.",
+        a: "Whichever your problem actually needs, and we will tell you honestly. A fast web app or PWA beats native for many operations; native earns its cost for deep device integration or app-store presence.",
       },
       {
         q: "What do you build with?",
-        a: "Modern, boring-on-purpose tools: React, React Native, Node.js, PostgreSQL, Next.js — proven stacks any competent team can maintain after handover, not exotic tech that locks you to us.",
+        a: "Modern, boring-on-purpose tools: React, React Native, Node.js, PostgreSQL, Next.js. Proven stacks any competent team can maintain after handover, not exotic tech that locks you to us.",
       },
     ],
   },
@@ -486,7 +488,7 @@ export const en = {
         "We’ll be in touch within 24 hours to set up your free analysis.",
       sendAnother: "Send another →",
       failTitle: "Couldn’t send.",
-      failText: "Nothing was lost — your message is still below.",
+      failText: "Nothing was lost; your message is still below.",
       failRetry: "Try again",
       failEmailPrefix: "Or email us directly at",
       errRequired: "Please fill in the required fields.",
@@ -506,7 +508,8 @@ export const en = {
       contact: "Contact",
       privacy: "Privacy Policy",
     },
-    product: "Wazen وازن — wazen.fit",
+    productName: "Wazen وازن",
+    productLink: "wazen.fit",
     location: "Dubai, UAE · DET Licensed",
     copyright: "© 2026 Binaa Labs. All rights reserved.",
     bottomNote: "Built by Binaa Labs",
