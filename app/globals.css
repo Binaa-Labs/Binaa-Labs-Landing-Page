@@ -1,6 +1,6 @@
 /* ============================================================
    Binaa Labs — global styles (Stage 2 redesign)
-   D14 color lock · presentation-layer scales (D4) · splash v2.
+   D14 color lock · presentation-layer scales (D4) · splash v3.
    This file is always edited by FULL REWRITE, never string
    replacement (see CLAUDE.md §0).
    ============================================================ */
@@ -119,13 +119,13 @@
   --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-hover: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* splash timeline — the only durations outside the 150/300/600 scale;
-     one element, once per session (STAGE2-DESIGN §0). */
-  --spl-close-dur: 400ms;
-  --spl-text-delay: 1900ms;
+  /* splash v3 "singularity" timeline — the only durations outside the
+     150/300/600 scale; one element, once per session (STAGE2-DESIGN §0). */
+  --spl-flare-delay: 550ms;
+  --spl-text-delay: 2000ms;
   --spl-text-dur: 600ms;
   --spl-skip-delay: 1000ms;
-  --spl-exit-delay: 3140ms;
+  --spl-exit-delay: 3200ms;
   --spl-exit-dur: 600ms;
 }
 
@@ -231,36 +231,73 @@ ul {
     transform: rotate(360deg);
   }
 }
-@keyframes splCloseL {
+@keyframes splBreathe {
   from {
-    transform: translateX(-101%);
+    opacity: 0.55;
+    transform: scale(0.92);
   }
   to {
-    transform: translateX(0);
+    opacity: 1;
+    transform: scale(1.08);
   }
 }
-@keyframes splCloseR {
-  from {
-    transform: translateX(101%);
+@keyframes splFlareK {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
   }
-  to {
-    transform: translateX(0);
+  40% {
+    opacity: 0.85;
   }
-}
-@keyframes splPartL {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-101%);
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
   }
 }
-@keyframes splPartR {
+@keyframes splBloom {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(3.2);
+  }
+}
+@keyframes splCoverOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes splMaskRise {
   from {
-    transform: translateX(0);
+    transform: translateY(110%);
   }
   to {
-    transform: translateX(101%);
+    transform: translateY(0);
+  }
+}
+@keyframes splTrack {
+  from {
+    opacity: 0;
+    letter-spacing: 0.45em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.24em;
+  }
+}
+@keyframes splTrackAr {
+  from {
+    opacity: 0;
+    letter-spacing: 0.16em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.04em;
   }
 }
 @keyframes splFadeOut {
@@ -713,9 +750,13 @@ ul {
 }
 
 /* ============================================================
-   SPLASH v2 — page-level overlay, once per session
-   Panels close → HeroCanvas cube builds & stays alive → lockup
-   rises → hold → panels part. Brand-dark in BOTH themes.
+   SPLASH v3 "singularity" — page-level overlay, once per session
+   Cover present at first paint (no slide-in) → dim gold glow
+   breathing at center, dust drifting inward (beat 0) → soft flare,
+   the cube births CENTER-OUT on the canvas, pulses begin (beat 1)
+   → masked lockup rise (beat 2) → radial light bloom from the cube
+   center dissolves the cover outward (beat 3). No panel movement.
+   Brand-dark in BOTH themes.
    ============================================================ */
 #splash {
   position: fixed;
@@ -724,7 +765,7 @@ ul {
   overflow: hidden;
   /* brand palette, scoped: the splash is a brand moment, not a themed
      surface. The canvas inside reads --gold/--ink-3 from here. */
-  --spl-panel: #141414;
+  --spl-cover: #101010;
   --spl-ink: #fafaf8;
   --spl-ink-2: #a2a29c;
   --gold: #d4a017;
@@ -744,32 +785,45 @@ html:not(.js) #splash {
   }
 }
 #splash.skipping {
-  opacity: 0;
   pointer-events: none;
-  transition: opacity var(--dur-base) var(--ease-hover);
 }
-.spl-panel {
+/* the cover: opaque from SSR paint; dissolves under the bloom at exit */
+.spl-cover {
   position: absolute;
-  inset-block: 0;
-  width: 50.5%;
-  background: var(--spl-panel);
+  inset: 0;
+  background: var(--spl-cover);
+  animation: splCoverOut 450ms var(--ease-hover)
+    calc(var(--spl-exit-delay) + 150ms) forwards;
 }
-/* gold hairline seam where the panels meet */
-.spl-l {
-  left: 0;
-  border-right: 1px solid rgba(212, 160, 23, 0.22);
+/* beat 0: the singularity — dim gold glow breathing at center */
+.spl-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 46%,
+    rgba(212, 160, 23, 0.18),
+    transparent 30%
+  );
+  transform-origin: 50% 46%;
   animation:
-    splCloseL var(--spl-close-dur) var(--ease-enter) both,
-    splPartL var(--spl-exit-dur) var(--ease-hover) var(--spl-exit-delay)
-      forwards;
+    splBreathe 1.6s var(--ease-hover) infinite alternate,
+    splFadeOut var(--dur-base) var(--ease-hover) var(--spl-exit-delay) forwards;
 }
-.spl-r {
-  right: 0;
-  border-left: 1px solid rgba(212, 160, 23, 0.22);
-  animation:
-    splCloseR var(--spl-close-dur) var(--ease-enter) both,
-    splPartR var(--spl-exit-dur) var(--ease-hover) var(--spl-exit-delay)
-      forwards;
+/* beat 1: one soft flare as the build begins */
+.spl-flare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 46%,
+    rgba(240, 215, 140, 0.5),
+    rgba(212, 160, 23, 0.22) 12%,
+    transparent 34%
+  );
+  transform-origin: 50% 46%;
+  opacity: 0;
+  animation: splFlareK 900ms var(--ease-enter) var(--spl-flare-delay) both;
 }
 .spl-stage {
   position: absolute;
@@ -782,7 +836,7 @@ html:not(.js) #splash {
   animation: splFadeOut var(--dur-base) var(--ease-hover) var(--spl-exit-delay)
     forwards;
 }
-/* the ported HeroCanvas cube — the centerpiece, ~55–65vh */
+/* the HeroCanvas cube — the centerpiece, ~55–65vh, born center-out */
 .spl-canvas {
   width: min(92vw, 640px);
   height: min(60vh, 560px);
@@ -792,40 +846,85 @@ html:not(.js) #splash {
   height: 100%;
   display: block;
 }
-.spl-title,
-.spl-ar,
-.spl-slogan {
-  animation: splRise var(--spl-text-dur) var(--ease-enter) both;
+/* beat 2: masked slide-up lockup + letter-spaced slogan resolve */
+.spl-lockup {
+  display: grid;
+  gap: var(--sp-2);
+  justify-items: center;
+}
+.spl-line {
+  display: block;
+  overflow: hidden;
 }
 .spl-title {
-  animation-delay: var(--spl-text-delay);
+  display: block;
   font-family: var(--ff-display);
   font-size: clamp(1.9rem, 4vw, 2.4rem);
   font-weight: 700;
   letter-spacing: -0.01em;
+  line-height: 1.15;
   color: var(--spl-ink);
+  animation: splMaskRise var(--spl-text-dur) var(--ease-enter)
+    var(--spl-text-delay) both;
 }
 .spl-ar {
-  animation-delay: calc(var(--spl-text-delay) + 120ms);
+  display: block;
   font-family: var(--ff-arabic);
   font-size: 1.3rem;
   font-weight: 500;
+  line-height: 1.5;
   color: var(--gold);
   direction: rtl;
+  animation: splMaskRise var(--spl-text-dur) var(--ease-enter)
+    calc(var(--spl-text-delay) + 120ms) both;
 }
 .spl-slogan {
-  animation-delay: calc(var(--spl-text-delay) + 240ms);
   font-family: var(--ff-mono);
   font-size: 0.62rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--spl-ink-2);
   margin-top: var(--sp-2);
+  animation: splTrack var(--spl-text-dur) var(--ease-enter)
+    calc(var(--spl-text-delay) + 240ms) both;
 }
 [dir="rtl"] .spl-slogan {
   letter-spacing: 0.04em;
   text-transform: none;
   font-size: 0.85rem;
+  animation-name: splTrackAr;
+}
+/* beat 3: the bloom — light floods out from the cube center and the
+   hero is revealed out of the brightness */
+.spl-bloom {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 46%,
+    rgba(253, 248, 235, 0.96) 0%,
+    rgba(228, 178, 58, 0.6) 16%,
+    rgba(212, 160, 23, 0.25) 30%,
+    transparent 46%
+  );
+  transform-origin: 50% 46%;
+  opacity: 0;
+  animation: splBloom var(--spl-exit-dur) var(--ease-hover)
+    var(--spl-exit-delay) forwards;
+}
+/* dismissal = accelerated bloom (~350ms), never a hard cut. The component
+   unmounts on the bloom's animationend. */
+#splash.skipping .spl-bloom {
+  animation: splBloom 350ms var(--ease-hover) 0ms forwards;
+}
+#splash.skipping .spl-cover {
+  animation: splCoverOut 280ms var(--ease-hover) 70ms forwards;
+}
+#splash.skipping .spl-stage,
+#splash.skipping .spl-glow,
+#splash.skipping .spl-flare,
+#splash.skipping .spl-skip {
+  animation: splFadeOut 200ms var(--ease-hover) forwards;
 }
 .spl-skip {
   position: absolute;

@@ -11,20 +11,28 @@ const HeroCanvas = dynamic(() => import("@/components/sections/HeroCanvas"), {
 const SEEN_KEY = "binaa-splash-seen";
 
 /**
- * Intro splash v2 (page-level, once per session). Beats, all CSS-driven from
- * the --spl-* timeline tokens: panels close (gold seam) → the HeroCanvas cube
- * builds ~1.5s and stays alive → "Binaa Labs" / بناء لابس / slogan rise →
- * hold → panels part (~3.7s total).
+ * Intro splash v3 "singularity" (page-level, once per session). Beats, all
+ * CSS-driven from the --spl-* timeline tokens:
+ *   0 · cover present at first paint; dim gold glow breathing at center,
+ *       canvas dust drifting inward (~0.6s)
+ *   1 · soft flare; the cube births CENTER-OUT on the canvas (~1.4s) and
+ *       stays alive (traveling pulses); dust reverses to slow outward drift
+ *   2 · masked lockup rise: "Binaa Labs" → بناء لابس (+120ms) → slogan
+ *       letter-spaced resolve (+240ms)
+ *   3 · radial light bloom from the cube center dissolves the cover outward;
+ *       the hero is revealed out of the brightness (~3.8s total)
  *
- * Contract (STAGE2-DESIGN §1 + splash v2 spec):
+ * Contract (carried over from v2, D15):
  * - Session-once via sessionStorage; the layout boot script sets
  *   `html.splash-seen` BEFORE paint on repeat loads, so there is no flash.
  * - Reduced motion never mounts it: CSS layer (`display:none`) + the
  *   matchMedia check below (layer 2).
  * - Skip button fades in at ~1s; ANY wheel / touchmove / scroll /
- *   pointerdown / keydown skips instantly.
- * - Zero layout shift: fixed overlay; the page paints beneath from t=0
- *   (beat 1 is the panels closing OVER the visible page).
+ *   pointerdown / keydown dismisses instantly. Dismissal = accelerated
+ *   bloom (~350ms via .skipping), never a hard cut.
+ * - Zero layout shift: fixed overlay; the page paints beneath from t=0.
+ * - Unmount is anchored to the bloom's animationend (natural and skipped
+ *   exits both end in splBloom), with a safety timer behind it.
  */
 export default function Splash() {
   const { t } = useSite();
@@ -33,10 +41,11 @@ export default function Splash() {
   const [gone, setGone] = useState(false);
   const [skipping, setSkipping] = useState(false);
   // The CSS beats start at first paint; the canvas mounts at hydration.
-  // Aim the cube's build at ~panel-close end regardless of hydration lag.
+  // Aim the cube's center-out birth at the end of beat 0 (~600ms after
+  // paint) regardless of hydration lag.
   const [canvasDelay] = useState(() =>
     typeof performance !== "undefined"
-      ? Math.max(0, 420 - performance.now())
+      ? Math.max(0, 620 - performance.now())
       : 0
   );
 
@@ -62,31 +71,28 @@ export default function Splash() {
     }
 
     let finished = false;
-    let fadeTimer = 0;
+    let safety = 0;
     const finish = () => {
       if (finished) return;
       finished = true;
-      setSkipping(true);
-      fadeTimer = window.setTimeout(() => setGone(true), 320);
+      setSkipping(true); // restarts the bloom at 350ms — accelerated exit
+      safety = window.setTimeout(() => setGone(true), 900);
     };
     finishRef.current = finish;
 
-    // any input skips instantly (v2 rule)
+    // any input dismisses instantly (accelerated bloom, not a hard cut)
     window.addEventListener("wheel", finish, { passive: true });
     window.addEventListener("touchmove", finish, { passive: true });
     window.addEventListener("scroll", finish, { passive: true });
     window.addEventListener("pointerdown", finish);
     window.addEventListener("keydown", finish);
 
-    // natural end: the right panel's part animation completes
-    const panel = el.querySelector<HTMLElement>(".spl-r");
+    // both exits (natural + skipped) end when the bloom finishes
+    const bloom = el.querySelector<HTMLElement>(".spl-bloom");
     const onAnimEnd = (e: AnimationEvent) => {
-      if (e.animationName === "splPartR" && !finished) {
-        finished = true;
-        setGone(true);
-      }
+      if (e.animationName === "splBloom") setGone(true);
     };
-    panel?.addEventListener("animationend", onAnimEnd);
+    bloom?.addEventListener("animationend", onAnimEnd);
 
     return () => {
       window.removeEventListener("wheel", finish);
@@ -94,8 +100,8 @@ export default function Splash() {
       window.removeEventListener("scroll", finish);
       window.removeEventListener("pointerdown", finish);
       window.removeEventListener("keydown", finish);
-      panel?.removeEventListener("animationend", onAnimEnd);
-      window.clearTimeout(fadeTimer);
+      bloom?.removeEventListener("animationend", onAnimEnd);
+      window.clearTimeout(safety);
     };
   }, []);
 
@@ -103,18 +109,24 @@ export default function Splash() {
 
   return (
     <div id="splash" ref={ref} className={skipping ? "skipping" : undefined}>
-      <div className="spl-panel spl-l" aria-hidden="true" />
-      <div className="spl-panel spl-r" aria-hidden="true" />
+      <div className="spl-cover" aria-hidden="true" />
+      <div className="spl-glow" aria-hidden="true" />
+      <div className="spl-flare" aria-hidden="true" />
       <div className="spl-stage">
         <div className="spl-canvas" aria-hidden="true">
           <HeroCanvas startDelayMs={canvasDelay} />
         </div>
-        <div>
-          <p className="spl-title">{t.splash.title}</p>
-          <p className="spl-ar">{t.splash.arabicName}</p>
+        <div className="spl-lockup">
+          <span className="spl-line">
+            <span className="spl-title">{t.splash.title}</span>
+          </span>
+          <span className="spl-line">
+            <span className="spl-ar">{t.splash.arabicName}</span>
+          </span>
           <p className="spl-slogan">{t.splash.slogan}</p>
         </div>
       </div>
+      <div className="spl-bloom" aria-hidden="true" />
       <button
         type="button"
         className="spl-skip"
