@@ -1,7 +1,9 @@
 import * as React from "react";
 
 export function LogoMark({ size = 30 }: { size?: number }) {
-  // isometric node-cube — mirrors the Binaa Labs brand mark.
+  // The real Binaa Labs mark, de-traced from assets/brand/logo-source.svg
+  // into clean stroke geometry: partial isometric wireframe cube with
+  // circuit gaps and three hollow ring nodes (top, upper-left, lower-right).
   // Color rides on --logo: gold in dark theme, navy in light (D14).
   return (
     <svg
@@ -9,24 +11,21 @@ export function LogoMark({ size = 30 }: { size?: number }) {
       height={size}
       viewBox="0 0 100 100"
       fill="none"
+      stroke="var(--logo)"
+      strokeWidth={3.1}
+      strokeLinecap="round"
+      strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path
-        d="M50 24 L74 38 L74 64 L50 78 L26 64 L26 38 Z"
-        stroke="var(--logo)"
-        strokeWidth={4}
-        strokeLinejoin="round"
-      />
-      <path
-        d="M50 24 L50 51 M50 51 L74 38 M50 51 L26 38"
-        stroke="var(--logo)"
-        strokeWidth={4}
-        strokeLinejoin="round"
-        opacity={0.55}
-      />
-      <circle cx={50} cy={24} r={5.5} fill="var(--logo)" />
-      <circle cx={26} cy={38} r={5.5} fill="var(--logo)" />
-      <circle cx={74} cy={64} r={5.5} fill="var(--logo)" />
+      <path d="M27.7 30.5 L44.7 20.7" />
+      <path d="M54.9 20.7 L74.5 31.8" />
+      <path d="M49.8 49 L77.2 33.4 L77.2 58.7" />
+      <path d="M49.8 49 L49.8 80.3 L72.1 67.5" />
+      <path d="M49.8 49 L27.7 36.3" />
+      <path d="M22.6 39.3 L22.6 64.6 L44.4 77.2" />
+      <circle cx={49.8} cy={17.8} r={3.9} />
+      <circle cx={22.6} cy={33.4} r={3.9} />
+      <circle cx={77.2} cy={64.6} r={3.9} />
     </svg>
   );
 }

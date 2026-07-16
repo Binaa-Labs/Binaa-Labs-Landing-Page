@@ -38,7 +38,10 @@ const arabic = Tajawal({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Binaa Labs — Custom Software Studio for the Gulf",
+  title: {
+    default: "Binaa Labs",
+    template: "%s · Binaa Labs",
+  },
   description:
     "Binaa Labs is a Dubai software studio that moves Gulf businesses fully online — custom web apps, mobile apps, process automation and system integrations, built Arabic-first.",
   keywords: [
@@ -53,7 +56,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Binaa Labs" }],
   openGraph: {
-    title: "Binaa Labs — Custom Software Studio for the Gulf",
+    title: "Binaa Labs · Custom Software Studio for the Gulf",
     description:
       "We move your business fully online and automate the busywork — custom-built, launched fast, and yours to keep.",
     siteName: "Binaa Labs",
@@ -62,7 +65,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Binaa Labs — Custom Software Studio for the Gulf",
+    title: "Binaa Labs · Custom Software Studio for the Gulf",
     description:
       "We move your business fully online and automate the busywork — custom-built, launched fast, and yours to keep.",
   },
