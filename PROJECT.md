@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-16 · Status: **Stage 2 + refinement pass 1 PUSHED for preview review (`feat/site-redesign` → Vercel preview); owner reviews the preview, then rules on merge**
+Last updated: 2026-07-19 · Status: **Push-prep complete (`d888d75` pushed); owner preview review completed and approved on the `feat/site-redesign` preview; binding Lighthouse measurement done (mobile LCP 3.3s vs. 2.5s budget) → D19 disables the splash on mobile, re-measure pending; refinement pass 2 (D20, hero mock variation + FAQ fit question) landed**
 
 ---
 
@@ -175,7 +175,10 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 | **D15** | *(2026-07-14, owner)* **Splash v2 adopted; its D2 mock gate waived.** The intro splash ships as specified in the implementation brief, superseding STAGE2-DESIGN §1's SVG line-draw storyboard (and checklist items 1–2): panels close over the painted page (gold hairline seam) → the **original HeroCanvas node-cube**, centered at ~60vh, builds in ~1.5s and **stays alive** (traveling pulses, particle dust, float) → "Binaa Labs" rises → بناء لابس (+120ms) → slogan **"Where your software gets built"** / **«حيث تُبنى برمجياتك»** (+240ms) → ~0.4s hold → panels part (total ~3.7s, ≤4s). Session-once (`sessionStorage` + pre-paint boot-script class); Skip at ~1s; **any** wheel/touchmove/scroll/pointerdown/keydown skips instantly; reduced motion never mounts it (CSS + matchMedia); zero layout shift. The §1.3 LCP fallback ladder stands — measure on the Vercel preview before merging. |
 | **D16** | *(2026-07-14, owner)* **D2's small-reviewed-passes rule waived for the Stage 2 implementation.** The full redesign landed in one pass as per-stage checkpoint commits (A: tokens+dictionaries · B: splash/nav/hero · C: gap/scenarios/merged section · D: work/guarantee/team/FAQ/contact/footer · E: docs+verification) on `feat/site-redesign`; the owner accepts single-pass review. Screenshot review and the explicit push instruction remain the gates — nothing is pushed without them. Owner also ruled the open checklist items: nav shows the proposed four links (The Gap · What We Build · Selected Work · How We Work), the hero floating chip is **dropped** (D1 — no placeholder metric), and case-panel Role rows ship as mocked. |
 
-| **D17** | *(2026-07-16, owner, refinement pass 1)* **Brand mark integrated · em-dash rule · splash v3.** (a) The real logo (owner-placed trace, now `assets/brand/logo-source.{svg,png}`) is de-traced into clean stroke geometry (partial isometric wireframe cube, circuit gaps, three hollow ring nodes) and replaces the placeholder everywhere: `LogoMark` on `var(--logo)`, `app/icon.svg` gold-on-dark, regenerated `apple-icon.png`/`favicon.ico`, OG card mark; tab title is exactly **"Binaa Labs"** (template `%s · Binaa Labs`). The splash keeps the generic full cube (owner ruling). (b) **House copy rule: zero em dashes in rendered copy** (dictionaries, metadata, OG); rephrase with comma/colon/period/middot. Headline is now "Run Your Business Online, Not Out of a WhatsApp Group and a Spreadsheet". (c) **Splash v3 "singularity"** supersedes v2's panel choreography (D15 beats retired): cover at first paint → breathing gold glow + inward dust (~0.6s) → flare + CENTER-OUT cube birth (~1.4s) + pulses + outward dust → masked lockup rise (+120/+240ms, slogan letter-spaced resolve) → radial bloom dissolves the cover, hero revealed out of the brightness (~3.8s). Dismissal = accelerated 350ms bloom; session-once/reduced-motion/no-JS/zero-CLS contracts unchanged. |
+| **D17** | *(2026-07-16, owner, refinement pass 1)* **Brand mark integrated · em-dash rule · splash v3.** (a) The real logo (owner-placed trace, now `assets/brand/logo-source.{svg,png}`) is de-traced into clean stroke geometry (partial isometric wireframe cube, circuit gaps, three hollow ring nodes) and replaces the placeholder everywhere: `LogoMark` on `var(--logo)`, `app/icon.svg` gold-on-dark, regenerated `apple-icon.png`/`favicon.ico`, OG card mark; tab title is exactly **"Binaa Labs"** (template `%s · Binaa Labs`). The splash keeps the generic full cube (owner ruling). (b) **House copy rule: zero em dashes in rendered copy** (dictionaries, metadata, OG); rephrase with comma/colon/period/middot. Headline is now "Run Your Business Online, Not Out of a WhatsApp Group and a Spreadsheet". (c) **Splash v3 "singularity"** supersedes v2's panel choreography (D15 beats retired): cover at first paint → breathing gold glow + inward dust (~0.6s) → flare + CENTER-OUT cube birth (~1.4s) + pulses + outward dust → masked lockup rise (+120/+240ms, slogan letter-spaced resolve) → radial bloom dissolves the cover, hero revealed out of the brightness (~3.8s). Dismissal = accelerated 350ms bloom; session-once/reduced-motion/no-JS/zero-CLS contracts unchanged. *(Amended 2026-07-16, owner:)* **Favicon gold-on-dark is now an explicit owner ruling.** It originally shipped as the D17 default without a ruling; this converts the accident into a decision. |
+| **D18** | *(2026-07-16, owner)* **Standard process reinstated.** Supersedes D15/D16 going forward; their rows stay as written (do not rewrite history). Reason: the mock waiver existed only because a splash animation cannot be judged from a still; the splash is approved, so the reason is gone. Back in force: pre-build render gates for compositional changes, small passes, two-gate approvals. |
+| **D19** | *(2026-07-18, owner)* **Splash disabled on mobile viewports (LCP rung 2).** Binding preview Lighthouse measured mobile LCP at 3.3s against the 2.5s budget, driven by the splash's HeroCanvas mount; rung 2 of the §1.3 fallback ladder (disable the splash below the site's 920px desktop breakpoint) is applied rather than a heavier rung. Same two-layer contract as reduced-motion: CSS `display:none` at `(max-width: 919px)` (zero flash, zero CLS) plus a matching `matchMedia` check in `Splash.tsx` (unmounts, doesn't consume the session-once flag). **Desktop splash choreography, session-once logic, and the reduced-motion path are all unchanged.** |
+| **D20** | *(2026-07-19, owner, refinement pass 2)* **Hero mock variation + FAQ fit question.** (a) The hero product frame swaps from a "Coach Dashboard" overview to a **Clients list view**: nav active tab moves to Clients, frame title is "Clients", header reads "Sorted by check-in", and the three tiles are relabeled "Total clients" / "Checked in" / "Plans updated" (owner correction: "Awaiting plan" read as a service backlog, not the dashboard's intended positive framing) while keeping the existing 128/96%/24 figures; the "Khalid M. · Onboarding · Plan due" row stays as pipeline detail at row level. `Hero.tsx`'s active-nav highlight is now driven by a new `frame.navActive` dictionary field instead of a hardcoded index. AR inherits the frame unchanged (`ar.hero.frame = en.hero.frame`, Latin/LTR by design). Render gate: EN/AR × dark/light × 1440/390 approved (`design/impl-review/hero-r2-*.png`, uncommitted). (b) **FAQ grows to 8 questions**: appended "Who do you work best with?" / AR mirror, scoping fit around established Gulf operators wanting one owned system, not a no-code patch or template site. (c) **Report-only finding, no change made:** the AR Guarantee's `arabicSubline` is the literal same Arabic string as the EN page's cross-language accent line, not an English mirror of it. On `/ar` it reads as the same Arabic sentence repeated back to back rather than a deliberate cross-language accent; left as is pending an owner call. |
 
 *(New decisions get the next D-number with a one-line rationale.)*
 
@@ -190,8 +193,15 @@ repo via the asset pass — cleanup scope in D14.)*
 
 ## 5 · Redesign status & remaining work
 
-**Status: Stage 2 implemented in full on `feat/site-redesign` (2026-07-14,
-five checkpoint commits per D16); owner review pending; NOTHING pushed.**
+**Status: push-prep complete (`d888d75` pushed to `feat/site-redesign`);
+owner preview review completed and approved on the Vercel preview
+(2026-07-16); binding Lighthouse measurement done (2026-07-18) — mobile LCP
+3.3s vs. 2.5s budget, D19 disables the splash on mobile (rung 2); re-measure
+on the preview after this lands.**
+
+> **Owner confirmation (2026-07-16):** Splash session-once behavior confirmed
+> by owner as built (survives refreshes within a session, replays on new
+> visit). No code change.
 
 ### Shipped in the Stage 2 implementation pass
 
@@ -238,9 +248,14 @@ five checkpoint commits per D16); owner review pending; NOTHING pushed.**
 2. **Lead backend:** implement `/api/lead` (or swap the marked stub in
    `Contact.tsx`) — until then submissions land in the honest failure state
    with the mailto fallback. **Vercel Analytics** (D5).
-3. **Pre-merge measurement:** LCP/Lighthouse on the Vercel preview — apply
-   the D15/§1.3 splash fallback ladder if it regresses. Calendly link stays
-   out until one exists (checklist 13).
+3. **Pre-merge measurement:** LCP/Lighthouse on the Vercel preview — binding
+   mobile LCP measured at 3.3s vs. the 2.5s budget; **D19 applies rung 2 of
+   the fallback ladder (splash disabled on mobile)**; re-measure after to
+   confirm the budget is met. Calendly link stays out until one exists
+   (checklist 13).
+4. **Parked (post-launch):** a mobile lite splash (~1.5-1.8s micro-intro:
+   glow pulse + text rise + bloom), owner-gated; re-measure LCP after
+   building it (D19).
 
 ### Launch checklist
 

@@ -55,11 +55,12 @@ export const en = {
     frame: {
       url: "app.wazen.fit",
       nav: ["Dashboard", "Clients", "Plans", "Check-ins", "Messages"],
-      title: "Coach Dashboard",
-      period: "This week",
+      navActive: "Clients",
+      title: "Clients",
+      period: "Sorted by check-in",
       tiles: [
-        { value: "128", label: "Active clients" },
-        { value: "96%", label: "Check-in rate" },
+        { value: "128", label: "Total clients" },
+        { value: "96%", label: "Checked in" },
         { value: "24", label: "Plans updated" },
       ],
       rows: [
@@ -457,6 +458,10 @@ export const en = {
       {
         q: "What do you build with?",
         a: "Modern, boring-on-purpose tools: React, React Native, Node.js, PostgreSQL, Next.js. Proven stacks any competent team can maintain after handover, not exotic tech that locks you to us.",
+      },
+      {
+        q: "Who do you work best with?",
+        a: "Established Gulf businesses running real operations on WhatsApp, spreadsheets and disconnected tools, who want one properly built system they own. If you are looking for a quick no-code patch or a template website, we are not the right fit.",
       },
     ],
   },

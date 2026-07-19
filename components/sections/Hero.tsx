@@ -77,7 +77,10 @@ export default function Hero() {
             <div className="app">
               <div className="app-side">
                 {h.frame.nav.map((n, i) => (
-                  <span key={i} className={"app-nav" + (i === 0 ? " on" : "")}>
+                  <span
+                    key={i}
+                    className={"app-nav" + (n === h.frame.navActive ? " on" : "")}
+                  >
                     {n}
                   </span>
                 ))}
