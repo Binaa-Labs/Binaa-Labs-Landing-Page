@@ -190,3 +190,30 @@ test("splash never mounts on mobile viewports (D19, LCP rung 2)", async ({
 
   await context.close();
 });
+
+test("hero copy paints without waiting on hydration on mobile (D19, LCP rung 2b)", async ({
+  browser,
+  baseURL,
+}) => {
+  // JS disabled entirely: the strongest proxy for "hydration never gets a
+  // chance to run before paint" (throttled-CPU hydration on the real device
+  // just delays it — here it never happens at all). The hero copy must still
+  // render fully visible from CSS alone, with no [data-revealed] flip needed.
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+    javaScriptEnabled: false,
+  });
+  const page = await context.newPage();
+  await page.goto("/");
+
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCSS(
+    "opacity",
+    "1"
+  );
+  await expect(page.locator(".hero-sub")).toHaveCSS("opacity", "1");
+  await expect(page.locator(".hero-ctas")).toHaveCSS("opacity", "1");
+  await expect(page.locator(".proof-band")).toHaveCSS("opacity", "1");
+
+  await context.close();
+});

@@ -384,6 +384,21 @@ ul {
 .js .hero [data-reveal] {
   transition-duration: var(--dur-slow);
 }
+/* mobile LCP rung 2b (D19 cont'd): below 920px the hero copy (badge, title,
+   subcopy, CTAs, proof band) skips the JS-gated fade-in entirely. On a
+   throttled-CPU hydration [data-reveal] sits at opacity:0 until
+   ClientEffects' IntersectionObserver mounts and sets [data-revealed],
+   which delays first paint of the LCP candidate (h1.hero-title). The
+   product frame (.hero-stack) sits below the fold on mobile and keeps its
+   normal scroll reveal; every other section is unaffected. */
+@media (max-width: 919px) {
+  .js .hero-copy [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+}
 
 /* ---- layout primitives ---- */
 .root {
