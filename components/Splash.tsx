@@ -22,26 +22,40 @@ const SEEN_KEY = "binaa-splash-seen";
  *   3 · radial light bloom from the cube center dissolves the cover outward;
  *       the hero is revealed out of the brightness (~3.8s total)
  *
+ * Mobile gets a trimmed sibling, not this choreography compressed: a 2.0s
+ * "lite" variant (D19 rung 3) — breathing glow (~0.6s) → masked text rise,
+ * title + Arabic name only, no slogan (~0.8s) → radial bloom (~0.6s). No
+ * cube birth, no traveling nodes, no HeroCanvas chunk fetch (`showCanvas`
+ * never flips true on mobile — same D22 gating mechanism). It reuses the
+ * exact same overlay contract, keyframes and CSS custom properties as the
+ * desktop splash; only the `--spl-*` timeline tokens are retimed, scoped
+ * under `#splash.lite` so desktop's own values are untouched.
+ *
  * Contract (carried over from v2, D15):
  * - Session-once via sessionStorage; the layout boot script sets
  *   `html.splash-seen` BEFORE paint on repeat loads, so there is no flash.
- * - Reduced motion never mounts it: CSS layer (`display:none`) + the
- *   matchMedia check below (layer 2).
- * - Mobile never mounts it either (D19, LCP rung 2): same two layers,
- *   gated at the site's 920px desktop breakpoint (`(max-width: 919px)`).
- *   Desktop choreography, session-once logic and the reduced-motion path
- *   are unchanged.
+ *   The same key gates both variants — a session never sees both.
+ * - Reduced motion never mounts either variant: CSS layer (`display:none`)
+ *   + the matchMedia check below (layer 2).
+ * - Below the site's 920px desktop breakpoint the lite variant mounts
+ *   instead of the full one (D19 rung 3, superseding rung 2's "never
+ *   mounts"); desktop choreography, session-once logic and the
+ *   reduced-motion path are all unchanged.
  * - The HeroCanvas chunk (audit finding B5, likely "chunk 919") is gated
  *   behind a separate `showCanvas` flag that only flips true in the same
- *   mount effect that computes `gone`, for qualifying (desktop, motion-
- *   allowed) sessions. `<HeroCanvas>` is absent from the JSX on the first
- *   render (SSR and client hydration alike, so no mismatch), which means
- *   `next/dynamic`'s import() for it is never triggered at all on mobile
- *   or under reduced motion, not just unmounted after the fact.
- * - Skip button fades in at ~1s; ANY wheel / touchmove / scroll /
+ *   mount effect that computes `gone`/`lite`, for qualifying (desktop,
+ *   motion-allowed) sessions. `<HeroCanvas>` is absent from the JSX on the
+ *   first render (SSR and client hydration alike, so no mismatch) and
+ *   absent from the lite JSX entirely, which means `next/dynamic`'s
+ *   import() for it is never triggered at all on mobile or under reduced
+ *   motion, not just unmounted after the fact.
+ * - Skip button fades in early; ANY wheel / touchmove / scroll /
  *   pointerdown / keydown dismisses instantly. Dismissal = accelerated
  *   bloom (~350ms via .skipping), never a hard cut.
  * - Zero layout shift: fixed overlay; the page paints beneath from t=0.
+ *   The lite variant sits on top of the mobile hero, which already paints
+ *   fully visible from CSS alone (D19/2b) regardless of the overlay, so
+ *   LCP timing is unaffected by what's drawn on top of it.
  * - Unmount is anchored to the bloom's animationend (natural and skipped
  *   exits both end in splBloom), with a safety timer behind it.
  */
@@ -51,6 +65,10 @@ export default function Splash() {
   const finishRef = useRef<() => void>(() => {});
   const [gone, setGone] = useState(false);
   const [skipping, setSkipping] = useState(false);
+  // Mobile (<920px) branch: the 2.0s lite variant instead of the full one.
+  // Stays false through SSR and the first client render (same reasoning as
+  // showCanvas below) so the mount effect is the only place it flips.
+  const [lite, setLite] = useState(false);
   // Gates the HeroCanvas dynamic import itself (see file-header note) — stays
   // false through SSR and the first client render, so the chunk is only
   // fetched once the mount effect below confirms a qualifying session.
@@ -75,9 +93,9 @@ export default function Splash() {
     } catch {
       /* ignore */
     }
+    const mobile = window.matchMedia("(max-width: 919px)").matches;
     if (
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      window.matchMedia("(max-width: 919px)").matches ||
       seen
     ) {
       setGone(true);
@@ -88,7 +106,11 @@ export default function Splash() {
     } catch {
       /* ignore */
     }
-    setShowCanvas(true);
+    if (mobile) {
+      setLite(true);
+    } else {
+      setShowCanvas(true);
+    }
 
     let finished = false;
     let safety = 0;
@@ -127,15 +149,21 @@ export default function Splash() {
 
   if (gone) return null;
 
+  const className =
+    [lite && "lite", skipping && "skipping"].filter(Boolean).join(" ") ||
+    undefined;
+
   return (
-    <div id="splash" ref={ref} className={skipping ? "skipping" : undefined}>
+    <div id="splash" ref={ref} className={className}>
       <div className="spl-cover" aria-hidden="true" />
       <div className="spl-glow" aria-hidden="true" />
-      <div className="spl-flare" aria-hidden="true" />
+      {!lite && <div className="spl-flare" aria-hidden="true" />}
       <div className="spl-stage">
-        <div className="spl-canvas" aria-hidden="true">
-          {showCanvas && <HeroCanvas startDelayMs={canvasDelay} />}
-        </div>
+        {!lite && (
+          <div className="spl-canvas" aria-hidden="true">
+            {showCanvas && <HeroCanvas startDelayMs={canvasDelay} />}
+          </div>
+        )}
         <div className="spl-lockup">
           <span className="spl-line">
             <span className="spl-title">{t.splash.title}</span>
@@ -143,7 +171,7 @@ export default function Splash() {
           <span className="spl-line">
             <span className="spl-ar">{t.splash.arabicName}</span>
           </span>
-          <p className="spl-slogan">{t.splash.slogan}</p>
+          {!lite && <p className="spl-slogan">{t.splash.slogan}</p>}
         </div>
       </div>
       <div className="spl-bloom" aria-hidden="true" />

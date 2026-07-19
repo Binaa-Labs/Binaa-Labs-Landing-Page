@@ -184,6 +184,8 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 
 | **D22** | *(2026-07-19, owner, final pre-merge pass)* **Vercel Analytics added; splash HeroCanvas chunk fetch gated off mobile/reduced-motion.** (a) `@vercel/analytics` (^2.0.1) added as a dependency (D5's remaining Analytics item) — `<Analytics />` mounted in `app/layout.tsx`, no server/route changes. (b) **Audit finding B5-high fixed:** `Splash.tsx` previously rendered `<HeroCanvas>` unconditionally from its first commit, so `next/dynamic`'s chunk fetch fired before the mount effect could gate it off for mobile/reduced-motion sessions (this chunk is the likely "919" culprit in the ~600ms mobile TBT audit finding). Fix: a new `showCanvas` state, default `false` (identical on SSR and the first client render, so no hydration mismatch), flips `true` only inside the same mount effect that already computes `gone`, and only for qualifying (desktop, motion-allowed, not-yet-seen) sessions — `<HeroCanvas>` is absent from the JSX until then, so the import is never triggered at all on mobile/reduced-motion. Desktop choreography unchanged (the existing `canvasDelay` calc already compensates for hydration-timed mounting). |
 
+| **D23** | *(2026-07-19, owner, post-launch)* **Mobile lite splash ships (D19 rung 3), superseding rung 2's "never mounts."** Post-launch item 4 built: below 920px, `Splash.tsx` now mounts a 2.0s-hard-cap trimmed sibling instead of skipping the splash entirely. Three beats, all reusing the desktop splash's own keyframes (`splBreathe`/`splMaskRise`/`splBloom`/`splCoverOut`/`splFadeOut`/`splRise`) retimed via `--spl-*` custom-property overrides scoped to `#splash.lite` (desktop's own token values are untouched): breathing gold glow (0-600ms, one pulse rather than the desktop's infinite loop) → masked text rise, "Binaa Labs" + بناء لابس only, no slogan (600-1400ms) → radial bloom reveal (1400-2000ms, lands exactly on the cap). No cube birth, no traveling nodes, no `HeroCanvas` chunk fetch (`showCanvas` never flips true on mobile — D22's gate holds). Same session-once key as desktop (`binaa-splash-seen`), same skip-on-any-input/bloom-`animationend`-unmount mechanism, same reduced-motion kill (never mounts either variant). Mobile hero still paints fully visible from CSS alone underneath the overlay (D19/2b unchanged), so LCP timing is unaffected by what's drawn on top of it. Verified via Playwright: computed `animation-delay`/`animation-duration` on `.spl-title`/`.spl-ar`/`.spl-bloom`/`.spl-cover`/`.spl-skip` match the token overrides exactly; `.spl-canvas`/`.spl-flare`/`.spl-slogan` are absent from the DOM; skip-on-scroll correctly applies the accelerated fade to `.spl-glow` too (a same-specificity tie with the shared `#splash.skipping` rule that needed an explicit `#splash.lite.skipping` override to resolve correctly). Fresh mobile Lighthouse pending on the pushed preview — numbers to follow before this merges to `main`. |
+
 *(New decisions get the next D-number with a one-line rationale.)*
 
 ---
@@ -255,8 +257,8 @@ The redesign is live (`main` at `49a76bb`); nothing below is a merge blocker.
    `IntersectionObserver`/count-up `requestAnimationFrame` setup off the
    hydration-critical tick (`requestIdleCallback`, or confirm via trace it's
    already effectively deferred).
-4. **Mobile lite splash** (~1.5-1.8s micro-intro: glow pulse + text rise +
-   bloom), owner-gated; re-measure LCP after building it (D19).
+4. ~~**Mobile lite splash**~~ — shipped (D23): 2.0s glow → text rise →
+   bloom. LCP re-measurement pending on the pushed preview.
 5. **Wazen video asset pass:** the 20–30s silent capture (seeded demo data
    only) → `lib/work-video.ts`; real Almani frames (D7); logo SVG de-trace +
    dual-color variants (D14); real Wazen metric if the hero chip is revived

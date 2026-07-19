@@ -871,10 +871,13 @@ html:not(.js) #splash {
     display: none;
   }
 }
-/* mobile LCP rung 2 (D19): below the site's 920px desktop breakpoint the
-   splash never mounts. Pure CSS, so it hides before paint like the
-   reduced-motion layer above; the matchMedia check in Splash.tsx removes it
-   from the DOM the same way. */
+/* mobile LCP rung 2/3 (D19): below the site's 920px desktop breakpoint the
+   full splash never mounts — it hides before paint like the reduced-motion
+   layer above. Splash.tsx's first render (SSR + first client pass) is
+   always the full/non-lite markup regardless of device, so this keeps a
+   mobile visitor from ever seeing so much as a flash of it; only once the
+   mount effect confirms "mobile" and swaps in the trimmed `.lite` markup
+   does the more specific rule below re-enable display. */
 @media (max-width: 919px) {
   #splash {
     display: none;
@@ -1052,6 +1055,38 @@ html:not(.js) #splash {
 .spl-skip:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
+}
+
+/* ---- mobile lite splash (D19 rung 3): trimmed sibling, 2.0s hard cap ----
+   Reuses the exact same overlay/keyframes as the full splash above; only
+   the --spl-* timeline tokens are retimed here, scoped to #splash.lite so
+   the desktop instance's own values are untouched (the two are never
+   mounted at once). Beats: breathing glow (0-600ms) → masked text rise,
+   title + Arabic name only (600-1400ms) → radial bloom (1400-2000ms). */
+#splash.lite {
+  --spl-text-delay: 600ms;
+  --spl-text-dur: 450ms;
+  --spl-skip-delay: 400ms;
+  --spl-exit-delay: 1400ms;
+}
+/* the base .spl-glow breathes on a 1.6s loop tuned for the 3.8s desktop
+   timeline; too slow to read as a single "breath" in a 600ms beat, so its
+   animation (not tokenized) is overridden directly rather than looped. */
+#splash.lite .spl-glow {
+  animation:
+    splBreathe 300ms var(--ease-hover) 2 alternate both,
+    splFadeOut var(--dur-fast) var(--ease-hover) var(--spl-exit-delay) forwards;
+}
+/* higher specificity than both the rule above and the shared
+   #splash.skipping group (same tie otherwise, and this one must win on
+   skip so the accelerated exit still applies to the glow on mobile). */
+#splash.lite.skipping .spl-glow {
+  animation: splFadeOut 200ms var(--ease-hover) forwards;
+}
+@media (max-width: 919px) {
+  #splash.lite {
+    display: block;
+  }
 }
 
 /* ============================================================

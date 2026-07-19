@@ -174,7 +174,7 @@ test("splash never mounts under reduced motion", async ({
   await context.close();
 });
 
-test("splash never mounts on mobile viewports (D19, LCP rung 2)", async ({
+test("mobile shows the 2.0s lite splash on a fresh session, then reveals the hero (D19 rung 3)", async ({
   browser,
   baseURL,
 }) => {
@@ -183,13 +183,48 @@ test("splash never mounts on mobile viewports (D19, LCP rung 2)", async ({
     viewport: { width: 390, height: 844 },
   });
   const page = await context.newPage();
-  // fresh session — no seeding: even a first-ever visit must skip the splash
+  // fresh session — no seeding: even a first-ever visit gets the lite splash
   await page.goto("/");
 
-  // CSS layer hides it immediately; the matchMedia layer removes it
-  await expect(page.locator("#splash")).toBeHidden();
-  await expect(page.locator("#splash")).toHaveCount(0);
+  await expect(page.locator("#splash")).toBeVisible();
+  await expect(page.locator("#splash")).toHaveClass(/lite/);
+  // trimmed sibling: no cube canvas, no flare, no slogan line
+  await expect(page.locator("#splash .spl-canvas")).toHaveCount(0);
+  await expect(page.locator("#splash .spl-flare")).toHaveCount(0);
+  await expect(page.locator("#splash .spl-slogan")).toHaveCount(0);
+
+  // the hero is already painted underneath (D19/2b) even while the lite
+  // splash overlays it, so LCP is unaffected by what's drawn on top
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCSS(
+    "opacity",
+    "1"
+  );
+
+  // hard cap: gone within 2.2s with no input needed
+  await expect(page.locator("#splash")).toHaveCount(0, { timeout: 2200 });
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+
+  // session-once, same shared key as desktop: a reload doesn't replay it
+  await page.reload();
+  await expect(page.locator("#splash")).toHaveCount(0);
+
+  await context.close();
+});
+
+test("mobile lite splash skips instantly on any input", async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+  await page.goto("/");
+  await expect(page.locator("#splash")).toBeVisible();
+
+  await page.mouse.wheel(0, 120);
+  await expect(page.locator("#splash")).toHaveCount(0);
 
   await context.close();
 });
