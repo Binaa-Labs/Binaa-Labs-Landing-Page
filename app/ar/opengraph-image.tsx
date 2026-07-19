@@ -1,7 +1,7 @@
 import { ogContentType, ogSize, renderOgImage } from "@/components/og-card";
 
 // Branded social share card for the Arabic route.
-export const alt = "Binaa Labs — استوديو برمجيات مخصص للخليج";
+export const alt = "Binaa Labs · استوديو برمجيات مخصص للخليج";
 export const size = ogSize;
 export const contentType = ogContentType;
 

@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — Hero (AR/RTL)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens-draft.css" />
+    <link rel="stylesheet" href="stage2-base.css" />
+    <style>
+      .nav {
+        background: var(--bg-nav);
+        border-bottom: 1px solid var(--line);
+        position: relative;
+        z-index: 2;
+      }
+      .nav-inner {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 13px var(--sp-5);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+      }
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .brand-name {
+        font-size: 1.02rem;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+      .brand-sub {
+        font-size: 0.68rem;
+        letter-spacing: 0;
+        color: var(--ink-3);
+      }
+      .nav-links {
+        display: none;
+        align-items: center;
+        gap: 26px;
+      }
+      .nav-links a {
+        color: var(--ink-2);
+        text-decoration: none;
+        font-size: 0.86rem;
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: var(--sp-7) 0 var(--sp-8);
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--hero-light);
+        pointer-events: none;
+        transform: scaleX(-1);
+      }
+      .hero-inner {
+        position: relative;
+        max-width: 1160px;
+        margin: 0 auto;
+        padding-inline: var(--sp-5);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--sp-7);
+        align-items: center;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.78rem;
+        color: var(--ink-3);
+        border: 1px solid var(--line);
+        border-radius: var(--r-pill);
+        padding: 7px 14px;
+        margin-bottom: var(--sp-5);
+      }
+      .badge-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+      h1 {
+        font-size: clamp(2rem, 4.4vw, 3.05rem);
+        line-height: 1.28;
+        font-weight: 700;
+        max-width: 18ch;
+      }
+      h1 em {
+        font-style: normal;
+        color: var(--gold);
+      }
+      .sub {
+        color: var(--ink-2);
+        font-size: 1.04rem;
+        max-width: 52ch;
+        margin-top: var(--sp-5);
+      }
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--sp-3);
+        margin-top: var(--sp-6);
+      }
+      .proof-band {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--sp-4) var(--sp-5);
+        margin-top: var(--sp-6);
+        padding-top: var(--sp-5);
+        border-top: 1px solid var(--line);
+        max-width: 560px;
+      }
+      .proof {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .proof b {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.2;
+      }
+      .proof span {
+        font-size: 0.8rem;
+        color: var(--ink-3);
+        line-height: 1.5;
+      }
+
+      .stack {
+        position: relative;
+      }
+      .stack::before {
+        content: "";
+        position: absolute;
+        inset: var(--sp-5) calc(-1 * var(--sp-3)) calc(-1 * var(--sp-5)) var(--sp-5);
+        border: 1px solid var(--line);
+        border-radius: var(--r-3);
+        background: var(--bg-2);
+      }
+      .stack .frame {
+        position: relative;
+        box-shadow: var(--elev-3), var(--glow-gold);
+      }
+      .chip-float {
+        position: absolute;
+        inset-inline-end: calc(-1 * var(--sp-2));
+        /* see hero.html: low anchor keeps the chip off the mirrored sidebar nav */
+        bottom: var(--sp-7);
+        background: var(--surface);
+        border: 1px solid var(--gold-line);
+        border-radius: var(--r-2);
+        box-shadow: var(--elev-2);
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.74rem;
+        color: var(--ink-2);
+      }
+      .chip-float b {
+        color: var(--gold);
+        font-size: 0.82rem;
+      }
+
+      @media (min-width: 920px) {
+        .nav-links {
+          display: flex;
+        }
+        .hero {
+          padding: var(--sp-9) 0;
+        }
+        .hero-inner {
+          grid-template-columns: 1.04fr 0.96fr;
+          gap: var(--sp-8);
+        }
+        .proof-band {
+          grid-template-columns: repeat(4, auto);
+          justify-content: start;
+          gap: var(--sp-6);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <svg width="34" height="34" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <path d="M50 24 L74 38 L74 64 L50 78 L26 64 L26 38 Z" stroke="var(--logo)" stroke-width="4" stroke-linejoin="round" />
+            <path d="M50 24 L50 51 M50 51 L74 38 M50 51 L26 38" stroke="var(--logo)" stroke-width="4" stroke-linejoin="round" opacity="0.55" />
+            <circle cx="50" cy="24" r="5.5" fill="var(--logo)" />
+            <circle cx="26" cy="38" r="5.5" fill="var(--logo)" />
+            <circle cx="74" cy="64" r="5.5" fill="var(--logo)" />
+          </svg>
+          <div class="brand-text">
+            <span class="brand-name display">Binaa Labs</span>
+            <span class="brand-sub">استوديو برمجيات</span>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a href="#">الفجوة</a>
+          <a href="#">ما نبنيه</a>
+          <a href="#">أعمال مختارة</a>
+          <a href="#">ضماننا</a>
+          <span class="btn btn-primary btn-sm">تحليل مجاني</span>
+        </nav>
+      </div>
+    </header>
+
+    <main class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="badge"><span class="badge-dot"></span>دبي، الإمارات · مبني للخليج</p>
+          <h1 class="display">أدِر عملك أونلاين — لا من <em>مجموعة واتساب</em> و<em>ملف إكسل</em></h1>
+          <!-- copy diet, Arabic held to the same discipline: 30 words → 14 -->
+          <p class="sub">
+            ننقل عملياتك بالكامل إلى الإنترنت ونؤتمت العمل المتكرر — بناء مخصص، إطلاق سريع، وملكية كاملة لك.
+          </p>
+          <div class="cta-row">
+            <span class="btn btn-primary">احجز تحليلك المجاني ←</span>
+            <span class="btn btn-ghost">شاهد ما بنيناه</span>
+          </div>
+          <div class="proof-band">
+            <div class="proof"><b>100%</b><span>الكود والملكية تبقى لك</span></div>
+            <div class="proof"><b>AR + EN</b><span>ثنائي اللغة، مبني للخليج</span></div>
+            <div class="proof"><b>أسبوعان</b><span>لعرض توضيحي وخطة واضحة</span></div>
+            <div class="proof"><b>24 ساعة</b><span>رد مباشر من الفريق</span></div>
+          </div>
+        </div>
+
+        <div class="stack" aria-hidden="true">
+          <div class="frame">
+            <div class="frame-bar">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="frame-url mono">app.wazen.fit</span>
+            </div>
+            <!-- frame interior stays LTR in RTL: a browser chrome is an LTR artifact
+                 and the product UI/URL are Latin (STAGE2-DESIGN §3 RTL note) -->
+            <div class="app">
+              <div class="app-side">
+                <span class="app-nav on">Dashboard</span>
+                <span class="app-nav">Clients</span>
+                <span class="app-nav">Plans</span>
+                <span class="app-nav">Check-ins</span>
+                <span class="app-nav">Messages</span>
+              </div>
+              <div class="app-main">
+                <div class="app-head">
+                  <span class="app-title">Coach Dashboard</span>
+                  <span class="app-date mono">This week</span>
+                </div>
+                <div class="tiles">
+                  <div class="tile"><b class="mono">128</b><span>Active clients</span></div>
+                  <div class="tile"><b class="mono">96%</b><span>Check-in rate</span></div>
+                  <div class="tile"><b class="mono">24</b><span>Plans updated</span></div>
+                </div>
+                <div class="rows">
+                  <div class="rowi"><span>Ahmad K. — Cut phase · wk 6</span><span class="st mono">Checked in</span></div>
+                  <div class="rowi"><span>Omar S. — Strength · wk 3</span><span class="st mono">Checked in</span></div>
+                  <div class="rowi"><span>Khalid M. — Onboarding</span><span class="st mut mono">Plan due</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chip-float"><b>96%</b> نسبة الالتزام</div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

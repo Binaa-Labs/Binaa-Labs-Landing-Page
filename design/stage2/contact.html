@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — Contact (form as the star)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens-draft.css" />
+    <link rel="stylesheet" href="stage2-base.css" />
+    <style>
+      .section {
+        background: var(--bg-2);
+        border-block: 1px solid var(--line);
+        padding: var(--sp-8) 0;
+      }
+      /* form-forward: the ask column is wider and heavier than the explainer */
+      .cols {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--sp-6);
+      }
+
+      /* ── left: headline + three one-line steps. Nothing else. ── */
+      .pitch h2 {
+        margin-top: var(--sp-3);
+      }
+      .steps {
+        margin-top: var(--sp-6);
+        display: flex;
+        flex-direction: column;
+      }
+      .cstep {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-3);
+        padding: var(--sp-3) 0;
+        border-top: 1px solid var(--line);
+        font-size: 0.9rem;
+        color: var(--ink-2);
+      }
+      .cstep:first-child {
+        border-top: none;
+      }
+      .cstep .n {
+        flex: 0 0 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        color: var(--gold);
+        font-size: 0.55rem;
+        display: grid;
+        place-items: center;
+      }
+
+      /* ── right: the form. The star of the section. ── */
+      .form {
+        background: var(--surface);
+        border: 1px solid var(--line-2);
+        border-radius: var(--r-4);
+        padding: var(--sp-5);
+        box-shadow: var(--elev-3);
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-4);
+      }
+      .form-cap {
+        font-size: 0.6rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        padding-bottom: var(--sp-3);
+        border-bottom: 1px solid var(--line);
+      }
+      .fld label {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--ink-2);
+        margin-bottom: 6px;
+      }
+      .fld .in {
+        width: 100%;
+        min-height: 46px;
+        border: 1px solid var(--line-2);
+        border-radius: var(--r-2);
+        background: var(--surface-2);
+        padding: 12px 14px;
+        font-size: 0.88rem;
+        color: var(--ink-3);
+      }
+      .fld .in.area {
+        min-height: 104px;
+      }
+      .row2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--sp-4);
+      }
+      .submit {
+        width: 100%;
+        text-align: center;
+        margin-top: var(--sp-2);
+      }
+
+      /* ── the receipt strip: what happens after you press the button ── */
+      .receipt {
+        margin-top: var(--sp-4);
+        padding-top: var(--sp-4);
+        /* perforation — reads as a receipt tear, not another hairline */
+        border-top: 1px dashed var(--line-2);
+      }
+      .receipt-cap {
+        display: block;
+        font-size: 0.55rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        margin-bottom: var(--sp-3);
+      }
+      .rchips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--sp-2);
+      }
+      .rchip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.62rem;
+        letter-spacing: 0.08em;
+        color: var(--ink-2);
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: var(--r-1);
+        padding: 6px 10px;
+      }
+      .rchip::before {
+        content: "✓";
+        color: var(--gold);
+        font-size: 0.6rem;
+      }
+
+      /* ── form states — designed, not optimistic ── */
+      .states {
+        margin-top: var(--sp-8);
+        padding-top: var(--sp-6);
+        border-top: 1px dashed var(--line-2);
+      }
+      .states-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        margin-bottom: var(--sp-4);
+      }
+      .state-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--sp-4);
+      }
+      .state {
+        border: 1px solid var(--line);
+        border-radius: var(--r-3);
+        background: var(--surface);
+        padding: var(--sp-5);
+      }
+      .state .tag-s {
+        font-size: 0.56rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        display: block;
+        margin-bottom: var(--sp-3);
+      }
+      .btn-submitting {
+        background: var(--gold-btn);
+        color: var(--gold-ink);
+        opacity: 0.75;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .spinner {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid var(--gold-ink);
+        border-top-color: transparent;
+        display: inline-block;
+      }
+      .ok {
+        display: flex;
+        gap: var(--sp-3);
+        align-items: flex-start;
+      }
+      .ok .mark {
+        flex: 0 0 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        color: var(--gold);
+        display: grid;
+        place-items: center;
+        font-size: 0.8rem;
+      }
+      .ok b {
+        display: block;
+        font-size: 0.95rem;
+      }
+      .ok p {
+        font-size: 0.82rem;
+        color: var(--ink-2);
+        margin-top: 2px;
+      }
+      .err {
+        border: 1px solid var(--rose-line);
+        background: var(--rose-soft);
+        border-radius: var(--r-2);
+        padding: var(--sp-3) var(--sp-4);
+        font-size: 0.84rem;
+        color: var(--ink);
+      }
+      .err b {
+        color: var(--rose);
+      }
+      .err a {
+        color: var(--ink);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .retry {
+        margin-top: var(--sp-3);
+      }
+
+      @media (min-width: 920px) {
+        /* the form column is the wider, heavier one — it is the section's job */
+        .cols {
+          grid-template-columns: 0.78fr 1.22fr;
+          gap: var(--sp-8);
+          align-items: start;
+        }
+        .pitch {
+          padding-top: var(--sp-4);
+        }
+        .row2 {
+          grid-template-columns: 1fr 1fr;
+        }
+        .state-row {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .form {
+          padding: var(--sp-6);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="section">
+      <div class="wrap">
+        <div class="cols">
+          <!-- ══ left: headline + three one-line steps. That is all. ══ -->
+          <div class="pitch">
+            <p class="label mono">Free Analysis</p>
+            <h2 class="display">Get Your Free System Analysis</h2>
+            <div class="steps">
+              <div class="cstep"><span class="n mono">01</span>Tell us how your business runs today.</div>
+              <div class="cstep"><span class="n mono">02</span>We map it and show you a visual demo.</div>
+              <div class="cstep"><span class="n mono">03</span>You get a plan and a fixed price.</div>
+            </div>
+          </div>
+
+          <!-- ══ right: the form — the star ══ -->
+          <div class="form">
+            <p class="form-cap mono">Book your call</p>
+            <div class="row2">
+              <div class="fld"><label>Name</label><div class="in">Your name</div></div>
+              <div class="fld"><label>Email</label><div class="in">you@company.com</div></div>
+            </div>
+            <div class="row2">
+              <div class="fld"><label>Company</label><div class="in">Your company</div></div>
+              <div class="fld"><label>Phone</label><div class="in">Your phone number</div></div>
+            </div>
+            <div class="fld">
+              <label>What are you building?</label>
+              <div class="in area">Tell us about your business and what you want to build or automate…</div>
+            </div>
+            <span class="btn btn-primary submit">Book My Free Analysis →</span>
+
+            <div class="receipt">
+              <span class="receipt-cap mono">What happens next</span>
+              <div class="rchips">
+                <span class="rchip mono">24h response</span>
+                <span class="rchip mono">Free analysis</span>
+                <span class="rchip mono">No commitment</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ the three honest states (kept) ══ -->
+        <div class="states">
+          <p class="states-label mono">Form states — honest lifecycle (no optimistic success)</p>
+          <div class="state-row">
+            <div class="state">
+              <span class="tag-s mono">1 · Submitting</span>
+              <span class="btn btn-submitting"><span class="spinner"></span>Sending…</span>
+            </div>
+            <div class="state">
+              <span class="tag-s mono">2 · Success (server-confirmed only)</span>
+              <div class="ok">
+                <span class="mark">✓</span>
+                <div><b class="display">Request received</b><p>We’ll be in touch within 24 hours to set up your free analysis.</p></div>
+              </div>
+            </div>
+            <div class="state">
+              <span class="tag-s mono">3 · Failure</span>
+              <div class="err">
+                <b>Couldn’t send.</b> Nothing was lost — your message is still below. Retry, or email us directly at
+                <a href="#">admin@binaalabs.com</a>.
+              </div>
+              <span class="btn btn-ghost btn-sm retry">Try again</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

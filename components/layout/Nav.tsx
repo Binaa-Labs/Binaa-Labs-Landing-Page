@@ -2,15 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSite } from "@/components/Providers";
-import { LogoMark, SunIcon, MoonIcon, MenuIcon, CloseIcon } from "@/components/ui/icons";
+import {
+  LogoMark,
+  SunIcon,
+  MoonIcon,
+  MenuIcon,
+  CloseIcon,
+} from "@/components/ui/icons";
 
-const SECTION_IDS = [
-  "the-gap",
-  "what-we-build",
-  "selected-work",
-  "offer",
-  "our-guarantee",
-] as const;
+// Anchor plan per STAGE2-DESIGN §2: the merged section owns #how-we-work
+// (and carries an invisible #offer alias for old deep links).
+const SECTION_IDS = ["gap", "build", "work", "how-we-work"] as const;
 
 export default function Nav() {
   const { t, lang, setLang, theme, toggleTheme } = useSite();
@@ -20,11 +22,10 @@ export default function Nav() {
   const barRef = useRef<HTMLDivElement>(null);
 
   const links = [
-    { id: "the-gap", href: "#the-gap", label: t.nav.links.theGap },
-    { id: "what-we-build", href: "#what-we-build", label: t.nav.links.whatWeBuild },
-    { id: "selected-work", href: "#selected-work", label: t.nav.links.selectedWork },
-    { id: "offer", href: "#offer", label: t.nav.links.offer },
-    { id: "our-guarantee", href: "#our-guarantee", label: t.nav.links.guarantee },
+    { id: "gap", href: "#gap", label: t.nav.links.theGap },
+    { id: "build", href: "#build", label: t.nav.links.whatWeBuild },
+    { id: "work", href: "#work", label: t.nav.links.selectedWork },
+    { id: "how-we-work", href: "#how-we-work", label: t.nav.links.howWeWork },
   ];
 
   // scroll progress bar + nav border
@@ -33,8 +34,7 @@ export default function Nav() {
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        const max =
-          document.documentElement.scrollHeight - window.innerHeight;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
         const p = max > 0 ? (window.scrollY / max) * 100 : 0;
         if (barRef.current) barRef.current.style.width = p + "%";
         setScrolled(window.scrollY > 6);
@@ -85,14 +85,17 @@ export default function Nav() {
     <header className={"nav-header" + (scrolled ? " scrolled" : "")}>
       <div ref={barRef} className="nav-progress" aria-hidden="true" />
       <nav className="nav-inner">
-        <a href="#top" aria-label={t.ui.aria.home} className="brand">
+        {/* No aria-label here: the visible text names the link (axe
+            label-content-name-mismatch fix); the sr-only suffix disambiguates. */}
+        <a href="#top" className="brand">
           <span className="brand-mark" aria-hidden="true">
-            <LogoMark size={36} />
+            <LogoMark size={34} />
           </span>
           <span className="brand-text">
             <span className="brand-name">{t.nav.brandName}</span>
             <span className="brand-sub">{t.nav.brandSub}</span>
           </span>
+          <span className="sr-only">{t.ui.aria.home}</span>
         </a>
 
         <ul className="nav-links">
@@ -109,7 +112,11 @@ export default function Nav() {
         </ul>
 
         <div className="nav-actions" style={{ marginInlineStart: "auto" }}>
-          <div className="lang-group" role="group" aria-label={t.ui.aria.language}>
+          <div
+            className="lang-group"
+            role="group"
+            aria-label={t.ui.aria.language}
+          >
             <button
               type="button"
               className={"lang-btn" + (lang === "en" ? " active" : "")}
@@ -140,7 +147,11 @@ export default function Nav() {
             {theme === "dark" ? <MoonIcon /> : <SunIcon />}
           </button>
 
-          <a href="#contact" data-magnetic="" className="nav-cta">
+          <a
+            href="#contact"
+            data-magnetic=""
+            className="btn-primary btn-sm nav-cta"
+          >
             {t.nav.cta}
           </a>
 

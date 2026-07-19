@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — Intro Splash (playable)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ————— self-contained token subset (mirrors tokens-draft.css, D14) ————— */
+      :root[data-theme="dark"] {
+        --bg: #1a1a1a;
+        --bg-2: #141414;
+        --bg-nav: rgba(26, 26, 26, 0.82);
+        --surface: #202020;
+        --surface-2: #272727;
+        --line: rgba(250, 250, 248, 0.08);
+        --line-2: rgba(250, 250, 248, 0.16);
+        --ink: #fafaf8;
+        --ink-2: #a2a29c;
+        --ink-3: #8a8a84;
+        --gold: #d4a017;
+        --gold-btn: var(--gold);
+        --gold-ink: #1a1a1a;
+        --gold-soft: rgba(212, 160, 23, 0.13);
+        --gold-line: rgba(212, 160, 23, 0.34);
+        --logo: var(--gold);
+        --elev-1: 0 1px 2px rgba(0, 0, 0, 0.35);
+        --elev-2: 0 10px 28px -10px rgba(0, 0, 0, 0.5);
+        --elev-3: 0 28px 56px -16px rgba(0, 0, 0, 0.6);
+        --glow-gold: 0 0 90px -20px rgba(212, 160, 23, 0.4);
+        --hero-light: radial-gradient(ellipse 42% 55% at 68% 40%, rgba(212, 160, 23, 0.1), transparent 68%);
+      }
+      :root[data-theme="light"] {
+        --bg: #fafafa;
+        --bg-2: #f1f2f4;
+        --bg-nav: rgba(250, 250, 250, 0.82);
+        --surface: #ffffff;
+        --surface-2: #f5f6f8;
+        --line: rgba(36, 50, 75, 0.1);
+        --line-2: rgba(36, 50, 75, 0.18);
+        --ink: #24324b;
+        --ink-2: #4e5a70;
+        --ink-3: #616b80;
+        --gold: #a87810;
+        --gold-btn: #8f660d;
+        --gold-ink: #ffffff;
+        --gold-soft: rgba(212, 160, 23, 0.11);
+        --gold-line: rgba(168, 120, 16, 0.3);
+        --logo: #24324b;
+        --elev-1: 0 1px 2px rgba(36, 50, 75, 0.08);
+        --elev-2: 0 10px 28px -10px rgba(36, 50, 75, 0.14);
+        --elev-3: 0 28px 56px -16px rgba(36, 50, 75, 0.18);
+        --glow-gold: 0 0 90px -20px rgba(168, 120, 16, 0.22);
+        --hero-light: none;
+      }
+      :root {
+        --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+        --sp-7: 48px; --sp-8: 64px; --sp-9: 96px;
+        --r-1: 6px; --r-2: 10px; --r-3: 16px; --r-pill: 999px;
+        --dur-fast: 150ms; --dur-base: 300ms; --dur-slow: 600ms;
+        --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-hover: cubic-bezier(0.4, 0, 0.2, 1);
+
+        /* ————— splash timeline (single source of truth for the beats) ————— */
+        --spl-close-dur: 400ms;                 /* beat 1: panels close        */
+        --spl-hex-delay: 400ms;  --spl-hex-dur: 900ms;   /* beat 2a: hexagon    */
+        --spl-inner-delay: 1000ms; --spl-inner-dur: 750ms; /* beat 2b: inner Y  */
+        --spl-node-dur: 300ms;                  /* beat 2c: node pops           */
+        --spl-text-delay: 1900ms; --spl-text-dur: 600ms; /* beat 3: text fade   */
+        --spl-skip-delay: 1000ms;               /* skip affordance appears      */
+        --spl-exit-delay: 3100ms; --spl-exit-dur: 600ms; /* beat 5: panels part */
+        /* beat 4 (hold) = exit-delay − (text-delay + text-dur + 2 staggers)    */
+
+        /* splash is brand-dark in BOTH themes (storyboard: brand-dark panels) */
+        --spl-panel: #141414;
+        --spl-ink: #fafaf8;
+        --spl-ink-2: #a2a29c;
+        --spl-gold: #d4a017;
+        --spl-gold-line: rgba(212, 160, 23, 0.34);
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Inter", "Tajawal", system-ui, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .display { font-family: "Bricolage Grotesque", "Tajawal", sans-serif; }
+      .mono { font-family: "JetBrains Mono", monospace; }
+
+      /* ═══════════════ hero placeholder beneath the splash ═══════════════ */
+      .nav { background: var(--bg-nav); border-bottom: 1px solid var(--line); }
+      .nav-inner {
+        max-width: 1160px; margin: 0 auto; padding: 13px var(--sp-5);
+        display: flex; align-items: center; justify-content: space-between;
+      }
+      .brand { display: flex; align-items: center; gap: 11px; }
+      .brand-name { font-size: 1.02rem; font-weight: 700; line-height: 1.1; display: block; }
+      .brand-sub { font-size: 0.56rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3); }
+      .nav-links { display: none; align-items: center; gap: 26px; }
+      .nav-links a { color: var(--ink-2); text-decoration: none; font-size: 0.86rem; }
+      .btn {
+        display: inline-block; border-radius: var(--r-2); padding: 14px var(--sp-5);
+        font-size: 0.95rem; font-weight: 600; line-height: 1.2; white-space: nowrap;
+      }
+      .btn-primary { background: var(--gold-btn); color: var(--gold-ink); box-shadow: var(--elev-1); }
+      .btn-ghost { border: 1px solid var(--line-2); color: var(--ink); }
+      .btn-sm { padding: 9px var(--sp-4); font-size: 0.8rem; }
+
+      .hero { position: relative; overflow: hidden; padding: var(--sp-7) 0 var(--sp-8); }
+      .hero::before { content: ""; position: absolute; inset: 0; background: var(--hero-light); pointer-events: none; }
+      .hero-inner {
+        position: relative; max-width: 1160px; margin: 0 auto; padding-inline: var(--sp-5);
+        display: grid; grid-template-columns: 1fr; gap: var(--sp-7); align-items: center;
+      }
+      .badge {
+        display: inline-flex; align-items: center; gap: 8px; font-size: 0.66rem;
+        letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3);
+        border: 1px solid var(--line); border-radius: var(--r-pill); padding: 7px 14px;
+        margin-bottom: var(--sp-5);
+      }
+      .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+      h1 { font-size: clamp(2rem, 4.4vw, 3.15rem); line-height: 1.12; letter-spacing: -0.015em; font-weight: 700; max-width: 16ch; }
+      h1 em { font-style: normal; color: var(--gold); }
+      .sub { color: var(--ink-2); font-size: 1.02rem; max-width: 52ch; margin-top: var(--sp-5); }
+      .cta-row { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-6); }
+      .proof-band {
+        display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4) var(--sp-5);
+        margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: 1px solid var(--line); max-width: 560px;
+      }
+      .proof b { font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.2; display: block; }
+      .proof span { font-size: 0.72rem; color: var(--ink-3); line-height: 1.4; }
+
+      /* dense product frame (fidelity floor: real UI text, no grey bars) */
+      .stack { position: relative; }
+      .stack::before {
+        content: ""; position: absolute;
+        inset: var(--sp-5) calc(-1 * var(--sp-3)) calc(-1 * var(--sp-5)) var(--sp-5);
+        border: 1px solid var(--line); border-radius: var(--r-3); background: var(--bg-2);
+      }
+      .frame {
+        position: relative; background: var(--surface); border: 1px solid var(--line);
+        border-radius: var(--r-3); overflow: hidden; box-shadow: var(--elev-3), var(--glow-gold);
+      }
+      .frame-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+      .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line-2); }
+      .frame-url {
+        flex: 1; margin-inline-start: 10px; background: var(--surface-2); border: 1px solid var(--line);
+        border-radius: var(--r-1); font-size: 0.58rem; color: var(--ink-3); text-align: center; padding: 3px 0;
+        direction: ltr;
+      }
+      .app { display: grid; grid-template-columns: 108px 1fr; min-height: 280px; direction: ltr; }
+      .app-side { border-right: 1px solid var(--line); padding: 12px 10px; display: flex; flex-direction: column; gap: 3px; }
+      .app-nav {
+        font-size: 0.6rem; color: var(--ink-3); padding: 6px 8px; border-radius: var(--r-1);
+        display: flex; align-items: center; gap: 6px;
+      }
+      .app-nav::before { content: ""; width: 5px; height: 5px; border-radius: 2px; background: var(--line-2); }
+      .app-nav.on { background: var(--gold-soft); border: 1px solid var(--gold-line); color: var(--gold); }
+      .app-nav.on::before { background: var(--gold); }
+      .app-main { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+      .app-head { display: flex; align-items: baseline; justify-content: space-between; }
+      .app-title { font-size: 0.78rem; font-weight: 600; color: var(--ink); }
+      .app-date { font-size: 0.54rem; color: var(--ink-3); }
+      .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .tile { border: 1px solid var(--line); border-radius: var(--r-2); padding: 8px 10px; }
+      .tile b { font-size: 0.82rem; font-weight: 600; color: var(--gold); display: block; line-height: 1.2; }
+      .tile span { font-size: 0.5rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; }
+      .rows { display: flex; flex-direction: column; }
+      .rowi {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 6px 2px; border-top: 1px solid var(--line); font-size: 0.6rem; color: var(--ink-2);
+      }
+      .rowi .st { font-size: 0.5rem; color: var(--gold); background: var(--gold-soft); border: 1px solid var(--gold-line); border-radius: var(--r-pill); padding: 1px 7px; }
+      .rowi .st.mut { color: var(--ink-3); background: var(--surface-2); border-color: var(--line); }
+      .chip-float {
+        position: absolute; inset-inline-end: calc(-1 * var(--sp-2)); top: var(--sp-8);
+        background: var(--surface); border: 1px solid var(--gold-line); border-radius: var(--r-2);
+        box-shadow: var(--elev-2); padding: 8px 12px; display: flex; align-items: center; gap: 8px;
+        font-size: 0.62rem; color: var(--ink-2);
+      }
+      .chip-float b { color: var(--gold); font-size: 0.78rem; }
+
+      @media (min-width: 920px) {
+        .nav-links { display: flex; }
+        .hero { padding: var(--sp-9) 0; }
+        .hero-inner { grid-template-columns: 1.04fr 0.96fr; gap: var(--sp-8); }
+        .proof-band { grid-template-columns: repeat(4, auto); justify-content: start; gap: var(--sp-6); }
+      }
+
+      /* ═══════════════════════ the splash overlay ═══════════════════════ */
+      #splash { position: fixed; inset: 0; z-index: 50; overflow: hidden; }
+      #splash.skipping { opacity: 0; pointer-events: none; transition: opacity var(--dur-base) var(--ease-hover); }
+
+      /* beat 1 + beat 5: the two brand-dark panels */
+      .panel { position: absolute; inset-block: 0; width: 50.5%; background: var(--spl-panel); }
+      .panel-l { left: 0; border-right: 1px solid rgba(212, 160, 23, 0.12); }
+      .panel-r { right: 0; border-left: 1px solid rgba(212, 160, 23, 0.12); }
+      /* close: decisive settle (--ease-enter). part: smooth reveal (--ease-hover),
+         so the 0.6s parting is felt across its whole duration, not front-loaded. */
+      .panel-l {
+        animation:
+          spl-close-l var(--spl-close-dur) var(--ease-enter) both,
+          spl-part-l var(--spl-exit-dur) var(--ease-hover) var(--spl-exit-delay) forwards;
+      }
+      .panel-r {
+        animation:
+          spl-close-r var(--spl-close-dur) var(--ease-enter) both,
+          spl-part-r var(--spl-exit-dur) var(--ease-hover) var(--spl-exit-delay) forwards;
+      }
+      @keyframes spl-close-l { from { transform: translateX(-101%); } to { transform: translateX(0); } }
+      @keyframes spl-close-r { from { transform: translateX(101%); } to { transform: translateX(0); } }
+      @keyframes spl-part-l { from { transform: translateX(0); } to { transform: translateX(-101%); } }
+      @keyframes spl-part-r { from { transform: translateX(0); } to { transform: translateX(101%); } }
+
+      /* beats 2–4: centered stage (cube draw → text → hold), dissolves on exit */
+      .stage {
+        position: absolute; inset: 0; display: grid; place-content: center;
+        justify-items: center; text-align: center; gap: var(--sp-4);
+        animation: spl-stage-out var(--dur-base) var(--ease-hover) var(--spl-exit-delay) forwards;
+      }
+      @keyframes spl-stage-out { to { opacity: 0; } }
+
+      .cube { width: 148px; height: 148px; filter: drop-shadow(0 0 26px rgba(212, 160, 23, 0.35)); }
+      .cube path { fill: none; stroke: var(--spl-gold); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+      .cube .hex {
+        stroke-dasharray: 1; stroke-dashoffset: 1;
+        animation: spl-draw var(--spl-hex-dur) var(--ease-hover) var(--spl-hex-delay) both;
+      }
+      .cube .inner {
+        opacity: 0.55; stroke-dasharray: 1; stroke-dashoffset: 1;
+        animation: spl-draw var(--spl-inner-dur) var(--ease-hover) var(--spl-inner-delay) both;
+      }
+      @keyframes spl-draw { to { stroke-dashoffset: 0; } }
+      .cube circle { fill: var(--spl-gold); transform-origin: center; transform-box: fill-box; }
+      .cube .nd { animation: spl-node var(--spl-node-dur) var(--ease-enter) both; }
+      .cube .n1 { animation-delay: 1450ms; }
+      .cube .n2 { animation-delay: 1560ms; }
+      .cube .n3 { animation-delay: 1670ms; }
+      @keyframes spl-node { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
+
+      .s-title, .s-ar, .s-tag { animation: spl-text var(--spl-text-dur) var(--ease-enter) both; }
+      .s-title { animation-delay: var(--spl-text-delay); font-size: 1.9rem; font-weight: 700; letter-spacing: -0.01em; color: var(--spl-ink); margin-top: var(--sp-3); }
+      .s-ar { animation-delay: calc(var(--spl-text-delay) + 120ms); font-family: "Tajawal", sans-serif; font-size: 1.22rem; font-weight: 500; color: var(--spl-gold); direction: rtl; }
+      .s-tag { animation-delay: calc(var(--spl-text-delay) + 240ms); font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--spl-ink-2); }
+      @keyframes spl-text { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+      /* skip affordance — appears after ~1s */
+      .skip {
+        position: absolute; bottom: var(--sp-6); inset-inline-end: var(--sp-6);
+        background: none; border: 1px solid rgba(250, 250, 248, 0.16); border-radius: var(--r-pill);
+        color: var(--spl-ink-2); font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
+        padding: 10px 18px; cursor: pointer; min-height: 40px;
+        animation:
+          spl-text var(--dur-base) var(--ease-enter) var(--spl-skip-delay) both,
+          spl-stage-out var(--dur-fast) var(--ease-hover) var(--spl-exit-delay) forwards;
+      }
+      .skip:hover { color: var(--spl-ink); border-color: var(--spl-gold-line); }
+      .skip:focus-visible { outline: 2px solid var(--spl-gold); outline-offset: 2px; }
+
+      /* reduced motion, layer 1: the splash never shows (layer 2 = JS matchMedia below) */
+      @media (prefers-reduced-motion: reduce) {
+        #splash { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ————— hero placeholder (revealed at beat 5; static, paints from t=0) ————— -->
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <svg width="34" height="34" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <path d="M50 24 L74 38 L74 64 L50 78 L26 64 L26 38 Z" stroke="var(--logo)" stroke-width="4" stroke-linejoin="round" />
+            <path d="M50 24 L50 51 M50 51 L74 38 M50 51 L26 38" stroke="var(--logo)" stroke-width="4" stroke-linejoin="round" opacity="0.55" />
+            <circle cx="50" cy="24" r="5.5" fill="var(--logo)" />
+            <circle cx="26" cy="38" r="5.5" fill="var(--logo)" />
+            <circle cx="74" cy="64" r="5.5" fill="var(--logo)" />
+          </svg>
+          <div>
+            <span class="brand-name display">Binaa Labs</span>
+            <span class="brand-sub mono">Software Studio</span>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a href="#">The Gap</a>
+          <a href="#">What We Build</a>
+          <a href="#">Selected Work</a>
+          <a href="#">Our Guarantee</a>
+          <span class="btn btn-primary btn-sm">Free Analysis</span>
+        </nav>
+      </div>
+    </header>
+
+    <main class="hero">
+      <div class="hero-inner">
+        <div>
+          <p class="badge mono"><span class="badge-dot"></span>Dubai, UAE · Built for the Gulf</p>
+          <h1 class="display">Run Your Business Online — Not Out of a <em>WhatsApp Group</em> and a <em>Spreadsheet</em></h1>
+          <p class="sub">We move your operation fully online and automate the busywork — custom-built, launched fast, yours to keep.</p>
+          <div class="cta-row">
+            <span class="btn btn-primary">Book Your Free Analysis →</span>
+            <span class="btn btn-ghost">See What We’ve Built</span>
+          </div>
+          <div class="proof-band">
+            <div class="proof"><b>100%</b><span>Code and ownership stays yours</span></div>
+            <div class="proof"><b>AR + EN</b><span>Bilingual, built for the Gulf</span></div>
+            <div class="proof"><b>2 wks</b><span>To a demo and clear plan</span></div>
+            <div class="proof"><b>24h</b><span>Response, direct from the builders</span></div>
+          </div>
+        </div>
+
+        <div class="stack" aria-hidden="true">
+          <div class="frame">
+            <div class="frame-bar">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="frame-url mono">app.wazen.fit</span>
+            </div>
+            <div class="app">
+              <div class="app-side">
+                <span class="app-nav on">Dashboard</span>
+                <span class="app-nav">Clients</span>
+                <span class="app-nav">Plans</span>
+                <span class="app-nav">Check-ins</span>
+                <span class="app-nav">Messages</span>
+              </div>
+              <div class="app-main">
+                <div class="app-head"><span class="app-title">Coach Dashboard</span><span class="app-date mono">This week</span></div>
+                <div class="tiles">
+                  <div class="tile"><b class="mono">128</b><span>Active clients</span></div>
+                  <div class="tile"><b class="mono">96%</b><span>Check-in rate</span></div>
+                  <div class="tile"><b class="mono">24</b><span>Plans updated</span></div>
+                </div>
+                <div class="rows">
+                  <div class="rowi"><span>Ahmad K. — Cut phase · wk 6</span><span class="st mono">Checked in</span></div>
+                  <div class="rowi"><span>Omar S. — Strength · wk 3</span><span class="st mono">Checked in</span></div>
+                  <div class="rowi"><span>Khalid M. — Onboarding</span><span class="st mut mono">Plan due</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chip-float mono"><b>96%</b> check-in rate</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ————— splash overlay: panels close → cube draws → text → hold → part ————— -->
+    <div id="splash">
+      <div class="panel panel-l"></div>
+      <div class="panel panel-r"></div>
+      <div class="stage">
+        <svg class="cube" viewBox="0 0 100 100" aria-hidden="true">
+          <!-- geometry = app/icon.svg node-cube (trace.svg stand-in until the D14 asset pass) -->
+          <path class="hex" pathLength="1" d="M50 24 L74 38 L74 64 L50 78 L26 64 L26 38 Z" />
+          <path class="inner" pathLength="1" d="M50 24 L50 51 M50 51 L74 38 M50 51 L26 38" />
+          <circle class="nd n1" cx="50" cy="24" r="6" />
+          <circle class="nd n2" cx="26" cy="38" r="6" />
+          <circle class="nd n3" cx="74" cy="64" r="6" />
+        </svg>
+        <div>
+          <p class="s-title display">Welcome to Binaa Labs</p>
+          <p class="s-ar">بناء لابس</p>
+          <p class="s-tag mono">Software Studio · Dubai</p>
+        </div>
+      </div>
+      <button class="skip mono" id="skip" type="button">Skip →</button>
+    </div>
+
+    <script>
+      (function () {
+        var KEY = "binaa-splash-seen";
+        var splash = document.getElementById("splash");
+        var seek = new URLSearchParams(location.search).get("t"); // ms — filmstrip/debug freeze-frame
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (seek === null) {
+          var seen = false;
+          try { seen = sessionStorage.getItem(KEY) === "1"; } catch (e) {}
+          // layer 2 (JS) of the reduced-motion rule; layer 1 is the CSS media query above
+          if (reduce || seen) { splash.remove(); return; }
+          try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
+        }
+
+        var done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          splash.classList.add("skipping");
+          setTimeout(function () { splash.remove(); }, 320);
+        }
+
+        document.getElementById("skip").addEventListener("click", finish);
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape") finish(); });
+
+        splash.querySelector(".panel-r").addEventListener("animationend", function (e) {
+          if (e.animationName === "spl-part-r" && seek === null && !done) {
+            done = true;
+            splash.remove();
+          }
+        });
+
+        if (seek !== null) {
+          var t = Math.max(0, parseFloat(seek));
+          requestAnimationFrame(function () {
+            document.getAnimations().forEach(function (a) { a.pause(); a.currentTime = t; });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

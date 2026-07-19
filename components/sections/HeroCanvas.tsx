@@ -22,15 +22,28 @@ function hexA(c: string, a: number): string {
         .map((s) => s.trim());
       return `rgba(${p.join(",")},${a})`;
     });
-  return `rgba(227,174,58,${a})`;
+  return `rgba(212,160,23,${a})`;
 }
 
 /**
- * Animated isometric node-cube that "builds in" (nodes pop outward, edges draw
- * themselves), then floats with traveling pulses. Theme-aware and respects
- * prefers-reduced-motion (renders the finished cube, statically).
+ * The splash cube (v3 "singularity" choreography): the isometric node-cube
+ * is BORN CENTER-OUT — the three inner spokes grow from the center first,
+ * then the hexagon edges grow outward from the spoke junctions, and each
+ * node pops the moment a drawing edge arrives at it. Once built it stays
+ * alive: floating, with traveling pulses.
+ *
+ * The ambient dust carries beat 0: it drifts INWARD toward the singularity
+ * until the cube is built, then reverses to a slow outward drift.
+ *
+ * Colors come from the CSS custom properties in scope (`#splash` pins the
+ * brand-dark palette in both themes). The splash never mounts under reduced
+ * motion, but the matchMedia static path is kept as belt-and-braces.
  */
-export default function HeroCanvas() {
+export default function HeroCanvas({
+  startDelayMs = 0,
+}: {
+  startDelayMs?: number;
+}) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -39,10 +52,11 @@ export default function HeroCanvas() {
     const ctx = cv.getContext("2d");
     if (!ctx) return;
 
-    const motion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const getVar = (n: string) => getComputedStyle(cv).getPropertyValue(n).trim();
-    const isLight = () =>
-      document.documentElement.getAttribute("data-theme") === "light";
+    const motion = !window.matchMedia("(prefers-reduced-motion: reduce)")
+      .matches;
+    const getVar = (n: string) =>
+      getComputedStyle(cv).getPropertyValue(n).trim();
+    const delay = startDelayMs / 1000;
 
     let W = 0;
     let H = 0;
@@ -70,78 +84,87 @@ export default function HeroCanvas() {
       [-0.866, 0.5],
       [-0.866, -0.5],
     ];
-    const edges: number[][] = [
-      [0, 1],
-      [1, 2],
-      [2, 3],
-      [3, 4],
-      [4, 5],
-      [5, 0],
-    ];
-    const innerEdges: number[][] = [
+    // Center-out birth order: inner spokes first (drawn FROM the center),
+    // then each hexagon edge grows outward from its spoke-junction vertex
+    // (1, 3, 5) toward the far vertices (0, 2, 4).
+    const allEdges: number[][] = [
       [6, 1],
       [6, 3],
       [6, 5],
+      [1, 0],
+      [1, 2],
+      [3, 2],
+      [3, 4],
+      [5, 4],
+      [5, 0],
     ];
-    const allEdges = edges.concat(innerEdges);
+    const EDGE_START = [0, 0.06, 0.12, 0.5, 0.59, 0.68, 0.77, 0.86, 0.95];
+    const EDGE_DUR = [0.5, 0.5, 0.5, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45];
+    const INTRO_END = motion ? 1.4 : 0; // the ~1.4s center-out build
+    // node pop moment = when the first drawing edge arrives at it
+    const NODE_AT: Record<number, number> = {
+      6: 0,
+      1: 0.5,
+      3: 0.56,
+      5: 0.62,
+      0: 0.95,
+      2: 1.04,
+      4: 1.22,
+    };
+    const NODE_GROW = 0.24;
     const ambient = Array.from({ length: 26 }, () => ({
       x: Math.random(),
       y: Math.random(),
       r: Math.random() * 1.6 + 0.5,
-      sx: (Math.random() - 0.5) * 0.00018,
-      sy: (Math.random() - 0.5) * 0.00018,
     }));
     const t0 = performance.now();
-
-    // intro timing — center node first, then ring nodes radiating out
-    const nodeOrder = [6, 0, 1, 2, 3, 4, 5];
-    const nodeAt: Record<number, number> = {};
-    nodeOrder.forEach((idx, o) => {
-      nodeAt[idx] = o;
-    });
-    const NODE_STAGGER = 0.085;
-    const NODE_GROW = 0.34;
-    const NODES_DONE = motion ? nodeOrder.length * NODE_STAGGER + NODE_GROW : 0;
-    const EDGE_DRAW = 0.5;
-    const EDGE_DUR = motion ? (allEdges.length + 2) * 0.11 + EDGE_DRAW : 0;
-    const INTRO_END = NODES_DONE + EDGE_DUR;
     const easeOut = (p: number) => 1 - Math.pow(1 - p, 3);
     const easeInOut = (p: number) =>
       p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-    const edgeDelay = (i: number) => NODES_DONE + i * 0.11;
 
     const draw = (now: number) => {
-      const light = isLight();
-      const time = (now - t0) / 1000;
-      const intro = motion ? Math.min(time / Math.max(INTRO_END, 0.001), 1) : 1;
-      const built = intro >= 1;
+      const raw = (now - t0) / 1000; // runs from mount (dust lives here)
+      const time = Math.max(0, raw - delay); // build timeline (post-beat-0)
+      const built = !motion || time >= INTRO_END;
       const gold = getVar("--gold") || "#D4A017";
-      const ink = getVar("--ink-3") || "#6A6A64";
-      const eAlpha = light ? 0.5 : 0.3;
-      const dAlpha = light ? 0.55 : 0.4;
+      const ink = getVar("--ink-3") || "#8A8A84";
+      const eAlpha = 0.3;
+      const dAlpha = 0.4;
       ctx.clearRect(0, 0, W, H);
 
-      const isRtl = document.documentElement.dir === "rtl";
-      const cx = W * (isRtl ? 0.38 : 0.62);
+      const cx = W * 0.5;
       const cy = H * 0.5;
-      const R = Math.min(W, H) * 0.26;
+      const R = Math.min(W, H) * 0.32;
       const liveT = Math.max(time - INTRO_END, 0);
-      const motionGain = built ? easeInOut(Math.min(liveT / 1.2, 1)) : 0;
+      const motionGain =
+        built && motion ? easeInOut(Math.min(liveT / 1.2, 1)) : motion ? 0 : 1;
       const floatY = motion ? Math.sin(liveT * 0.6) * 8 * motionGain : 0;
-      const pts = baseHex.map(([x, y]) => ({ x: cx + x * R, y: cy + y * R + floatY }));
+      const pts = baseHex.map(([x, y]) => ({
+        x: cx + x * R,
+        y: cy + y * R + floatY,
+      }));
       pts.push({ x: cx, y: cy + floatY }); // center node = index 6
 
-      // ambient dots
+      // ambient dust: inward toward the singularity until the cube is
+      // built, then a slow outward drift (respawning near the center)
       ctx.save();
-      const ambAlpha = dAlpha * (motion ? easeOut(Math.min(time / 1.4, 1)) : 1);
+      const ambAlpha = dAlpha * (motion ? easeOut(Math.min(raw / 0.9, 1)) : 1);
       ambient.forEach((p) => {
-        if (motion && built) {
-          p.x += p.sx;
-          p.y += p.sy;
-          if (p.x < 0) p.x = 1;
-          if (p.x > 1) p.x = 0;
-          if (p.y < 0) p.y = 1;
-          if (p.y > 1) p.y = 0;
+        if (motion) {
+          if (!built) {
+            p.x += (0.5 - p.x) * 0.005;
+            p.y += (0.5 - p.y) * 0.005;
+          } else {
+            const dx = p.x - 0.5;
+            const dy = p.y - 0.5;
+            const d = Math.hypot(dx, dy) || 0.001;
+            p.x += (dx / d) * 0.0011;
+            p.y += (dy / d) * 0.0011;
+            if (p.x < -0.05 || p.x > 1.05 || p.y < -0.05 || p.y > 1.05) {
+              p.x = 0.5 + (Math.random() - 0.5) * 0.14;
+              p.y = 0.5 + (Math.random() - 0.5) * 0.14;
+            }
+          }
         }
         ctx.beginPath();
         ctx.arc(p.x * W, p.y * H, p.r, 0, Math.PI * 2);
@@ -150,7 +173,7 @@ export default function HeroCanvas() {
       });
       ctx.restore();
 
-      // edges — each draws itself a->b during the build
+      // edges: each grows outward from its center-side endpoint
       ctx.lineWidth = 1.6;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
@@ -159,7 +182,7 @@ export default function HeroCanvas() {
         const b = pts[e[1]];
         let prog = 1;
         if (motion && !built) {
-          prog = Math.max(0, Math.min((time - edgeDelay(i)) / EDGE_DRAW, 1));
+          prog = Math.max(0, Math.min((time - EDGE_START[i]) / EDGE_DUR[i], 1));
           prog = easeOut(prog);
         }
         if (prog <= 0) return;
@@ -169,11 +192,14 @@ export default function HeroCanvas() {
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(ex, ey);
         const drawing = !built && prog < 1;
-        ctx.strokeStyle = hexA(gold, drawing ? Math.min(eAlpha + 0.3, 0.85) : eAlpha);
+        ctx.strokeStyle = hexA(
+          gold,
+          drawing ? Math.min(eAlpha + 0.3, 0.85) : eAlpha
+        );
         ctx.stroke();
       });
 
-      // traveling pulses (only after fully built)
+      // traveling pulses (only after fully built — the "stays alive" beat)
       if (motion && built) {
         const pAlpha = motionGain;
         allEdges.forEach((e, i) => {
@@ -192,15 +218,17 @@ export default function HeroCanvas() {
         });
       }
 
-      // nodes — pop in staggered (center outward), each with a flash ring
+      // nodes: each pops when the drawing edge reaches it, with a flash ring
       pts.forEach((p, i) => {
         const isHub = i === 6 || i === 0 || i === 1 || i === 3 || i === 5;
         const baseR = isHub ? 4.6 : 3.2;
         let grow = 1;
         let popRing = 0;
         if (motion && !built) {
-          const appear = (nodeAt[i] || 0) * NODE_STAGGER;
-          const g = Math.max(0, Math.min((time - appear) / NODE_GROW, 1));
+          const g = Math.max(
+            0,
+            Math.min((time - (NODE_AT[i] ?? 0)) / NODE_GROW, 1)
+          );
           if (g <= 0) return;
           grow = easeOut(g);
           popRing = g < 1 ? 1 - g : 0;
@@ -231,8 +259,7 @@ export default function HeroCanvas() {
     // Only animate while the canvas is on-screen and the tab is visible —
     // otherwise the rAF loop keeps burning CPU/battery off-screen.
     let onScreen = true;
-    const isActive = () =>
-      onScreen && document.visibilityState === "visible";
+    const isActive = () => onScreen && document.visibilityState === "visible";
 
     const frame = (now: number) => {
       draw(now);
@@ -267,7 +294,7 @@ export default function HeroCanvas() {
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, [startDelayMs]);
 
-  return <canvas ref={ref} className="hero-canvas" />;
+  return <canvas ref={ref} />;
 }

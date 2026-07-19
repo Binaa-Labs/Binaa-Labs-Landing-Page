@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — Selected Work (fidelity raise + video slot)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens-draft.css" />
+    <link rel="stylesheet" href="stage2-base.css" />
+    <style>
+      .section {
+        background: var(--bg-2);
+        border-block: 1px solid var(--line);
+        padding: var(--sp-8) 0;
+      }
+      .panels {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-6);
+        margin-top: var(--sp-7);
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-4);
+        padding: var(--sp-5);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--sp-5);
+        box-shadow: var(--elev-1);
+      }
+      .case-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 0.6rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--gold);
+        border: 1px solid var(--gold-line);
+        border-radius: var(--r-pill);
+        padding: 5px 12px;
+        width: fit-content;
+      }
+      .case-badge::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+      .panel h3 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-top: var(--sp-4);
+      }
+      .panel .cat {
+        font-size: 0.78rem;
+        color: var(--ink-3);
+        margin-top: 2px;
+      }
+      .panel .desc {
+        font-size: 0.92rem;
+        color: var(--ink-2);
+        margin-top: var(--sp-4);
+        max-width: 44ch;
+      }
+      .meta {
+        margin-top: var(--sp-5);
+        padding-top: var(--sp-4);
+        border-top: 1px solid var(--line);
+      }
+      .case-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: var(--sp-5);
+        color: var(--gold);
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .panel-visual {
+        align-self: center;
+        width: 100%;
+      }
+
+      /* ════════════════ dense product UI (poster frame for the video slot) ════════════════ */
+      .ui {
+        display: grid;
+        grid-template-columns: 96px 1fr;
+        min-height: 300px;
+        direction: ltr;
+        font-size: 0.6rem;
+      }
+      .ui-side {
+        border-right: 1px solid var(--line);
+        padding: 11px 9px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .ui-brand {
+        font-size: 0.62rem;
+        font-weight: 700;
+        color: var(--gold);
+        padding: 0 6px 9px;
+      }
+      .ui-nav {
+        font-size: 0.57rem;
+        color: var(--ink-3);
+        padding: 5px 7px;
+        border-radius: var(--r-1);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .ui-nav::before {
+        content: "";
+        width: 4px;
+        height: 4px;
+        border-radius: 1px;
+        background: var(--line-2);
+      }
+      .ui-nav.on {
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        color: var(--gold);
+      }
+      .ui-nav.on::before {
+        background: var(--gold);
+      }
+      .ui-main {
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+      }
+      .ui-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+      .ui-h1 {
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .ui-sub {
+        font-size: 0.52rem;
+        color: var(--ink-3);
+      }
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+      }
+      .kpi {
+        border: 1px solid var(--line);
+        border-radius: var(--r-2);
+        padding: 7px 9px;
+        background: var(--bg-2);
+      }
+      .kpi b {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--gold);
+        line-height: 1.2;
+      }
+      .kpi span {
+        font-size: 0.47rem;
+        color: var(--ink-3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+      }
+      /* weekly check-in chart — a real chart, with axis labels */
+      .chart {
+        border: 1px solid var(--line);
+        border-radius: var(--r-2);
+        padding: 8px 9px;
+        background: var(--bg-2);
+      }
+      .chart-cap {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.5rem;
+        color: var(--ink-3);
+        margin-bottom: 6px;
+      }
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 5px;
+        height: 40px;
+      }
+      .bars i {
+        flex: 1;
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        border-radius: 2px 2px 0 0;
+      }
+      .bars i.hi {
+        background: var(--gold);
+        border-color: var(--gold);
+      }
+      .axis {
+        display: flex;
+        gap: 5px;
+        margin-top: 3px;
+      }
+      .axis span {
+        flex: 1;
+        text-align: center;
+        font-size: 0.44rem;
+        color: var(--ink-3);
+      }
+      .tbl {
+        display: flex;
+        flex-direction: column;
+      }
+      .tr {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr auto;
+        gap: 8px;
+        align-items: center;
+        padding: 5px 2px;
+        border-top: 1px solid var(--line);
+        font-size: 0.55rem;
+        color: var(--ink-2);
+      }
+      .tr.th {
+        border-top: none;
+        color: var(--ink-3);
+        font-size: 0.47rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .pill {
+        font-size: 0.47rem;
+        color: var(--gold);
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        border-radius: var(--r-pill);
+        padding: 1px 7px;
+        white-space: nowrap;
+      }
+      .pill.mut {
+        color: var(--ink-3);
+        background: var(--surface-2);
+        border-color: var(--line);
+      }
+
+      /* ════════════════ the video slot ════════════════ */
+      .video-slot {
+        position: relative;
+      }
+      .video-slot .frame {
+        box-shadow: var(--elev-3);
+      }
+      /* silent-loop caption — sits UNDER the frame, so it never occludes the
+         product UI it is describing (the real overlay affordance is specced in
+         the states strip below) */
+      .loop-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: var(--sp-3);
+        background: var(--surface-2);
+        border: 1px solid var(--gold-line);
+        border-radius: var(--r-pill);
+        padding: 5px 11px;
+        font-size: 0.54rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-2);
+      }
+      .loop-chip::before {
+        content: "";
+        width: 0;
+        height: 0;
+        border-block: 4px solid transparent;
+        border-inline-start: 6px solid var(--gold);
+        border-inline-end: 0;
+      }
+
+      /* ════════════════ Almani — placeholder at the same fidelity floor ════════════════ */
+      /* The frame is dense and plausible, but it is a SCHEMATIC — never presentable
+         as a real screenshot (D1 no-fabricated-proof / D7 assets land later).
+         The disclosure is a copy-column note + a dashed frame border, so the
+         label can't be mistaken for part of the product UI. */
+      .ph-wrap .frame {
+        border-style: dashed;
+        border-color: var(--line-2);
+      }
+      .placeholder-note {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: var(--sp-5);
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        border: 1px dashed var(--line-2);
+        border-radius: var(--r-1);
+        padding: 5px 10px;
+      }
+      .cat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+      }
+      .part {
+        border: 1px solid var(--line);
+        border-radius: var(--r-2);
+        padding: 7px;
+        background: var(--bg-2);
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      /* schematic part thumbnail: a drawn shape, not a grey block */
+      .part-img {
+        height: 34px;
+        border-radius: var(--r-1);
+        border: 1px solid var(--line);
+        background:
+          radial-gradient(circle at 50% 50%, var(--surface-2) 38%, transparent 39%),
+          repeating-linear-gradient(45deg, var(--surface) 0 4px, var(--bg-2) 4px 8px);
+        display: grid;
+        place-items: center;
+      }
+      .part-img svg {
+        opacity: 0.55;
+      }
+      .part-name {
+        font-size: 0.52rem;
+        color: var(--ink-2);
+        line-height: 1.3;
+      }
+      .part-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .part-price {
+        font-size: 0.55rem;
+        color: var(--gold);
+        font-weight: 600;
+      }
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .filters span {
+        font-size: 0.48rem;
+        color: var(--ink-3);
+        border: 1px solid var(--line);
+        border-radius: var(--r-pill);
+        padding: 2px 8px;
+      }
+      .filters span.on {
+        color: var(--gold);
+        border-color: var(--gold-line);
+        background: var(--gold-soft);
+      }
+
+      /* ════════════════ video-slot spec strip (annotation, not page content) ════════════════ */
+      .spec {
+        margin-top: var(--sp-8);
+        padding-top: var(--sp-6);
+        border-top: 1px dashed var(--line-2);
+      }
+      .spec-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        margin-bottom: var(--sp-4);
+      }
+      .spec-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--sp-4);
+      }
+      .spec-card {
+        border: 1px solid var(--line);
+        border-radius: var(--r-3);
+        background: var(--surface);
+        padding: var(--sp-4);
+      }
+      .spec-card .tag-s {
+        display: block;
+        font-size: 0.56rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        margin-bottom: var(--sp-3);
+      }
+      /* miniature of the frame, three states */
+      .mini {
+        border: 1px solid var(--line);
+        border-radius: var(--r-2);
+        overflow: hidden;
+        background: var(--bg-2);
+        position: relative;
+      }
+      .mini-bar {
+        display: flex;
+        gap: 4px;
+        padding: 5px 7px;
+        border-bottom: 1px solid var(--line);
+      }
+      .mini-bar i {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--line-2);
+      }
+      .mini-body {
+        height: 76px;
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+      .mini-ui {
+        position: absolute;
+        inset: 7px;
+        border-radius: var(--r-1);
+        background:
+          linear-gradient(90deg, var(--surface-2) 0 22%, transparent 22%),
+          repeating-linear-gradient(180deg, transparent 0 9px, var(--line) 9px 10px);
+        opacity: 0.5;
+      }
+      .mini-badge {
+        position: relative;
+        z-index: 1;
+        font-size: 0.52rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        border-radius: var(--r-pill);
+        padding: 3px 10px;
+      }
+      .mini-badge.poster {
+        color: var(--ink-3);
+        background: var(--surface);
+        border: 1px solid var(--line-2);
+      }
+      .mini-badge.play {
+        color: var(--gold);
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+      }
+      .mini-badge.rm {
+        color: var(--ink-2);
+        background: var(--surface);
+        border: 1px solid var(--line-2);
+      }
+      .spec-card p {
+        font-size: 0.72rem;
+        color: var(--ink-2);
+        margin-top: var(--sp-3);
+      }
+
+      @media (min-width: 920px) {
+        .panel {
+          grid-template-columns: 1fr 1.15fr;
+          padding: var(--sp-6);
+          gap: var(--sp-7);
+          align-items: center;
+        }
+        .panel-alt .panel-visual {
+          order: -1;
+        }
+        .spec-row {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="section">
+      <div class="wrap">
+        <p class="label mono">Selected Work</p>
+        <h2 class="display">Real Work, Shipped and Running</h2>
+        <p class="section-sub">Two products, live and in daily use — one of them our own.</p>
+
+        <div class="panels">
+          <!-- ════ Panel 1 · Wazen — copy left / VIDEO SLOT right ════ -->
+          <article class="panel">
+            <div class="panel-copy">
+              <span class="case-badge mono">Binaa Labs Product</span>
+              <h3 class="display">Wazen وازن</h3>
+              <p class="cat">Coaching SaaS</p>
+              <p class="desc">
+                Our own coaching platform — the WhatsApp-and-spreadsheets grind, replaced. Clients, plans, check-ins
+                and progress analytics in one place.
+              </p>
+              <dl class="meta mono">
+                <div class="pair"><dt>Role</dt><dd>Product · Design · Build</dd></div>
+                <div class="pair"><dt>Stack</dt><dd>React · Node.js · PostgreSQL</dd></div>
+                <div class="pair"><dt>Status</dt><dd>Live</dd></div>
+              </dl>
+              <a class="case-link" href="#">Visit wazen.fit →</a>
+            </div>
+
+            <div class="panel-visual video-slot" aria-hidden="true">
+              <div class="frame">
+                <div class="frame-bar">
+                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                  <span class="frame-url mono">app.wazen.fit</span>
+                </div>
+                <!-- poster frame = first frame of the silent loop -->
+                <div class="ui">
+                  <div class="ui-side">
+                    <span class="ui-brand mono">Wazen</span>
+                    <span class="ui-nav on">Dashboard</span>
+                    <span class="ui-nav">Clients</span>
+                    <span class="ui-nav">Plans</span>
+                    <span class="ui-nav">Check-ins</span>
+                    <span class="ui-nav">Templates</span>
+                    <span class="ui-nav">Messages</span>
+                  </div>
+                  <div class="ui-main">
+                    <div class="ui-head">
+                      <span class="ui-h1">Coach Dashboard</span>
+                      <span class="ui-sub mono">Week 24 · Jun</span>
+                    </div>
+                    <div class="kpis">
+                      <div class="kpi"><b class="mono">128</b><span>Active clients</span></div>
+                      <div class="kpi"><b class="mono">96%</b><span>Check-in rate</span></div>
+                      <div class="kpi"><b class="mono">24</b><span>Plans updated</span></div>
+                    </div>
+                    <div class="chart">
+                      <div class="chart-cap mono"><span>Check-ins this week</span><span>112 / 128</span></div>
+                      <div class="bars">
+                        <i style="height: 52%"></i><i style="height: 68%"></i><i style="height: 44%"></i>
+                        <i style="height: 80%"></i><i class="hi" style="height: 96%"></i><i style="height: 61%"></i>
+                        <i style="height: 38%"></i>
+                      </div>
+                      <div class="axis mono">
+                        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                      </div>
+                    </div>
+                    <div class="tbl">
+                      <div class="tr th"><span>Client</span><span>Plan</span><span>Status</span></div>
+                      <div class="tr"><span>Ahmad K.</span><span>Cut · wk 6</span><span class="pill mono">Checked in</span></div>
+                      <div class="tr"><span>Omar S.</span><span>Strength · wk 3</span><span class="pill mono">Checked in</span></div>
+                      <div class="tr"><span>Khalid M.</span><span>Onboarding</span><span class="pill mut mono">Plan due</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <span class="loop-chip mono">Silent loop</span>
+            </div>
+          </article>
+
+          <!-- ════ Panel 2 · Almani — FRAME left / copy right (alternated) ════ -->
+          <article class="panel panel-alt">
+            <div class="panel-copy">
+              <span class="case-badge mono">Live in Saudi Arabia</span>
+              <h3 class="display">Almani Motors</h3>
+              <p class="cat">Auto Parts E-Commerce</p>
+              <p class="desc">
+                A Saudi spare-parts warehouse, moved online — new parts sold like any store, used parts with their own
+                negotiable-price flow.
+              </p>
+              <dl class="meta mono">
+                <div class="pair"><dt>Role</dt><dd>Design · Build · Launch</dd></div>
+                <div class="pair"><dt>Stack</dt><dd>Next.js</dd></div>
+                <div class="pair"><dt>Status</dt><dd>Live (no public link)</dd></div>
+              </dl>
+              <p class="placeholder-note mono">Schematic — real frames land in the asset pass (D7)</p>
+            </div>
+
+            <div class="panel-visual ph-wrap" aria-hidden="true">
+              <div class="frame">
+                <div class="frame-bar">
+                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                  <span class="frame-url mono">almani-motors — placeholder</span>
+                </div>
+                <div class="ui">
+                  <div class="ui-side">
+                    <span class="ui-brand mono">Almani</span>
+                    <span class="ui-nav on">Catalog</span>
+                    <span class="ui-nav">Used parts</span>
+                    <span class="ui-nav">Offers</span>
+                    <span class="ui-nav">Orders</span>
+                    <span class="ui-nav">Inventory</span>
+                  </div>
+                  <div class="ui-main">
+                    <div class="ui-head">
+                      <span class="ui-h1">Parts catalog</span>
+                      <span class="ui-sub mono">1,240 listings</span>
+                    </div>
+                    <div class="filters mono">
+                      <span class="on">All brands</span><span>Model</span><span>Year</span>
+                      <span class="on">New</span><span>Used</span>
+                    </div>
+                    <div class="cat-grid">
+                      <div class="part">
+                        <div class="part-img">
+                          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="7" fill="none" stroke="var(--ink-3)" stroke-width="1.6" />
+                            <circle cx="12" cy="12" r="2.5" fill="none" stroke="var(--ink-3)" stroke-width="1.6" />
+                          </svg>
+                        </div>
+                        <span class="part-name">Brake disc — front</span>
+                        <div class="part-foot">
+                          <span class="part-price mono">SAR 320</span>
+                          <span class="pill mono">New</span>
+                        </div>
+                      </div>
+                      <div class="part">
+                        <div class="part-img">
+                          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="5" y="7" width="14" height="10" rx="2" fill="none" stroke="var(--ink-3)" stroke-width="1.6" />
+                            <path d="M9 7V5h6v2M8 17v2M16 17v2" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linecap="round" />
+                          </svg>
+                        </div>
+                        <span class="part-name">Alternator — 12V</span>
+                        <div class="part-foot">
+                          <span class="part-price mono">Make offer</span>
+                          <span class="pill mut mono">Used</span>
+                        </div>
+                      </div>
+                      <div class="part">
+                        <div class="part-img">
+                          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 15V9l4-2 4 2v6l-4 2z" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" />
+                            <path d="M14 11h4M16 9v4" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linecap="round" />
+                          </svg>
+                        </div>
+                        <span class="part-name">Oil filter — set of 4</span>
+                        <div class="part-foot">
+                          <span class="part-price mono">SAR 95</span>
+                          <span class="pill mono">New</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tbl">
+                      <div class="tr th"><span>Recent offer</span><span>Listing</span><span>State</span></div>
+                      <div class="tr"><span>SAR 480</span><span>Gearbox — used</span><span class="pill mono">Countered</span></div>
+                      <div class="tr"><span>SAR 210</span><span>Headlamp — used</span><span class="pill mut mono">Pending</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- ════ video-slot spec: three states (annotation strip, not page content) ════ -->
+        <div class="spec">
+          <p class="spec-label mono">Wazen video slot — 20–30s silent screen-capture loop · states</p>
+          <div class="spec-row">
+            <div class="spec-card">
+              <span class="tag-s mono">1 · Idle (lazy, out of view)</span>
+              <div class="mini">
+                <div class="mini-bar"><i></i><i></i><i></i></div>
+                <div class="mini-body">
+                  <span class="mini-ui"></span>
+                  <span class="mini-badge poster mono">Poster only · no fetch</span>
+                </div>
+              </div>
+              <p>Poster image renders; the video file is not requested until the panel nears the viewport.</p>
+            </div>
+            <div class="spec-card">
+              <span class="tag-s mono">2 · In view (playing)</span>
+              <div class="mini">
+                <div class="mini-bar"><i></i><i></i><i></i></div>
+                <div class="mini-body">
+                  <span class="mini-ui"></span>
+                  <span class="mini-badge play mono">▶ Silent loop</span>
+                </div>
+              </div>
+              <p>Muted, autoplaying, looping, <code>playsinline</code>. No audio track, no controls, no sound toggle.</p>
+            </div>
+            <div class="spec-card">
+              <span class="tag-s mono">3 · Reduced motion</span>
+              <div class="mini">
+                <div class="mini-bar"><i></i><i></i><i></i></div>
+                <div class="mini-body">
+                  <span class="mini-ui"></span>
+                  <span class="mini-badge rm mono">Paused on poster</span>
+                </div>
+              </div>
+              <p>matchMedia check: the video never autoplays — the poster is held as a still image.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

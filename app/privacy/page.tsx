@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Binaa Labs",
+  title: "Privacy Policy",
   description: "How Binaa Labs collects, uses, and protects your information.",
   alternates: {
     canonical: "/privacy",
@@ -66,7 +66,7 @@ export default function PrivacyEN() {
             <h3>2.3 Cookies and Local Storage</h3>
             <p>
               The Site stores a single preference in your browser’s{" "}
-              <code>localStorage</code> — your chosen colour theme (light or
+              <code>localStorage</code>: your chosen colour theme (light or
               dark). This value never leaves your device and is not linked to
               any personal identifier. We do not use advertising cookies or
               third-party tracking cookies.
@@ -97,15 +97,15 @@ export default function PrivacyEN() {
             </p>
             <ul>
               <li>
-                <strong>Legitimate interests</strong> — responding to business
+                <strong>Legitimate interests</strong>: responding to business
                 enquiries you initiate through our contact form.
               </li>
               <li>
-                <strong>Legal obligation</strong> — complying with applicable
+                <strong>Legal obligation</strong>: complying with applicable
                 UAE and international law.
               </li>
               <li>
-                <strong>Consent</strong> — where you have explicitly agreed to a
+                <strong>Consent</strong>: where you have explicitly agreed to a
                 specific use of your data.
               </li>
             </ul>
@@ -119,17 +119,17 @@ export default function PrivacyEN() {
             </p>
             <ul>
               <li>
-                <strong>Service providers</strong> — we use third-party tools
+                <strong>Service providers</strong>: we use third-party tools
                 (such as email delivery and hosting providers) that process data
                 on our behalf under strict confidentiality agreements.
               </li>
               <li>
-                <strong>Legal requirements</strong> — if required by law, court
+                <strong>Legal requirements</strong>: if required by law, court
                 order, or governmental authority in the UAE or another
                 applicable jurisdiction.
               </li>
               <li>
-                <strong>Business transfer</strong> — in the event of a merger,
+                <strong>Business transfer</strong>: in the event of a merger,
                 acquisition, or sale of all or part of our business, your data
                 may be transferred as part of that transaction.
               </li>

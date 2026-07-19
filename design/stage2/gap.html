@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — The Gap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens-draft.css" />
+    <link rel="stylesheet" href="stage2-base.css" />
+    <style>
+      .section {
+        background: var(--bg-2);
+        border-block: 1px solid var(--line);
+        padding: var(--sp-8) 0;
+      }
+
+      /* true split-screen: two tinted halves sharing a center spine */
+      .split {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        margin-top: var(--sp-7);
+        border: 1px solid var(--line);
+        border-radius: var(--r-4);
+        overflow: hidden;
+      }
+      .half {
+        padding: var(--sp-6) var(--sp-5);
+      }
+      .half-usual {
+        background: linear-gradient(180deg, var(--rose-soft), transparent 70%);
+      }
+      .half-studio {
+        background: linear-gradient(180deg, var(--gold-soft), transparent 70%);
+      }
+      .half-title {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-3);
+        margin-bottom: var(--sp-5);
+      }
+      .half-title h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+      .side-tag {
+        font-size: 0.56rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        border-radius: var(--r-pill);
+        padding: 4px 10px;
+      }
+      .half-usual .side-tag {
+        color: var(--rose);
+        border: 1px solid var(--rose-line);
+      }
+      .half-studio .side-tag {
+        color: var(--gold);
+        border: 1px solid var(--gold-line);
+      }
+      .gi {
+        display: flex;
+        gap: var(--sp-3);
+        padding: var(--sp-4) 0;
+      }
+      .gi + .gi {
+        border-top: 1px solid var(--line);
+      }
+      .gi .ico {
+        flex: 0 0 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        margin-top: 2px;
+      }
+      .half-usual .ico {
+        color: var(--rose);
+        background: var(--rose-soft);
+        border: 1px solid var(--rose-line);
+      }
+      .half-studio .ico {
+        color: var(--gold);
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+      }
+      .gi b {
+        display: block;
+        font-size: 0.94rem;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .gi p {
+        font-size: 0.84rem;
+        color: var(--ink-2);
+        margin-top: 3px;
+      }
+
+      /* the spine: horizontal on mobile (between stacked halves), vertical on desktop */
+      .spine {
+        position: relative;
+        height: 1px;
+        background: var(--line-2);
+      }
+      .spine-node {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--surface);
+        border: 1px solid var(--line-2);
+        border-radius: var(--r-pill);
+        box-shadow: var(--elev-2);
+        padding: 6px 14px;
+        font-size: 0.6rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--ink-2);
+        white-space: nowrap;
+      }
+
+      @media (min-width: 920px) {
+        .split {
+          grid-template-columns: 1fr 1px 1fr;
+        }
+        .half {
+          padding: var(--sp-7) var(--sp-7);
+        }
+        .spine {
+          height: auto;
+          width: 1px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="section">
+      <div class="wrap">
+        <p class="label mono">The Software Studio Trap</p>
+        <h2 class="display">Anyone Can Say ‘We’ll Automate It.’ Few Can Actually Build It.</h2>
+        <!-- copy diet: 44 words → 19. The two halves carry the argument; the sub only frames it. -->
+        <p class="section-sub">
+          A WhatsApp bot and a no-code patch are not a system. Everything below is the difference.
+        </p>
+
+        <div class="split">
+          <div class="half half-usual">
+            <div class="half-title">
+              <h3 class="display">The Usual Option</h3>
+              <span class="side-tag mono">What you get elsewhere</span>
+            </div>
+            <div class="gi">
+              <span class="ico">✗</span>
+              <div><b>Off-the-Shelf and No-Code Patches</b><p>Stitched-together tools and bots that demo well and break the moment real work hits them</p></div>
+            </div>
+            <div class="gi">
+              <span class="ico">✗</span>
+              <div><b>Outsourced Junior Teams</b><p>Your project handed to offshore shops with no real architecture behind it</p></div>
+            </div>
+            <div class="gi">
+              <span class="ico">✗</span>
+              <div><b>Endless Change Orders</b><p>Vague scopes designed to trigger surprise bills for basic adjustments</p></div>
+            </div>
+            <div class="gi">
+              <span class="ico">✗</span>
+              <div><b>Arabic as an Afterthought</b><p>RTL and Arabic tacked on at the end, breaking layouts and local payment flows</p></div>
+            </div>
+          </div>
+
+          <div class="spine"><span class="spine-node mono">The Gap</span></div>
+
+          <div class="half half-studio">
+            <div class="half-title">
+              <h3 class="display">Binaa Labs</h3>
+              <span class="side-tag mono">The Studio Model</span>
+            </div>
+            <div class="gi">
+              <span class="ico">✓</span>
+              <div><b>A Real Software Studio</b><p>Properly engineered systems built to scale and hold up for years, not a demo that falls apart</p></div>
+            </div>
+            <div class="gi">
+              <span class="ico">✓</span>
+              <div><b>Direct Senior Builders</b><p>Work directly with the people writing your code. No account managers, no layers</p></div>
+            </div>
+            <div class="gi">
+              <span class="ico">✓</span>
+              <div><b>Fixed Price, No Surprises</b><p>Transparent scope with zero surprise bills. We eat any cost overrun</p></div>
+            </div>
+            <div class="gi">
+              <span class="ico">✓</span>
+              <div><b>Arabic-First Architecture</b><p>Native RTL and bilingual interfaces engineered from day one for the Gulf</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

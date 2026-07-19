@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — What We Build (scenario reframe)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens-draft.css" />
+    <link rel="stylesheet" href="stage2-base.css" />
+    <style>
+      .section {
+        padding: var(--sp-8) 0;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--sp-4);
+        margin-top: var(--sp-7);
+      }
+      .card {
+        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-3);
+        padding: var(--sp-5);
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--elev-1);
+        overflow: hidden;
+      }
+      /* faint scenario-number watermark — texture, not an empty bar */
+      .card .idx {
+        position: absolute;
+        top: var(--sp-3);
+        inset-inline-end: var(--sp-4);
+        font-size: 0.62rem;
+        letter-spacing: 0.2em;
+        color: var(--ink-3);
+        opacity: 0.7;
+      }
+      .chip {
+        width: 46px;
+        height: 46px;
+        border-radius: var(--r-2);
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        display: grid;
+        place-items: center;
+      }
+      /* scenario headline — the picture, in the customer's words */
+      .card h3 {
+        font-size: 1.28rem;
+        font-weight: 700;
+        line-height: 1.22;
+        letter-spacing: -0.01em;
+        margin-top: var(--sp-4);
+        max-width: 18ch;
+      }
+      /* ONE line of what we build to make it true */
+      .card .build {
+        font-size: 0.9rem;
+        color: var(--ink-2);
+        margin-top: var(--sp-3);
+        max-width: 42ch;
+      }
+
+      /* the from → to line — kept as the punch */
+      .fromto {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--sp-2) var(--sp-3);
+        margin-top: auto;
+        padding-top: var(--sp-4);
+        border-top: 1px solid var(--line);
+        font-size: 0.84rem;
+        line-height: 1.5;
+      }
+      .fromto-top {
+        margin-top: var(--sp-5);
+      }
+      .from {
+        color: var(--ink-3);
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+        opacity: 0.9;
+      }
+      .arr {
+        color: var(--gold);
+        font-size: 0.8rem;
+        /* implementation: content flips via --arrowflip in RTL */
+      }
+      .to {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      @media (min-width: 920px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+          gap: var(--sp-5);
+        }
+        .card {
+          padding: var(--sp-6);
+        }
+        .card h3 {
+          font-size: 1.42rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="section">
+      <div class="wrap">
+        <p class="label mono">What We Build</p>
+        <h2 class="display">Picture It Already Working</h2>
+        <p class="section-sub">Four everyday operations — rebuilt as software that runs itself.</p>
+
+        <div class="grid">
+          <!-- 1 · clinic (web app / booking) -->
+          <article class="card">
+            <span class="idx mono">01</span>
+            <div class="chip">
+              <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="5" width="17" height="15" rx="2" fill="none" stroke="var(--gold)" stroke-width="1.7" />
+                <path d="M3.5 9h17M8 3v4M16 3v4" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linecap="round" />
+                <path d="M9 14.5l2 2 3.5-4" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h3 class="display">A clinic that books itself</h3>
+            <p class="build">A booking system your patients use directly — appointments, reminders and records in one place.</p>
+            <div class="fromto">
+              <span class="from">phone tag and a paper calendar</span>
+              <span class="arr mono">→</span>
+              <span class="to">slots that book, confirm and remind on their own</span>
+            </div>
+          </article>
+
+          <!-- 2 · warehouse (web app / inventory) -->
+          <article class="card">
+            <span class="idx mono">02</span>
+            <div class="chip">
+              <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="4" y="12" width="7" height="8" rx="1" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linejoin="round" />
+                <rect x="13" y="12" width="7" height="8" rx="1" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linejoin="round" />
+                <rect x="8.5" y="4" width="7" height="8" rx="1" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linejoin="round" />
+                <path d="M7 12v-1M17 12v-1M12 4v-1" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linecap="round" />
+              </svg>
+            </div>
+            <h3 class="display">A warehouse that knows every part it holds</h3>
+            <p class="build">An inventory system tracking every part, price and location in real time.</p>
+            <div class="fromto">
+              <span class="from">a storeroom only one person understands</span>
+              <span class="arr mono">→</span>
+              <span class="to">live stock every device can see</span>
+            </div>
+          </article>
+
+          <!-- 3 · reports (process automation) -->
+          <article class="card">
+            <span class="idx mono">03</span>
+            <div class="chip">
+              <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 3h8l4 4v14H6z" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linejoin="round" />
+                <path d="M14 3v4h4" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linejoin="round" />
+                <path d="M9 12h6M9 15h6M9 18h4" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linecap="round" />
+              </svg>
+            </div>
+            <h3 class="display">Reports that write themselves</h3>
+            <p class="build">Automation that pulls your numbers and assembles the report the moment it is due.</p>
+            <div class="fromto">
+              <span class="from">a night of copy-paste every month</span>
+              <span class="arr mono">→</span>
+              <span class="to">it is already in your inbox</span>
+            </div>
+          </article>
+
+          <!-- 4 · ten tools (system integration) -->
+          <article class="card">
+            <span class="idx mono">04</span>
+            <div class="chip">
+              <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="6" cy="6" r="2.4" fill="none" stroke="var(--gold)" stroke-width="1.7" />
+                <circle cx="18" cy="6" r="2.4" fill="none" stroke="var(--gold)" stroke-width="1.7" />
+                <circle cx="12" cy="18" r="2.4" fill="none" stroke="var(--gold)" stroke-width="1.7" />
+                <path d="M7.6 7.6l3 8M16.4 7.6l-3 8M8 6h8" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linecap="round" />
+              </svg>
+            </div>
+            <h3 class="display">Ten tools that finally talk</h3>
+            <p class="build">Integration wiring your CRM, accounting and payments into one connected flow.</p>
+            <div class="fromto">
+              <span class="from">ten disconnected tools</span>
+              <span class="arr mono">→</span>
+              <span class="to">one connected operation</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

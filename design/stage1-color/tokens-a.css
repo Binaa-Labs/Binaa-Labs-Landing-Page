@@ -1,0 +1,44 @@
+/* Direction A — current production token sets, verbatim from PROJECT.md §2.
+   Logo mark: gold in both themes (var(--gold)). */
+
+:root[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --bg-2: #141414;
+  --bg-nav: rgba(26, 26, 26, 0.82);
+  --surface: #202020;
+  --surface-2: #272727;
+  --line: rgba(250, 250, 248, 0.08);
+  --line-2: rgba(250, 250, 248, 0.16);
+  --ink: #fafaf8;
+  --ink-2: #a2a29c;
+  --ink-3: #6a6a64;
+  --gold: #d4a017;
+  --gold-ink: #1a1a1a;
+  --gold-soft: rgba(212, 160, 23, 0.13);
+  --gold-line: rgba(212, 160, 23, 0.34);
+  --rose: #d67a6e;
+  --logo: var(--gold);
+  --logo-v1: var(--gold);
+  --logo-v2: var(--gold);
+}
+
+:root[data-theme="light"] {
+  --bg: #fafaf8;
+  --bg-2: #f1f0eb;
+  --bg-nav: rgba(250, 250, 248, 0.82);
+  --surface: #ffffff;
+  --surface-2: #f4f3ee;
+  --line: #e7e5dd;
+  --line-2: #d7d4c9;
+  --ink: #1a1a1a;
+  --ink-2: #5c5c5c;
+  --ink-3: #8c8c86;
+  --gold: #a87810;
+  --gold-ink: #ffffff;
+  --gold-soft: rgba(212, 160, 23, 0.12);
+  --gold-line: rgba(168, 120, 16, 0.32);
+  --rose: #bc5346;
+  --logo: var(--gold);
+  --logo-v1: var(--gold);
+  --logo-v2: var(--gold);
+}

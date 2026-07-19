@@ -1,92 +1,25 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { useSite } from "@/components/Providers";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import CaseVideo from "@/components/sections/CaseVideo";
+import { WAZEN_LOOP_SRC } from "@/lib/work-video";
 
+const revealX = { "--reveal-x": "32px" } as React.CSSProperties;
+
+// Two case panels — the page's proof section. Carousel retired; no third
+// panel, no "coming soon". Frame interiors are LTR product schematics.
 export default function SelectedWork() {
-  const { t, lang } = useSite();
+  const { t } = useSite();
   const sw = t.selectedWork;
-  const carousel = t.ui.carousel;
-  const projects = sw.projects;
-  const n = projects.length;
-
-  const [index, setIndex] = useState(0);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const autoRef = useRef<number | null>(null);
-  const touchStartX = useRef<number | null>(null);
-
-  const clamped = Math.max(0, Math.min(index, n - 1));
-
-  // position the track (RTL slides move the opposite way)
-  useEffect(() => {
-    const tr = trackRef.current;
-    if (!tr) return;
-    const rtl = lang === "ar";
-    tr.style.transform = `translateX(${rtl ? "" : "-"}${clamped * 100}%)`;
-  }, [clamped, lang]);
-
-  const stop = () => {
-    if (autoRef.current) {
-      clearInterval(autoRef.current);
-      autoRef.current = null;
-    }
-  };
-  const start = () => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    stop();
-    autoRef.current = window.setInterval(
-      () => setIndex((i) => (i + 1) % n),
-      5000
-    );
-  };
-
-  // autoplay (cleared on unmount)
-  useEffect(() => {
-    start();
-    return stop;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [n]);
-
-  const go = (i: number) => {
-    setIndex(i);
-    start();
-  };
-  const next = () => {
-    setIndex((i) => (i + 1) % n);
-    start();
-  };
-  const prev = () => {
-    setIndex((i) => (i - 1 + n) % n);
-    start();
-  };
-
-  // touch swipe (mobile): pause autoplay on touch, advance on a horizontal flick
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    stop();
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const startX = touchStartX.current;
-    touchStartX.current = null;
-    if (startX == null) return;
-    const dx = e.changedTouches[0].clientX - startX;
-    if (Math.abs(dx) < 40) {
-      start();
-      return;
-    }
-    // swipe left -> next (reversed in RTL so it follows reading direction)
-    const goNext = lang === "ar" ? dx > 0 : dx < 0;
-    if (goNext) next();
-    else prev();
-  };
-
-  const status = carousel.status
-    .replace("{current}", String(clamped + 1))
-    .replace("{total}", String(n));
+  const wz = sw.wazen;
+  const al = sw.almani;
+  const wf = sw.wazenFrame;
+  const af = sw.almaniFrame;
 
   return (
-    <section id="selected-work" className="section bg">
+    <section id="work" className="section bg-2 bt">
       <div className="wrap">
         <SectionLabel>{sw.label}</SectionLabel>
         <h2 className="section-title" data-reveal="" data-reveal-delay="60">
@@ -96,116 +29,310 @@ export default function SelectedWork() {
           {sw.subtext}
         </p>
 
-        <div
-          className="work-wrap"
-          data-reveal=""
-          role="region"
-          aria-roledescription="carousel"
-          aria-label={carousel.region}
-          onMouseEnter={stop}
-          onMouseLeave={start}
-          onFocus={stop}
-          onBlur={start}
-        >
-          <div
-            className="work-viewport"
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-          >
-            <div className="work-track" ref={trackRef}>
-              {projects.map((p, i) => {
-                const num = String(i + 1).padStart(2, "0");
-                return (
-                  <div
-                    className="work-slide"
-                    key={i}
-                    role="group"
-                    aria-roledescription="slide"
-                    aria-label={carousel.status
-                      .replace("{current}", String(i + 1))
-                      .replace("{total}", String(n))}
-                    aria-hidden={i !== clamped}
-                  >
-                    <div className="slide-grid">
-                      <div className="slide-text">
-                        <div className="slide-meta">
-                          <span className="slide-cat">{p.cat}</span>
-                          {p.badge && (
-                            <span className="slide-badge">
-                              <span className="slide-badge-dot" />
-                              {p.badge}
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="slide-title">{p.name}</h3>
-                        <p className="slide-desc">{p.description}</p>
-                        {p.link && (
-                          <a
-                            className="slide-link"
-                            href={`https://${p.link}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            tabIndex={i === clamped ? undefined : -1}
-                          >
-                            {p.link} <span aria-hidden="true" style={{display:'inline-block', transform: `scaleX(var(--arrowflip, 1))`}}>↗</span>
-                          </a>
-                        )}
-                      </div>
-                      <div className="slide-preview">
-                        <div className="slide-preview-grid" aria-hidden="true" />
-                        <span className="slide-ghost" aria-hidden="true">
-                          {num}
+        <div className="work-panels">
+          {/* ── Panel 1 · Wazen — copy start / video slot end ── */}
+          <article className="work-panel">
+            <div className="panel-copy" data-reveal="">
+              <span className="case-badge">{wz.badge}</span>
+              <h3 className="case-name">{wz.name}</h3>
+              <p className="case-cat">{wz.cat}</p>
+              <p className="case-desc">{wz.description}</p>
+              <dl className="case-meta">
+                <div className="pair">
+                  <dt>{sw.meta.role}</dt>
+                  <dd dir="ltr">{wz.role}</dd>
+                </div>
+                <div className="pair">
+                  <dt>{sw.meta.stack}</dt>
+                  <dd dir="ltr">{wz.stack}</dd>
+                </div>
+                <div className="pair">
+                  <dt>{sw.meta.status}</dt>
+                  <dd dir="ltr">{wz.status}</dd>
+                </div>
+              </dl>
+              <a
+                className="case-link"
+                href={`https://${wz.link}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {wz.linkLabel}{" "}
+                <span className="ext" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            </div>
+
+            <div
+              className="panel-visual"
+              data-reveal="from-end"
+              style={revealX}
+              aria-hidden="true"
+              dir="ltr"
+            >
+              <CaseVideo src={WAZEN_LOOP_SRC}>
+                <div className="frame">
+                  <div className="frame-bar">
+                    <span className="dot" />
+                    <span className="dot" />
+                    <span className="dot" />
+                    <span className="frame-url">{wf.url}</span>
+                  </div>
+                  {/* poster = the dense coach-dashboard schematic; the real
+                      capture replaces it via lib/work-video.ts at asset pass */}
+                  <div className="ui">
+                    <div className="ui-side">
+                      <span className="ui-brand">{wf.brand}</span>
+                      {wf.nav.map((n, i) => (
+                        <span
+                          key={i}
+                          className={"ui-nav" + (i === 0 ? " on" : "")}
+                        >
+                          {n}
                         </span>
-                        <span className="slide-tag">[ {p.name} ]</span>
+                      ))}
+                    </div>
+                    <div className="ui-main">
+                      <div className="ui-head">
+                        <span className="ui-h1">{wf.title}</span>
+                        <span className="ui-sub">{wf.period}</span>
+                      </div>
+                      <div className="kpis">
+                        {wf.kpis.map((k, i) => (
+                          <div className="kpi" key={i}>
+                            <b>{k.value}</b>
+                            <span>{k.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="chart">
+                        <div className="chart-cap">
+                          <span>{wf.chartCap}</span>
+                          <span>{wf.chartVal}</span>
+                        </div>
+                        <div className="bars">
+                          {wf.chartBars.map((hgt, i) => (
+                            <i
+                              key={i}
+                              className={hgt >= 96 ? "hi" : undefined}
+                              style={{ height: `${hgt}%` }}
+                            />
+                          ))}
+                        </div>
+                        <div className="axis">
+                          {wf.chartAxis.map((a, i) => (
+                            <span key={i}>{a}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="tbl">
+                        <div className="tr th">
+                          {wf.tableHead.map((th, i) => (
+                            <span key={i}>{th}</span>
+                          ))}
+                        </div>
+                        {wf.tableRows.map((r, i) => (
+                          <div className="tr" key={i}>
+                            <span>{r.a}</span>
+                            <span>{r.b}</span>
+                            <span className={"pill" + (r.muted ? " mut" : "")}>
+                              {r.status}
+                            </span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              </CaseVideo>
+              {WAZEN_LOOP_SRC && (
+                <span className="loop-chip">{sw.loopChip}</span>
+              )}
             </div>
-          </div>
+          </article>
 
-          <div className="work-controls">
-            <div className="work-dots">
-              {projects.map((_, i) => (
-                <button
-                  type="button"
-                  key={i}
-                  className={"work-dot" + (i === clamped ? " active" : "")}
-                  aria-label={`${carousel.goToProject} ${i + 1}`}
-                  aria-current={i === clamped ? "true" : undefined}
-                  onClick={() => go(i)}
-                />
-              ))}
-            </div>
-            <div className="work-arrows">
-              <button
-                type="button"
-                className="work-arrow"
-                aria-label={carousel.previous}
-                onClick={prev}
+          {/* ── Panel 2 · Almani — visual start / copy end (alternated) ──
+              The frame is a SCHEMATIC, dashed-bordered so it can never be
+              mistaken for a screenshot; real frames land at the asset pass
+              (D7). No coming-soon copy anywhere. */}
+          <article className="work-panel alt">
+            <div className="panel-copy" data-reveal="">
+              <span className="case-badge">{al.badge}</span>
+              <h3 className="case-name">{al.name}</h3>
+              <p className="case-cat">{al.cat}</p>
+              <p className="case-desc">{al.description}</p>
+              <dl className="case-meta">
+                <div className="pair">
+                  <dt>{sw.meta.role}</dt>
+                  <dd dir="ltr">{al.role}</dd>
+                </div>
+                <div className="pair">
+                  <dt>{sw.meta.stack}</dt>
+                  <dd dir="ltr">{al.stack}</dd>
+                </div>
+                <div className="pair">
+                  <dt>{sw.meta.status}</dt>
+                  <dd dir="ltr">{al.status}</dd>
+                </div>
+              </dl>
+              <a
+                className="case-link"
+                href={al.linkHref}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M15 18l-6-6 6-6" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                className="work-arrow"
-                aria-label={carousel.next}
-                onClick={next}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
-              </button>
+                {al.linkLabel}{" "}
+                <span className="ext" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
             </div>
-          </div>
-          <p className="sr-only" aria-live="polite">
-            {status}
-          </p>
+
+            <div
+              className="panel-visual"
+              data-reveal="from-start"
+              style={revealX}
+              aria-hidden="true"
+            >
+              <div className="frame dashed" dir="ltr">
+                <div className="frame-bar">
+                  <span className="dot" />
+                  <span className="dot" />
+                  <span className="dot" />
+                  <span className="frame-url">{af.url}</span>
+                </div>
+                <div className="ui">
+                  <div className="ui-side">
+                    <span className="ui-brand">{af.brand}</span>
+                    {af.nav.map((n, i) => (
+                      <span
+                        key={i}
+                        className={"ui-nav" + (i === 0 ? " on" : "")}
+                      >
+                        {n}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="ui-main">
+                    <div className="ui-head">
+                      <span className="ui-h1">{af.title}</span>
+                      <span className="ui-sub">{af.period}</span>
+                    </div>
+                    <div className="filters">
+                      {af.filters.map((f, i) => (
+                        <span key={i} className={f.on ? "on" : undefined}>
+                          {f.label}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="cat-grid">
+                      {af.parts.map((p, i) => (
+                        <div className="part" key={i}>
+                          <div className="part-img">
+                            <PartGlyph i={i} />
+                          </div>
+                          <span className="part-name">{p.name}</span>
+                          <div className="part-foot">
+                            <span className="part-price">{p.price}</span>
+                            <span className={"pill" + (p.muted ? " mut" : "")}>
+                              {p.pill}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="tbl">
+                      <div className="tr th">
+                        {af.tableHead.map((th, i) => (
+                          <span key={i}>{th}</span>
+                        ))}
+                      </div>
+                      {af.tableRows.map((r, i) => (
+                        <div className="tr" key={i}>
+                          <span>{r.a}</span>
+                          <span>{r.b}</span>
+                          <span className={"pill" + (r.muted ? " mut" : "")}>
+                            {r.status}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <span className="panel-caption">{al.caption}</span>
+            </div>
+          </article>
         </div>
       </div>
     </section>
+  );
+}
+
+// schematic part thumbnails (brake disc / alternator / oil filter)
+function PartGlyph({ i }: { i: number }) {
+  if (i === 0) {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <circle
+          cx="12"
+          cy="12"
+          r="7"
+          fill="none"
+          stroke="var(--ink-3)"
+          strokeWidth="1.6"
+        />
+        <circle
+          cx="12"
+          cy="12"
+          r="2.5"
+          fill="none"
+          stroke="var(--ink-3)"
+          strokeWidth="1.6"
+        />
+      </svg>
+    );
+  }
+  if (i === 1) {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <rect
+          x="5"
+          y="7"
+          width="14"
+          height="10"
+          rx="2"
+          fill="none"
+          stroke="var(--ink-3)"
+          strokeWidth="1.6"
+        />
+        <path
+          d="M9 7V5h6v2M8 17v2M16 17v2"
+          fill="none"
+          stroke="var(--ink-3)"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M6 15V9l4-2 4 2v6l-4 2z"
+        fill="none"
+        stroke="var(--ink-3)"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14 11h4M16 9v4"
+        fill="none"
+        stroke="var(--ink-3)"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }

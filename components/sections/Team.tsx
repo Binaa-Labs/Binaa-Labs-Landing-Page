@@ -3,9 +3,12 @@
 import { useSite } from "@/components/Providers";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
+// Compact strip (keep-tier): one hairline-separated row on desktop,
+// 2×2 at mobile. One reveal for the whole strip — not a feature section.
 export default function Team() {
   const { t } = useSite();
   const tm = t.team;
+
   return (
     <section className="section bg">
       <div className="wrap">
@@ -17,13 +20,19 @@ export default function Team() {
           {tm.subtext}
         </p>
 
-        <div className="grid-4">
+        <div className="team-strip" data-reveal="">
           {tm.members.map((m, i) => (
-            <div className="team-card" data-reveal="" key={i}>
-              <span className="team-avatar">{m.initials}</span>
-              <h3 className="team-name">{m.name}</h3>
-              <p className="team-role">{m.role}</p>
-              <p className="team-desc">{m.description}</p>
+            <div className="member" key={i}>
+              <div className="member-top">
+                <span className="member-avatar" aria-hidden="true">
+                  {m.initials}
+                </span>
+                <div>
+                  <p className="member-name">{m.name}</p>
+                  <p className="member-role">{m.role}</p>
+                </div>
+              </div>
+              <p className="member-desc">{m.description}</p>
             </div>
           ))}
         </div>

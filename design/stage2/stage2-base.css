@@ -1,0 +1,260 @@
+/* Stage 2 mocks — shared primitives. Colors/scales come from tokens-draft.css.
+   Mobile-first; desktop layers on at 920px. Mocks render final (post-entrance)
+   states — motion is specified in STAGE2-DESIGN.md, not simulated here.
+
+   Fidelity floor (Stage 2b): product frames contain dense, plausible UI with
+   real labels and values. The old grey-bar placeholder primitives (.f-item,
+   .f-row, .f-lab, .ph-mark) are RETIRED — no empty grey bars anywhere. */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", "Tajawal", system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+[dir="rtl"] body {
+  font-family: "Tajawal", "Inter", system-ui, sans-serif;
+}
+
+.display {
+  font-family: "Bricolage Grotesque", "Tajawal", sans-serif;
+}
+[dir="rtl"] .display {
+  font-family: "Tajawal", "Bricolage Grotesque", sans-serif;
+}
+.mono {
+  font-family: "JetBrains Mono", monospace;
+}
+
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-inline: var(--sp-5);
+}
+
+/* buttons */
+.btn {
+  display: inline-block;
+  border-radius: var(--r-2);
+  padding: 14px var(--sp-5);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--gold-btn);
+  color: var(--gold-ink);
+  box-shadow: var(--elev-1);
+}
+.btn-ghost {
+  border: 1px solid var(--line-2);
+  color: var(--ink);
+}
+.btn-sm {
+  padding: 9px var(--sp-4);
+  font-size: 0.8rem;
+  border-radius: var(--r-2);
+}
+
+/* section scaffolding */
+.label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.64rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: var(--sp-4);
+}
+.label::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: var(--gold-line);
+}
+h2 {
+  font-size: clamp(1.65rem, 3.4vw, 2.45rem);
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+  max-width: 24ch;
+}
+.section-sub {
+  color: var(--ink-2);
+  font-size: 0.98rem;
+  max-width: 60ch;
+  margin-top: var(--sp-4);
+}
+
+/* ───────── browser-chrome product frame ───────── */
+.frame {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  overflow: hidden;
+  box-shadow: var(--elev-3);
+}
+.frame-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--line-2);
+}
+.frame-url {
+  flex: 1;
+  margin-inline-start: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  font-size: 0.58rem;
+  color: var(--ink-3);
+  text-align: center;
+  padding: 3px 0;
+  direction: ltr;
+}
+
+/* ───────── dense app UI inside the frame (the fidelity floor) ─────────
+   A browser chrome is an LTR artifact: the frame interior stays LTR even in
+   the RTL mocks (the URL is Latin). Shared by hero / hero-ar / splash. */
+.app {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  min-height: 280px;
+  direction: ltr;
+}
+.app-side {
+  border-right: 1px solid var(--line);
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.app-nav {
+  font-size: 0.6rem;
+  color: var(--ink-3);
+  padding: 6px 8px;
+  border-radius: var(--r-1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.app-nav::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 2px;
+  background: var(--line-2);
+}
+.app-nav.on {
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-line);
+  color: var(--gold);
+}
+.app-nav.on::before {
+  background: var(--gold);
+}
+.app-main {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.app-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.app-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.app-date {
+  font-size: 0.54rem;
+  color: var(--ink-3);
+}
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.tile {
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: 8px 10px;
+}
+.tile b {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gold);
+  display: block;
+  line-height: 1.2;
+}
+.tile span {
+  font-size: 0.5rem;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+.rowi {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 2px;
+  border-top: 1px solid var(--line);
+  font-size: 0.6rem;
+  color: var(--ink-2);
+}
+.rowi .st {
+  font-size: 0.5rem;
+  color: var(--gold);
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-line);
+  border-radius: var(--r-pill);
+  padding: 1px 7px;
+}
+.rowi .st.mut {
+  color: var(--ink-3);
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+
+/* mono meta rows (case panels) */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-5);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.meta dt {
+  color: var(--ink-3);
+}
+.meta dd {
+  color: var(--ink-2);
+}
+.meta .pair {
+  display: flex;
+  gap: var(--sp-2);
+}

@@ -1,0 +1,431 @@
+/* Stage 1 color-direction proofs — shared layout.
+   Token-agnostic: every color comes from tokens-a.css / tokens-b.css.
+   Mobile-first; desktop layers on at 920px, matching the site. */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.display {
+  font-family: "Bricolage Grotesque", sans-serif;
+}
+.mono {
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ---------- buttons ---------- */
+
+.btn {
+  display: inline-block;
+  border-radius: 10px;
+  padding: 14px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.btn-primary {
+  /* --gold-btn is a hybrid-candidate hook: falls back to --gold for A/B */
+  background: var(--gold-btn, var(--gold));
+  color: var(--gold-ink);
+}
+.btn-ghost {
+  border: 1px solid var(--line-2);
+  color: var(--ink);
+}
+.btn-sm {
+  padding: 9px 16px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+}
+
+/* ---------- nav ---------- */
+
+.nav {
+  background: var(--bg-nav);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+}
+.nav-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 13px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.brand-name {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.brand-sub {
+  font-size: 0.56rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 26px;
+}
+.nav-links a {
+  color: var(--ink-2);
+  text-decoration: none;
+  font-size: 0.86rem;
+}
+.nav-links a.active {
+  color: var(--ink);
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  padding: 56px 24px 48px;
+}
+.hero-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 44px;
+  align-items: center;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 7px 14px;
+  margin-bottom: 26px;
+}
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+h1 {
+  font-size: clamp(2.05rem, 4.6vw, 3.3rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  max-width: 15ch;
+}
+h1 em {
+  font-style: normal;
+  color: var(--gold);
+}
+.sub {
+  color: var(--ink-2);
+  font-size: 1.02rem;
+  max-width: 54ch;
+  margin-top: 22px;
+}
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+.trust {
+  color: var(--ink-3);
+  font-size: 0.84rem;
+  margin-top: 18px;
+}
+
+/* ---------- product frame (Wazen stand-in) ---------- */
+
+.frame {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 48px -18px rgba(0, 0, 0, 0.35);
+}
+.frame-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--line-2);
+}
+.frame-url {
+  flex: 1;
+  margin-inline-start: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 0.58rem;
+  color: var(--ink-3);
+  text-align: center;
+  padding: 3px 0;
+}
+.frame-body {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  min-height: 296px;
+}
+.f-side {
+  border-inline-end: 1px solid var(--line);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.f-item {
+  height: 10px;
+  border-radius: 4px;
+  background: var(--surface-2);
+}
+.f-item.active {
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-line);
+  height: 12px;
+}
+.f-main {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.f-head {
+  height: 13px;
+  width: 42%;
+  border-radius: 4px;
+  background: var(--surface-2);
+}
+.f-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.f-stat {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.f-num {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--gold);
+  line-height: 1;
+}
+.f-lab {
+  height: 7px;
+  width: 70%;
+  border-radius: 3px;
+  background: var(--surface-2);
+}
+.f-row {
+  height: 10px;
+  border-radius: 4px;
+  background: var(--surface-2);
+}
+.f-row.hot {
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-line);
+}
+.f-cta {
+  height: 26px;
+  width: 112px;
+  border-radius: 7px;
+  background: var(--gold-btn, var(--gold));
+  margin-top: 2px;
+}
+
+/* ---------- logo treatment strip ---------- */
+
+.logo-strip {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 6px 24px 60px;
+}
+.strip-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+.logo-tiles {
+  display: flex;
+  gap: 14px;
+}
+.logo-tile {
+  width: 148px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.tile-cap {
+  font-size: 0.52rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ---------- card section ---------- */
+
+.page-pad {
+  padding: 44px 0;
+}
+.section {
+  background: var(--bg-2);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 72px 24px;
+}
+.section-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+.label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.64rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+.label::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: var(--gold-line);
+}
+h2 {
+  font-size: clamp(1.65rem, 3.4vw, 2.45rem);
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+  max-width: 24ch;
+}
+.section-sub {
+  color: var(--ink-2);
+  font-size: 0.98rem;
+  max-width: 60ch;
+  margin-top: 16px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 44px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 26px;
+}
+.chip {
+  width: 46px;
+  height: 46px;
+  border-radius: 11px;
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-line);
+  display: grid;
+  place-items: center;
+}
+.card h3 {
+  font-size: 1.14rem;
+  font-weight: 600;
+  margin-top: 18px;
+}
+.card .body {
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  margin-top: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+}
+.tags .k {
+  font-size: 0.54rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-inline-end: 2px;
+}
+.tag {
+  font-size: 0.62rem;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 9px;
+}
+
+/* ---------- desktop ---------- */
+
+@media (min-width: 920px) {
+  .nav-links {
+    display: flex;
+  }
+  .hero {
+    padding: 84px 24px 60px;
+  }
+  .hero-inner {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+  }
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

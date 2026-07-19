@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 2 mock — How We Work &amp; What You Get (Process → Offer merge)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens-draft.css" />
+    <link rel="stylesheet" href="stage2-base.css" />
+    <style>
+      .section {
+        padding: var(--sp-8) 0;
+      }
+
+      /* ═══════════ the journey rail — three steps, each carrying an artifact ═══════════ */
+      .journey {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--sp-6);
+        margin-top: var(--sp-7);
+        padding-inline-start: var(--sp-6);
+      }
+      /* mobile: vertical connector on the inline-start edge */
+      .journey::before {
+        content: "";
+        position: absolute;
+        inset-block: 12px;
+        inset-inline-start: 13px;
+        width: 2px;
+        background: linear-gradient(180deg, var(--gold-line), var(--line-2));
+        border-radius: 2px;
+      }
+      .jstep {
+        position: relative;
+      }
+      .node {
+        position: absolute;
+        inset-inline-start: calc(-1 * var(--sp-6) - 1px);
+        top: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--surface);
+        border: 1px solid var(--gold-line);
+        color: var(--gold);
+        font-size: 0.62rem;
+        display: grid;
+        place-items: center;
+        box-shadow: var(--elev-1);
+      }
+      .jstep h3 {
+        font-size: 1.06rem;
+        font-weight: 600;
+        padding-top: 4px;
+      }
+      .jstep .jline {
+        font-size: 0.86rem;
+        color: var(--ink-2);
+        margin-top: var(--sp-2);
+        max-width: 40ch;
+      }
+
+      /* ── artifact fragments: what you physically receive at each step ── */
+      .artifact {
+        margin-top: var(--sp-4);
+        background: var(--bg-2);
+        border: 1px solid var(--line);
+        border-radius: var(--r-2);
+        padding: var(--sp-3) var(--sp-4);
+        box-shadow: var(--elev-1);
+      }
+      .art-cap {
+        display: block;
+        font-size: 0.52rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        margin-bottom: var(--sp-2);
+      }
+
+      /* 1 · fixed-quote doc fragment */
+      .quote-doc {
+        font-size: 0.66rem;
+        color: var(--ink-2);
+      }
+      .quote-doc .qh {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        color: var(--ink);
+        font-weight: 600;
+        font-size: 0.72rem;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--line);
+      }
+      .quote-doc .qr {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 0;
+      }
+      .quote-doc .qr span:last-child {
+        color: var(--ink-3);
+      }
+      .quote-doc .qt {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1px solid var(--line);
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .quote-doc .qt b {
+        color: var(--gold);
+      }
+
+      /* 2 · demo-link chip */
+      .demo-chip {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-2);
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: var(--r-1);
+        padding: 6px 8px;
+        direction: ltr;
+      }
+      .demo-chip .lock {
+        color: var(--gold);
+        font-size: 0.62rem;
+      }
+      .demo-chip .url {
+        flex: 1;
+        font-size: 0.6rem;
+        color: var(--ink-2);
+      }
+      .live-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.5rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold);
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        border-radius: var(--r-pill);
+        padding: 2px 7px;
+      }
+      .live-pill::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+      .demo-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 7px;
+        font-size: 0.56rem;
+        color: var(--ink-3);
+      }
+
+      /* 3 · repo-handover card */
+      .repo {
+        font-size: 0.66rem;
+      }
+      .repo-top {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-2);
+        direction: ltr;
+      }
+      .repo-name {
+        font-size: 0.68rem;
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .repo-owner {
+        margin-inline-start: auto;
+        font-size: 0.5rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold);
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        border-radius: var(--r-pill);
+        padding: 2px 7px;
+      }
+      .repo-rows {
+        margin-top: 7px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .repo-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.58rem;
+        color: var(--ink-3);
+      }
+      .repo-row b {
+        color: var(--ink-2);
+        font-weight: 500;
+      }
+      .repo-row .ok {
+        color: var(--gold);
+      }
+
+      /* ═══════════ what you get: deliverables + sticky proposal ═══════════ */
+      .getgrid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--sp-6);
+        margin-top: var(--sp-8);
+        padding-top: var(--sp-7);
+        border-top: 1px solid var(--line);
+      }
+      .get-head {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: var(--sp-5);
+      }
+      .del {
+        display: flex;
+        gap: var(--sp-4);
+        padding: var(--sp-4) 0;
+        border-top: 1px solid var(--line);
+      }
+      .del:first-of-type {
+        border-top: none;
+        padding-top: 0;
+      }
+      .del .dn {
+        flex: 0 0 auto;
+        font-size: 0.6rem;
+        color: var(--gold);
+        padding-top: 3px;
+      }
+      .del b {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+      .del p {
+        font-size: 0.84rem;
+        color: var(--ink-2);
+        margin-top: 3px;
+        max-width: 52ch;
+      }
+      /* the four service categories, absorbed from What We Build as ONE mono line */
+      .disciplines {
+        margin-top: var(--sp-5);
+        padding-top: var(--sp-4);
+        border-top: 1px solid var(--line);
+        font-size: 0.6rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .disciplines b {
+        color: var(--ink-2);
+        font-weight: 500;
+      }
+
+      .proposal {
+        background: var(--surface);
+        border: 1px solid var(--gold-line);
+        border-radius: var(--r-3);
+        padding: var(--sp-5);
+        box-shadow: var(--elev-2);
+      }
+      .prop-label {
+        font-size: 0.58rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+      .proposal h3 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-top: var(--sp-2);
+      }
+      .proposal .intro {
+        font-size: 0.86rem;
+        color: var(--ink-2);
+        margin-top: var(--sp-3);
+      }
+      .checks {
+        list-style: none;
+        margin-top: var(--sp-4);
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-2);
+      }
+      .checks li {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--sp-2);
+        font-size: 0.84rem;
+        color: var(--ink);
+      }
+      .checks .ck {
+        flex: 0 0 16px;
+        height: 16px;
+        border-radius: var(--r-1);
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        color: var(--gold);
+        font-size: 0.58rem;
+        display: grid;
+        place-items: center;
+        margin-top: 3px;
+      }
+      .freebox {
+        margin-top: var(--sp-5);
+        background: var(--gold-soft);
+        border: 1px solid var(--gold-line);
+        border-radius: var(--r-2);
+        padding: var(--sp-4);
+      }
+      .freebox .fl {
+        display: block;
+        font-size: 0.56rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 6px;
+      }
+      .freebox p {
+        font-size: 0.82rem;
+        color: var(--ink-2);
+      }
+      .proposal .btn {
+        width: 100%;
+        text-align: center;
+        margin-top: var(--sp-5);
+      }
+
+      @media (min-width: 920px) {
+        /* desktop: the rail runs horizontally through the three nodes */
+        .journey {
+          grid-template-columns: repeat(3, 1fr);
+          gap: var(--sp-7);
+          padding-inline-start: 0;
+          padding-top: var(--sp-6);
+        }
+        .journey::before {
+          inset-block: auto;
+          inset-inline: 15px;
+          top: calc(var(--sp-6) + 14px);
+          width: auto;
+          height: 2px;
+          background: linear-gradient(90deg, var(--gold-line), var(--line-2));
+        }
+        [dir="rtl"] .journey::before {
+          background: linear-gradient(-90deg, var(--gold-line), var(--line-2));
+        }
+        .jstep {
+          padding-top: var(--sp-7);
+        }
+        .node {
+          inset-inline-start: 0;
+          top: 0;
+        }
+        .getgrid {
+          grid-template-columns: 1.15fr 0.85fr;
+          gap: var(--sp-8);
+        }
+        .proposal {
+          position: sticky;
+          top: var(--sp-6);
+          padding: var(--sp-6);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="section">
+      <div class="wrap">
+        <p class="label mono">How We Work &amp; What You Get</p>
+        <h2 class="display">From First Call to Code That’s Yours</h2>
+        <p class="section-sub">Three steps, one fixed price — and at each one, something real lands in your hands.</p>
+
+        <!-- ══ journey rail: every step hands you an artifact ══ -->
+        <div class="journey">
+          <div class="jstep">
+            <span class="node mono">01</span>
+            <h3 class="display">Free analysis</h3>
+            <p class="jline">We map your operation, show you a visual demo, and put one fixed price on the table.</p>
+            <div class="artifact">
+              <span class="art-cap mono">You receive</span>
+              <div class="quote-doc mono">
+                <div class="qh"><span>Fixed-Price Proposal</span><span>v1</span></div>
+                <div class="qr"><span>Discovery &amp; system map</span><span>included</span></div>
+                <div class="qr"><span>Build — 5 modules, AR + EN</span><span>included</span></div>
+                <div class="qr"><span>Launch &amp; 12-mo support</span><span>included</span></div>
+                <div class="qt"><span>Total</span><b>One fixed price</b></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="jstep">
+            <span class="node mono">02</span>
+            <h3 class="display">You watch it build</h3>
+            <p class="jline">Click through a working link as we go, with a direct line to the people writing the code.</p>
+            <div class="artifact">
+              <span class="art-cap mono">You receive</span>
+              <div class="demo-chip">
+                <span class="lock mono">⌁</span>
+                <span class="url mono">preview.binaalabs.dev/your-app</span>
+                <span class="live-pill mono">Live</span>
+              </div>
+              <div class="demo-meta mono"><span>Build 0.6 · Booking module</span><span>Updated 2h ago</span></div>
+            </div>
+          </div>
+
+          <div class="jstep">
+            <span class="node mono">03</span>
+            <h3 class="display">Launch and own it</h3>
+            <p class="jline">We deploy, hand over the repository, and stay on for twelve months of support.</p>
+            <div class="artifact">
+              <span class="art-cap mono">You receive</span>
+              <div class="repo">
+                <div class="repo-top">
+                  <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 3v13a3 3 0 0 0 3 3h9" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" />
+                    <circle cx="6" cy="4" r="2" fill="none" stroke="var(--gold)" stroke-width="2" />
+                    <circle cx="18" cy="19" r="2" fill="none" stroke="var(--gold)" stroke-width="2" />
+                  </svg>
+                  <span class="repo-name mono">your-company/platform</span>
+                  <span class="repo-owner mono">Yours</span>
+                </div>
+                <div class="repo-rows mono">
+                  <div class="repo-row"><b>Source + history</b><span class="ok">transferred ✓</span></div>
+                  <div class="repo-row"><b>Infra &amp; DNS accounts</b><span class="ok">transferred ✓</span></div>
+                  <div class="repo-row"><b>Docs &amp; runbook</b><span class="ok">transferred ✓</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ what you get: deliverables + sticky proposal ══ -->
+        <div class="getgrid">
+          <div>
+            <h3 class="get-head display">Everything included in the build</h3>
+
+            <div class="del">
+              <span class="dn mono">01</span>
+              <div>
+                <b>A clear plan before any code</b>
+                <p>Every screen, database and connection mapped into a blueprint you approve first.</p>
+              </div>
+            </div>
+            <div class="del">
+              <span class="dn mono">02</span>
+              <div>
+                <b>Arabic-first design, done right</b>
+                <p>Bilingual interfaces built right-to-left from the first wireframe — not translated at the end.</p>
+              </div>
+            </div>
+            <div class="del">
+              <span class="dn mono">03</span>
+              <div>
+                <b>The full build, done properly</b>
+                <p>Clean, documented front-end and back-end, tested on real devices.</p>
+              </div>
+            </div>
+            <div class="del">
+              <span class="dn mono">04</span>
+              <div>
+                <b>Connected to the tools you use</b>
+                <p>Payment gateways, CRM, accounting and ERP, talking to each other from day one.</p>
+              </div>
+            </div>
+            <div class="del">
+              <span class="dn mono">05</span>
+              <div>
+                <b>Support after launch</b>
+                <p>Hosting, backups, fixes and a direct line to us for twelve months.</p>
+              </div>
+            </div>
+
+            <p class="disciplines mono">
+              Disciplines — <b>Web apps · Mobile apps · Process automation · System integration</b>
+            </p>
+          </div>
+
+          <aside class="proposal">
+            <span class="prop-label mono">Fixed Price Proposal</span>
+            <h3 class="display">The Complete Build</h3>
+            <!-- layout-neutral wording: the list is beside this card on desktop, above it on mobile -->
+            <p class="intro">Everything in the list, for one price — scoped to your project, agreed up front.</p>
+            <ul class="checks">
+              <li><span class="ck">✓</span>Scoped to your exact needs</li>
+              <li><span class="ck">✓</span>One price, no hourly surprises</li>
+              <li><span class="ck">✓</span>You own 100% of the code</li>
+              <li><span class="ck">✓</span>Backed by our delivery guarantee</li>
+            </ul>
+            <div class="freebox">
+              <span class="fl mono">Free first step — no cost</span>
+              <p>We map your system and show you a visual demo of your new setup, free, before you commit to anything.</p>
+            </div>
+            <span class="btn btn-primary">Book Your Free Analysis →</span>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
