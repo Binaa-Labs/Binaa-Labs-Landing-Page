@@ -19,8 +19,9 @@ Last updated: 2026-07-19 · Status: **Push-prep complete (`d888d75` pushed); own
 - **Claimable projects — exactly two:**
   - **Wazen** (wazen.fit) — coaching SaaS, Binaa Labs' own product, **live**
     (verified reachable in the 2026-07-13 audit).
-  - **Almani Motors** — auto-parts e-commerce, **live in Saudi Arabia**, no
-    public URL to link.
+  - **Almani Motors** — auto-parts e-commerce, **live in Saudi Arabia**, now
+    has a public link (`almanimotors.com/en/shop`, added 2026-07-19 in
+    `0ca0b50`; supersedes the earlier "no public URL to link" note).
 - **Team of four:**
   | Name | Role |
   |---|---|
@@ -164,7 +165,7 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 | **D4** | *(2026-07-13, owner)* **Refactor scope:** keep the architecture (i18n, theme, motion, SSR mechanisms); rebuild the presentation layer with a real token system (spacing/radius/elevation/motion scales); remove dead CSS section-by-section during the redesign. No big-bang rewrite. |
 | **D5** | *(2026-07-13, owner)* **Contact path:** the section UI is redesigned with honest submitting/success/failure states; the form handler/backend is developer-owned and out of Claude scope. **Vercel Analytics will be added** (implementation pass). |
 | **D6** | *(2026-07-13, owner)* **Claims kept:** "2 wks to demo," "24-hour response," and the four service capabilities stand — owner confirms all are deliverable. Copy direction for the redesign: frame around digital transformation / eliminating manual processes, with Wazen as proof of the gap-finding approach. |
-| **D7** | *(2026-07-13, owner)* **Almani Motors:** real visual assets will be provided later; design and build proceed with placeholder frames in the real layout. Not a blocker. |
+| **D7** | *(2026-07-13, owner)* **Almani Motors:** real visual assets will be provided later; design and build proceed with placeholder frames in the real layout. Not a blocker. *(Amended 2026-07-19:)* **Almani now has a public live link** (`almanimotors.com/en/shop`, landed in `0ca0b50`) — this doc's earlier "no public URL to link" note is superseded. Real visual assets (frames) remain the open item; still not a blocker. |
 | **D8** | *(2026-07-13, owner)* **FAQ section added** to the page (5–6 questions; content in design pass). |
 | **D9** | *(2026-07-13, design-authority call, owner-delegated)* **Nav subtext:** "Software Studio" replaces "Software Solutions". |
 | **D10** | *(2026-07-13, owner)* **Arabic transliteration unified to "بناء لابس"** — `ar.ts`'s "بناء لابز" is the incorrect one and will be fixed in implementation. |
