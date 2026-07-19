@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-19 · Status: **Push-prep complete (`d888d75` pushed); owner preview review completed and approved on the `feat/site-redesign` preview; binding Lighthouse measurement done (mobile LCP 3.3s vs. 2.5s budget) → D19 disables the splash on mobile; next measurement (LCP 3.4s, `h1.hero-title`) traced to a second JS-gated hider → D19 rung 2b makes mobile hero copy paint from CSS alone; refinement pass 2 (D20) and pass 3 (D21, AR Guarantee accent line) landed; final pre-merge pass (D22) adds Vercel Analytics and gates the splash's HeroCanvas chunk off mobile/reduced-motion, re-measure on the Vercel preview pending**
+Last updated: 2026-07-19 · Status: **Redesign live in production 2026-07-19** (`feat/site-redesign` merged to `main` at `49a76bb`; binding production Lighthouse: mobile 93 / LCP 2.6s (0.1s over the 2.5s §1.3 budget — tracked as a post-launch item, not a merge blocker) / desktop 99).
 
 ---
 
@@ -197,11 +197,10 @@ repo via the asset pass — cleanup scope in D14.)*
 
 ## 5 · Redesign status & remaining work
 
-**Status: push-prep complete (`d888d75` pushed to `feat/site-redesign`);
-owner preview review completed and approved on the Vercel preview
-(2026-07-16); binding Lighthouse measurement done (2026-07-18) — mobile LCP
-3.3s vs. 2.5s budget, D19 disables the splash on mobile (rung 2); re-measure
-on the preview after this lands.**
+**Status: redesign live in production (2026-07-19) — `feat/site-redesign`
+merged to `main` via merge commit `49a76bb`, deployed by Vercel's `main`
+auto-deploy to binaalabs.com. Binding production Lighthouse: mobile 93 /
+LCP 2.6s / desktop 99.**
 
 > **Owner confirmation (2026-07-16):** Splash session-once behavior confirmed
 > by owner as built (survives refreshes within a session, replays on new
@@ -243,30 +242,32 @@ on the preview after this lands.**
   systems (splash, video slot, journey artifacts, FAQ, form states, two dense
   frame schematics), not legacy carry-over — zero dead rules remain.
 
-### Remaining work
+### Post-launch work
 
-1. **Asset pass:** Wazen 20–30s silent capture (seeded demo data only) →
-   `lib/work-video.ts`; real Almani frames (D7); logo SVG de-trace +
+The redesign is live (`main` at `49a76bb`); nothing below is a merge blocker.
+
+1. **Font-preload micro-pass** — trim remaining web-font load cost identified
+   post-launch.
+2. **`SelectedWork.tsx` hydration deferral** (audit finding B5-medium) — defer
+   hydration of the below-fold case panels (idle-callback or
+   intersection-gated mount) to trim mobile TBT.
+3. **`ClientEffects.tsx` idle deferral** (audit finding B5-low) — defer the
+   `IntersectionObserver`/count-up `requestAnimationFrame` setup off the
+   hydration-critical tick (`requestIdleCallback`, or confirm via trace it's
+   already effectively deferred).
+4. **Mobile lite splash** (~1.5-1.8s micro-intro: glow pulse + text rise +
+   bloom), owner-gated; re-measure LCP after building it (D19).
+5. **Wazen video asset pass:** the 20–30s silent capture (seeded demo data
+   only) → `lib/work-video.ts`; real Almani frames (D7); logo SVG de-trace +
    dual-color variants (D14); real Wazen metric if the hero chip is revived
    (D16 dropped it).
-2. **Lead backend:** implement `/api/lead` (or swap the marked stub in
-   `Contact.tsx`) — until then submissions land in the honest failure state
-   with the mailto fallback. **Vercel Analytics added** (D5 — `@vercel/analytics`,
-   `<Analytics />` mounted in `app/layout.tsx`).
-3. **Pre-merge measurement:** LCP/Lighthouse on the Vercel preview — binding
-   mobile LCP measured at 3.3s vs. the 2.5s budget; **D19 applies rung 2 of
-   the fallback ladder (splash disabled on mobile)**; re-measure after to
-   confirm the budget is met. Calendly link stays out until one exists
-   (checklist 13).
-4. **Parked (post-launch):** a mobile lite splash (~1.5-1.8s micro-intro:
-   glow pulse + text rise + bloom), owner-gated; re-measure LCP after
-   building it (D19). Also parked from the pre-launch code-quality audit
-   (2026-07-19, report-only, not implemented): **B5-medium** — defer
-   hydration of the below-fold `SelectedWork.tsx` case panels (idle-callback
-   or intersection-gated mount) to trim mobile TBT; **B5-low** — defer
-   `ClientEffects.tsx`'s `IntersectionObserver`/count-up `requestAnimationFrame`
-   setup off the hydration-critical tick (`requestIdleCallback` or confirm via
-   trace it's already effectively deferred).
+6. **Cube-to-mark morph** — owner-flagged follow-up polish idea for the
+   splash/logo transition, not yet scoped.
+7. **Slogan revisit** — owner-flagged follow-up on the splash/hero slogan
+   copy, not yet scoped.
+8. **`/api/lead` (developer-owned):** implement the lead backend (or swap the
+   marked stub in `Contact.tsx`) — until then submissions land in the honest
+   failure state with the mailto fallback. Out of Claude scope per D5.
 
 ### Launch checklist
 
@@ -284,7 +285,8 @@ on the preview after this lands.**
 - [x] Visual pass verified EN + AR × light + dark × 1440 + 390
       (`design/impl-review/` matrix, 2026-07-14)
 - [x] `npm run check` + Playwright green · Lighthouse on local prod build
-      (100/100/100/91) — [ ] re-run on the Vercel preview before merge
+      (100/100/100/91) · [x] re-run on production post-merge: **mobile 93 /
+      LCP 2.6s / desktop 99** (2026-07-19, binding)
 
 ---
 
