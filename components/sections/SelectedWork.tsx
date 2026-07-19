@@ -176,6 +176,17 @@ export default function SelectedWork() {
                   <dd dir="ltr">{al.status}</dd>
                 </div>
               </dl>
+              <a
+                className="case-link"
+                href={al.linkHref}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {al.linkLabel}{" "}
+                <span className="ext" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
             </div>
 
             <div
@@ -183,9 +194,8 @@ export default function SelectedWork() {
               data-reveal="from-start"
               style={revealX}
               aria-hidden="true"
-              dir="ltr"
             >
-              <div className="frame dashed">
+              <div className="frame dashed" dir="ltr">
                 <div className="frame-bar">
                   <span className="dot" />
                   <span className="dot" />
@@ -251,6 +261,7 @@ export default function SelectedWork() {
                   </div>
                 </div>
               </div>
+              <span className="panel-caption">{al.caption}</span>
             </div>
           </article>
         </div>

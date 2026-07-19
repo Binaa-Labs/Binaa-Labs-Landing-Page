@@ -21,13 +21,16 @@ test("renders the English landing page", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Run Your Business Online"
   );
-  // the proof section now renders two fixed case panels
+  // the proof section now renders two fixed case panels, each with its own
+  // visit link
   await expect(page.locator("#work")).toContainText("Wazen وازن");
   await expect(page.locator("#work")).toContainText("Almani Motors");
-  await expect(page.locator("#work .case-link")).toHaveAttribute(
-    "href",
-    "https://wazen.fit"
-  );
+  await expect(
+    page.getByRole("link", { name: "Visit wazen.fit" })
+  ).toHaveAttribute("href", "https://wazen.fit");
+  await expect(
+    page.getByRole("link", { name: "Visit almanimotors.com" })
+  ).toHaveAttribute("href", "https://almanimotors.com/en/shop");
 });
 
 test("renders Arabic at /ar", async ({ page }) => {

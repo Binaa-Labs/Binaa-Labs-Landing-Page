@@ -167,10 +167,14 @@ export const ar: Dict = {
       name: "Almani Motors",
       cat: "متجر إلكتروني لقطع الغيار",
       description:
-        "مستودع قطع غيار سعودي انتقل إلى الإنترنت. قطع جديدة تُباع كأي متجر، وقطع مستعملة بتدفق خاص للأسعار القابلة للتفاوض.",
+        "مستودع قطع غيار سعودي انتقل إلى الإنترنت. قطع أصلية (OEM) لسيارات BMW وMini وVW وAudi، مقره في جدة.",
       role: "Design · Build · Launch",
       stack: "Next.js",
-      status: "Live (no public link)",
+      status: "Live",
+      link: "almanimotors.com",
+      linkHref: "https://almanimotors.com/en/shop",
+      linkLabel: "زيارة almanimotors.com",
+      caption: "واجهة تمثيلية.",
     },
     // LTR product schematics: deliberately not translated
     wazenFrame: en.selectedWork.wazenFrame,

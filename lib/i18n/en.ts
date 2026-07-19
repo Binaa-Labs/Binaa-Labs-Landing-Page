@@ -197,10 +197,14 @@ export const en = {
       name: "Almani Motors",
       cat: "Auto Parts E-Commerce",
       description:
-        "A Saudi spare-parts warehouse, moved online. New parts sold like any store, used parts with their own negotiable-price flow.",
+        "A Saudi spare-parts warehouse, moved online. Genuine OEM parts for BMW, Mini, VW and Audi, based in Jeddah.",
       role: "Design · Build · Launch",
       stack: "Next.js",
-      status: "Live (no public link)",
+      status: "Live",
+      link: "almanimotors.com",
+      linkHref: "https://almanimotors.com/en/shop",
+      linkLabel: "Visit almanimotors.com",
+      caption: "Representative interface.",
     },
     // case-frame schematics: Latin/LTR in both locales
     wazenFrame: {
@@ -238,7 +242,7 @@ export const en = {
       ],
     },
     almaniFrame: {
-      url: "almani-motors · placeholder",
+      url: "almanimotors.com",
       brand: "Almani",
       nav: ["Catalog", "Used parts", "Offers", "Orders", "Inventory"],
       title: "Parts catalog",

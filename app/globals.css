@@ -1663,6 +1663,13 @@ html:not(.js) #splash {
   border-inline-start: 6px solid var(--gold);
   border-inline-end: 0;
 }
+.panel-caption {
+  display: block;
+  margin-top: var(--sp-3);
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--ink-3);
+}
 /* dense product UI inside the case frames (fidelity floor; LTR artifact) */
 .ui {
   display: grid;
