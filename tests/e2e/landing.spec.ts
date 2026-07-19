@@ -135,7 +135,11 @@ test("FAQ accordion exposes state to assistive technology", async ({
 
 test("intro splash plays once per session and any scroll skips it", async ({
   page,
+  isMobile,
 }) => {
+  // mobile viewports never mount the splash at all (D19) — covered below
+  test.skip(isMobile, "splash is disabled on mobile viewports");
+
   // fresh session — no seeding: the splash must play
   await page.goto("/");
   await expect(page.locator("#splash")).toBeVisible();
@@ -163,6 +167,26 @@ test("splash never mounts under reduced motion", async ({
   // CSS layer hides it immediately; the matchMedia layer removes it
   await expect(page.locator("#splash")).toBeHidden();
   await expect(page.locator("#splash")).toHaveCount(0);
+
+  await context.close();
+});
+
+test("splash never mounts on mobile viewports (D19, LCP rung 2)", async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+  // fresh session — no seeding: even a first-ever visit must skip the splash
+  await page.goto("/");
+
+  // CSS layer hides it immediately; the matchMedia layer removes it
+  await expect(page.locator("#splash")).toBeHidden();
+  await expect(page.locator("#splash")).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
   await context.close();
 });

@@ -27,6 +27,10 @@ const SEEN_KEY = "binaa-splash-seen";
  *   `html.splash-seen` BEFORE paint on repeat loads, so there is no flash.
  * - Reduced motion never mounts it: CSS layer (`display:none`) + the
  *   matchMedia check below (layer 2).
+ * - Mobile never mounts it either (D19, LCP rung 2): same two layers,
+ *   gated at the site's 920px desktop breakpoint (`(max-width: 919px)`).
+ *   Desktop choreography, session-once logic and the reduced-motion path
+ *   are unchanged.
  * - Skip button fades in at ~1s; ANY wheel / touchmove / scroll /
  *   pointerdown / keydown dismisses instantly. Dismissal = accelerated
  *   bloom (~350ms via .skipping), never a hard cut.
@@ -60,7 +64,11 @@ export default function Splash() {
     } catch {
       /* ignore */
     }
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || seen) {
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.matchMedia("(max-width: 919px)").matches ||
+      seen
+    ) {
       setGone(true);
       return;
     }
