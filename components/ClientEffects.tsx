@@ -12,6 +12,13 @@ export default function ClientEffects() {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // iOS Safari only honors the CSS :active pseudo-class on elements that
+    // have (or descend from) a literal touchstart listener; React's
+    // delegated click handlers don't count. A single no-op listener here
+    // makes tap/press feedback register site-wide.
+    const noop = () => {};
+    document.addEventListener("touchstart", noop, { passive: true });
+
     const countUp = (el: HTMLElement) => {
       if (el.getAttribute("data-counted")) return;
       const raw = el.getAttribute("data-count") || el.textContent || "";
@@ -104,6 +111,7 @@ export default function ClientEffects() {
     return () => {
       io?.disconnect();
       cleanups.forEach((f) => f());
+      document.removeEventListener("touchstart", noop);
     };
   }, []);
 

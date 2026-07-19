@@ -535,10 +535,16 @@ ul {
   cursor: pointer;
   box-shadow: var(--elev-1);
   will-change: transform;
-  transition: box-shadow var(--dur-base) var(--ease-hover);
+  transition:
+    box-shadow var(--dur-base) var(--ease-hover),
+    transform var(--dur-fast) var(--ease-hover);
 }
 .btn-primary:hover {
   box-shadow: 0 0 34px var(--gold-line);
+}
+.btn-primary:active {
+  transform: scale(0.98);
+  box-shadow: var(--elev-1);
 }
 .btn-primary.block {
   width: 100%;
@@ -567,11 +573,15 @@ ul {
   cursor: pointer;
   transition:
     border-color var(--dur-fast) var(--ease-hover),
-    color var(--dur-fast) var(--ease-hover);
+    color var(--dur-fast) var(--ease-hover),
+    transform var(--dur-fast) var(--ease-hover);
 }
 .btn-ghost:hover {
   border-color: var(--gold-line);
   color: var(--gold);
+}
+.btn-ghost:active {
+  transform: scale(0.98);
 }
 .btn-sm {
   padding: 9px var(--sp-4);
@@ -687,8 +697,13 @@ ul {
   min-height: 40px;
   padding: 8px 10px;
   border-radius: var(--r-1);
-  transition: color var(--dur-fast) var(--ease-hover);
+  transition:
+    color var(--dur-fast) var(--ease-hover),
+    transform var(--dur-fast) var(--ease-hover);
   color: var(--ink-3);
+}
+.lang-btn:active {
+  transform: scale(0.98);
 }
 .lang-btn.active {
   color: var(--ink);
@@ -710,7 +725,11 @@ ul {
   border-radius: var(--r-2);
   transition:
     color var(--dur-fast) var(--ease-hover),
-    background-color var(--dur-fast) var(--ease-hover);
+    background-color var(--dur-fast) var(--ease-hover),
+    transform var(--dur-fast) var(--ease-hover);
+}
+.icon-btn:active {
+  transform: scale(0.98);
 }
 .icon-btn.theme {
   color: var(--ink-2);
@@ -725,9 +744,24 @@ ul {
 .nav-cta {
   display: none;
 }
+/* drawer: height animates via grid-rows (no-JS measurement, same trick as
+   the FAQ accordion); the inner layer fades/rises in once the row has
+   room, and each link/cta gets its own delay for the ~40ms stagger. */
 .nav-mobile {
-  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-rows: 0fr;
+  border-top: 1px solid transparent;
   background: var(--bg-nav);
+  transition:
+    grid-template-rows var(--dur-base) var(--ease-enter),
+    border-color var(--dur-base) var(--ease-enter);
+}
+.nav-mobile.open {
+  grid-template-rows: 1fr;
+  border-top-color: var(--line);
+}
+.nav-mobile-inner {
+  overflow: hidden;
   padding: var(--sp-2) var(--sp-5) var(--sp-4);
 }
 .nav-mobile-link {
@@ -738,6 +772,31 @@ ul {
   color: var(--ink-2);
   text-decoration: none;
   border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity var(--dur-fast) var(--ease-hover),
+    transform var(--dur-fast) var(--ease-hover);
+}
+.nav-mobile.open .nav-mobile-link {
+  opacity: 1;
+  transform: none;
+}
+.nav-mobile.open .nav-mobile-link:nth-child(1) {
+  transition-delay: 80ms;
+}
+.nav-mobile.open .nav-mobile-link:nth-child(2) {
+  transition-delay: 120ms;
+}
+.nav-mobile.open .nav-mobile-link:nth-child(3) {
+  transition-delay: 160ms;
+}
+.nav-mobile.open .nav-mobile-link:nth-child(4) {
+  transition-delay: 200ms;
+}
+.nav-mobile.open .nav-mobile-link:active {
+  transform: scale(0.98);
+  color: var(--gold);
 }
 .nav-mobile-cta {
   display: block;
@@ -751,6 +810,19 @@ ul {
   padding: 13px;
   border-radius: var(--r-2);
   text-decoration: none;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity var(--dur-fast) var(--ease-hover),
+    transform var(--dur-fast) var(--ease-hover);
+}
+.nav-mobile.open .nav-mobile-cta:active {
+  transform: scale(0.98);
+}
+.nav-mobile.open .nav-mobile-cta {
+  opacity: 1;
+  transform: none;
+  transition-delay: 240ms;
 }
 @media (min-width: 920px) {
   .nav-links {
@@ -1044,6 +1116,58 @@ html:not(.js) #splash {
 .hero-title em {
   font-style: normal;
   color: var(--gold);
+}
+/* mobile post-paint life: hero copy already paints fully visible (D19/2b),
+   so once the page has settled a thin gold underline sweeps in under the
+   two highlighted words with a brief glow, then stays drawn. Transform +
+   box-shadow only, nothing here touches opacity on the hero copy itself.
+   Desktop keeps the splash/reveal entrance and is untouched. */
+@media (max-width: 919px) {
+  .hero-title em {
+    position: relative;
+  }
+  .hero-title em::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: heroSweep 900ms var(--ease-enter) 700ms both;
+  }
+  [dir="rtl"] .hero-title em::after {
+    transform-origin: right;
+  }
+}
+@keyframes heroSweep {
+  0% {
+    transform: scaleX(0);
+    box-shadow: 0 0 0 transparent;
+  }
+  60% {
+    transform: scaleX(1);
+  }
+  75% {
+    box-shadow: 0 0 10px var(--gold-line);
+  }
+  100% {
+    transform: scaleX(1);
+    box-shadow: 0 0 0 transparent;
+  }
+}
+/* reduced-motion layer 2: the global `* {}` kill-switch (line ~345) does
+   not reach ::after generated content in this engine (verified: its
+   animation-duration is untouched by the media query on a pseudo-element),
+   so this one is killed explicitly rather than relying on it. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-title em::after {
+    animation: none;
+    transform: scaleX(1);
+    box-shadow: 0 0 0 transparent;
+  }
 }
 .hero-sub {
   color: var(--ink-2);
@@ -1413,11 +1537,16 @@ html:not(.js) #splash {
   overflow: hidden;
   transition:
     border-color var(--dur-base) var(--ease-hover),
-    box-shadow var(--dur-base) var(--ease-hover);
+    box-shadow var(--dur-base) var(--ease-hover),
+    transform var(--dur-fast) var(--ease-hover);
 }
 .scn-card:hover {
   border-color: var(--gold-line);
   box-shadow: var(--elev-2);
+}
+.scn-card:active {
+  transform: scale(0.98);
+  box-shadow: var(--elev-1);
 }
 .scn-idx {
   position: absolute;
@@ -1540,6 +1669,10 @@ html:not(.js) #splash {
   grid-template-columns: 1fr;
   gap: var(--sp-5);
   box-shadow: var(--elev-1);
+  transition: transform var(--dur-fast) var(--ease-hover);
+}
+.work-panel:active {
+  transform: scale(0.98);
 }
 .case-badge {
   display: inline-flex;
@@ -2579,7 +2712,15 @@ html:not(.js) #splash {
   color: var(--ink);
   text-align: start;
   border: none;
+  background: none;
   cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-hover),
+    transform var(--dur-fast) var(--ease-hover);
+}
+.qa-q:active {
+  background: var(--surface-2);
+  transform: scale(0.98);
 }
 .chev {
   flex: 0 0 26px;
@@ -2814,6 +2955,10 @@ html:not(.js) #splash {
   padding: 10px 16px;
   border-radius: var(--r-2);
   cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-hover);
+}
+.form-reset:active {
+  transform: scale(0.98);
 }
 /* failure — data is never cleared; retry + direct mailto */
 .form-err {
