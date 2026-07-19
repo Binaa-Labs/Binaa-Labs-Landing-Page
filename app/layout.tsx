@@ -6,6 +6,7 @@ import {
   JetBrains_Mono,
   Tajawal,
 } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -126,6 +127,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
         {children}
+        <Analytics />
       </body>
     </html>
   );

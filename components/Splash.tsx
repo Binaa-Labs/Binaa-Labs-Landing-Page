@@ -31,6 +31,13 @@ const SEEN_KEY = "binaa-splash-seen";
  *   gated at the site's 920px desktop breakpoint (`(max-width: 919px)`).
  *   Desktop choreography, session-once logic and the reduced-motion path
  *   are unchanged.
+ * - The HeroCanvas chunk (audit finding B5, likely "chunk 919") is gated
+ *   behind a separate `showCanvas` flag that only flips true in the same
+ *   mount effect that computes `gone`, for qualifying (desktop, motion-
+ *   allowed) sessions. `<HeroCanvas>` is absent from the JSX on the first
+ *   render (SSR and client hydration alike, so no mismatch), which means
+ *   `next/dynamic`'s import() for it is never triggered at all on mobile
+ *   or under reduced motion, not just unmounted after the fact.
  * - Skip button fades in at ~1s; ANY wheel / touchmove / scroll /
  *   pointerdown / keydown dismisses instantly. Dismissal = accelerated
  *   bloom (~350ms via .skipping), never a hard cut.
@@ -44,6 +51,10 @@ export default function Splash() {
   const finishRef = useRef<() => void>(() => {});
   const [gone, setGone] = useState(false);
   const [skipping, setSkipping] = useState(false);
+  // Gates the HeroCanvas dynamic import itself (see file-header note) — stays
+  // false through SSR and the first client render, so the chunk is only
+  // fetched once the mount effect below confirms a qualifying session.
+  const [showCanvas, setShowCanvas] = useState(false);
   // The CSS beats start at first paint; the canvas mounts at hydration.
   // Aim the cube's center-out birth at the end of beat 0 (~600ms after
   // paint) regardless of hydration lag.
@@ -77,6 +88,7 @@ export default function Splash() {
     } catch {
       /* ignore */
     }
+    setShowCanvas(true);
 
     let finished = false;
     let safety = 0;
@@ -122,7 +134,7 @@ export default function Splash() {
       <div className="spl-flare" aria-hidden="true" />
       <div className="spl-stage">
         <div className="spl-canvas" aria-hidden="true">
-          <HeroCanvas startDelayMs={canvasDelay} />
+          {showCanvas && <HeroCanvas startDelayMs={canvasDelay} />}
         </div>
         <div className="spl-lockup">
           <span className="spl-line">

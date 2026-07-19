@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-19 · Status: **Push-prep complete (`d888d75` pushed); owner preview review completed and approved on the `feat/site-redesign` preview; binding Lighthouse measurement done (mobile LCP 3.3s vs. 2.5s budget) → D19 disables the splash on mobile; next measurement (LCP 3.4s, `h1.hero-title`) traced to a second JS-gated hider → D19 rung 2b makes mobile hero copy paint from CSS alone; refinement pass 2 (D20, hero mock variation + FAQ fit question) landed; refinement pass 3 (D21, AR Guarantee cross-language accent line) landed**
+Last updated: 2026-07-19 · Status: **Push-prep complete (`d888d75` pushed); owner preview review completed and approved on the `feat/site-redesign` preview; binding Lighthouse measurement done (mobile LCP 3.3s vs. 2.5s budget) → D19 disables the splash on mobile; next measurement (LCP 3.4s, `h1.hero-title`) traced to a second JS-gated hider → D19 rung 2b makes mobile hero copy paint from CSS alone; refinement pass 2 (D20) and pass 3 (D21, AR Guarantee accent line) landed; final pre-merge pass (D22) adds Vercel Analytics and gates the splash's HeroCanvas chunk off mobile/reduced-motion, re-measure on the Vercel preview pending**
 
 ---
 
@@ -181,6 +181,8 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 | **D20** | *(2026-07-19, owner, refinement pass 2)* **Hero mock variation + FAQ fit question.** (a) The hero product frame swaps from a "Coach Dashboard" overview to a **Clients list view**: nav active tab moves to Clients, frame title is "Clients", header reads "Sorted by check-in", and the three tiles are relabeled "Total clients" / "Checked in" / "Plans updated" (owner correction: "Awaiting plan" read as a service backlog, not the dashboard's intended positive framing) while keeping the existing 128/96%/24 figures; the "Khalid M. · Onboarding · Plan due" row stays as pipeline detail at row level. `Hero.tsx`'s active-nav highlight is now driven by a new `frame.navActive` dictionary field instead of a hardcoded index. AR inherits the frame unchanged (`ar.hero.frame = en.hero.frame`, Latin/LTR by design). Render gate: EN/AR × dark/light × 1440/390 approved (`design/impl-review/hero-r2-*.png`, uncommitted). (b) **FAQ grows to 8 questions**: appended "Who do you work best with?" / AR mirror, scoping fit around established Gulf operators wanting one owned system, not a no-code patch or template site. (c) **Report-only finding, no change made:** the AR Guarantee's `arabicSubline` is the literal same Arabic string as the EN page's cross-language accent line, not an English mirror of it. On `/ar` it reads as the same Arabic sentence repeated back to back rather than a deliberate cross-language accent; left as is pending an owner call. **Resolved by D21 (refinement pass 3).** |
 | **D21** | *(2026-07-19, owner, refinement pass 3)* **AR Guarantee gets its own cross-language accent line.** D20(c)'s finding is resolved: `ar.ts`'s `guarantee.arabicSubline` no longer repeats the Arabic headline sentence, it now carries the English mirror "Approve before you pay." (matching the cross-language accent effect the EN page already gets from the Arabic subline). The value ends with a trailing U+200E (LRM) mark, added purely as data in `ar.ts` (no component/CSS change), because Chromium's bidi resolution otherwise floats the trailing period to the visual start of the run when a pure-LTR sentence sits inside the `.guarantee-ar` element's `direction: rtl` context, rendering it as ".Approve before you pay"; the LRM anchors the period after "pay" as intended. Verified EN untouched, AR renders correctly at dark/light × 1440/390 (`design/impl-review/guarantee-r3-*.png`, uncommitted). |
 
+| **D22** | *(2026-07-19, owner, final pre-merge pass)* **Vercel Analytics added; splash HeroCanvas chunk fetch gated off mobile/reduced-motion.** (a) `@vercel/analytics` (^2.0.1) added as a dependency (D5's remaining Analytics item) — `<Analytics />` mounted in `app/layout.tsx`, no server/route changes. (b) **Audit finding B5-high fixed:** `Splash.tsx` previously rendered `<HeroCanvas>` unconditionally from its first commit, so `next/dynamic`'s chunk fetch fired before the mount effect could gate it off for mobile/reduced-motion sessions (this chunk is the likely "919" culprit in the ~600ms mobile TBT audit finding). Fix: a new `showCanvas` state, default `false` (identical on SSR and the first client render, so no hydration mismatch), flips `true` only inside the same mount effect that already computes `gone`, and only for qualifying (desktop, motion-allowed, not-yet-seen) sessions — `<HeroCanvas>` is absent from the JSX until then, so the import is never triggered at all on mobile/reduced-motion. Desktop choreography unchanged (the existing `canvasDelay` calc already compensates for hydration-timed mounting). |
+
 *(New decisions get the next D-number with a one-line rationale.)*
 
 ---
@@ -248,7 +250,8 @@ on the preview after this lands.**
    (D16 dropped it).
 2. **Lead backend:** implement `/api/lead` (or swap the marked stub in
    `Contact.tsx`) — until then submissions land in the honest failure state
-   with the mailto fallback. **Vercel Analytics** (D5).
+   with the mailto fallback. **Vercel Analytics added** (D5 — `@vercel/analytics`,
+   `<Analytics />` mounted in `app/layout.tsx`).
 3. **Pre-merge measurement:** LCP/Lighthouse on the Vercel preview — binding
    mobile LCP measured at 3.3s vs. the 2.5s budget; **D19 applies rung 2 of
    the fallback ladder (splash disabled on mobile)**; re-measure after to
@@ -256,7 +259,13 @@ on the preview after this lands.**
    (checklist 13).
 4. **Parked (post-launch):** a mobile lite splash (~1.5-1.8s micro-intro:
    glow pulse + text rise + bloom), owner-gated; re-measure LCP after
-   building it (D19).
+   building it (D19). Also parked from the pre-launch code-quality audit
+   (2026-07-19, report-only, not implemented): **B5-medium** — defer
+   hydration of the below-fold `SelectedWork.tsx` case panels (idle-callback
+   or intersection-gated mount) to trim mobile TBT; **B5-low** — defer
+   `ClientEffects.tsx`'s `IntersectionObserver`/count-up `requestAnimationFrame`
+   setup off the hydration-critical tick (`requestIdleCallback` or confirm via
+   trace it's already effectively deferred).
 
 ### Launch checklist
 
@@ -265,8 +274,8 @@ on the preview after this lands.**
 - [x] Brand-link aria fix (`label-content-name-mismatch` on `.brand`)
 - [x] Contact section rebuilt with honest submitting/success/failure states
       (D5 — `/api/lead` handler still developer-owned)
-- [ ] Vercel Analytics added (D5)
-- [x] FAQ content finalized (D8 — 7 questions, doc §10 wording)
+- [x] Vercel Analytics added (D5 — `@vercel/analytics`, `<Analytics />` in `app/layout.tsx`)
+- [x] FAQ content finalized (D8 — 8 questions after D20(b), doc §10 wording)
 - [x] Nav subtext swap: "Software Studio" replaces "Software Solutions" (D9)
 - [x] Logo asset integration (D17): de-traced, background stripped, dual-color
       via `var(--logo)` (gold dark / navy light); favicon set + OG regenerated
@@ -289,9 +298,13 @@ on the preview after this lands.**
 - **Typed `Dict` parity is the i18n enforcement mechanism — never bypass it.**
   `ar.ts` is declared `ar: Dict`, so missing/extra keys fail typecheck. Don't
   weaken the type, don't add untyped copy paths.
-- **Hero highlight terms are hard-coded in `Hero.tsx`** (واتساب/إكسل vs
-  WhatsApp/Spreadsheet) — a standing violation of the everything-in-the-dictionary
-  convention. Fix during the redesign; don't repeat the pattern elsewhere.
+- **Hero highlight terms are dictionary-driven, not hard-coded.** `Hero.tsx`
+  reads `h.highlights` from the dictionary (both locales) and highlights
+  whichever terms match, instead of hard-coding واتساب/إكسل vs
+  WhatsApp/Spreadsheet. *(Corrected 2026-07-19: this note previously described
+  the fix as still outstanding; it had already landed and the note was
+  stale.)* Keep new copy the same way — never hard-code translatable terms
+  in a component.
 - **The `await headers()` SSR lang/dir mechanism must not break.**
   `middleware.ts` sets `x-binaa-lang`; the root layout awaits `headers()` to
   render `<html lang dir>` server-side. Any new Arabic route must be added to
