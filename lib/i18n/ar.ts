@@ -274,7 +274,7 @@ export const ar: Dict = {
   guarantee: {
     label: "ضماننا",
     headline: "تعتمد كل خطوة قبل أن تدفع مقابلها",
-    arabicSubline: "اعتمد قبل أن تدفع",
+    arabicSubline: "Approve before you pay.‎",
     body: "لن تدفع مقابل عمل لم تره. نريك عرضاً مرئياً لكل مرحلة، ولا نحصّل قيمتها إلا بعد اعتمادك.",
     secondary:
       "إذا لم يُرِك التحليل المجاني شيئاً يستحق البناء، تنسحب دون أي تكلفة.",
