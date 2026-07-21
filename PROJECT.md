@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-19 · Status: **Redesign live in production 2026-07-19** (`feat/site-redesign` merged to `main` at `49a76bb`; binding production Lighthouse: mobile 93 / LCP 2.6s (0.1s over the 2.5s §1.3 budget — tracked as a post-launch item, not a merge blocker) / desktop 99).
+Last updated: 2026-07-21 · Status: **Post-launch pass 1 live in production 2026-07-21** (`feat/post-launch-1` merged to `main` at `e8a4731`; binding production Lighthouse mobile: 83 / LCP 2.5s / TBT 550ms / CLS 0. TBT rose from the pre-merge baseline as the accepted trade for the mobile lite splash (D23); its recovery is the next post-launch pass, §5).
 
 ---
 
@@ -186,6 +186,8 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 
 | **D23** | *(2026-07-19, owner, post-launch)* **Mobile lite splash ships (D19 rung 3), superseding rung 2's "never mounts."** Post-launch item 4 built: below 920px, `Splash.tsx` now mounts a 2.0s-hard-cap trimmed sibling instead of skipping the splash entirely. Three beats, all reusing the desktop splash's own keyframes (`splBreathe`/`splMaskRise`/`splBloom`/`splCoverOut`/`splFadeOut`/`splRise`) retimed via `--spl-*` custom-property overrides scoped to `#splash.lite` (desktop's own token values are untouched): breathing gold glow (0-600ms, one pulse rather than the desktop's infinite loop) → masked text rise, "Binaa Labs" + بناء لابس only, no slogan (600-1400ms) → radial bloom reveal (1400-2000ms, lands exactly on the cap). No cube birth, no traveling nodes, no `HeroCanvas` chunk fetch (`showCanvas` never flips true on mobile — D22's gate holds). Same session-once key as desktop (`binaa-splash-seen`), same skip-on-any-input/bloom-`animationend`-unmount mechanism, same reduced-motion kill (never mounts either variant). Mobile hero still paints fully visible from CSS alone underneath the overlay (D19/2b unchanged), so LCP timing is unaffected by what's drawn on top of it. Verified via Playwright: computed `animation-delay`/`animation-duration` on `.spl-title`/`.spl-ar`/`.spl-bloom`/`.spl-cover`/`.spl-skip` match the token overrides exactly; `.spl-canvas`/`.spl-flare`/`.spl-slogan` are absent from the DOM; skip-on-scroll correctly applies the accelerated fade to `.spl-glow` too (a same-specificity tie with the shared `#splash.skipping` rule that needed an explicit `#splash.lite.skipping` override to resolve correctly). Fresh mobile Lighthouse pending on the pushed preview — numbers to follow before this merges to `main`. |
 
+| **D24** | *(2026-07-21, owner)* **`feat/post-launch-1` merged to `main` (`e8a4731`); TBT regression from D23 accepted as the lite-splash trade.** Post-merge binding production Lighthouse mobile: **83 / LCP 2.5s / TBT 550ms / CLS 0**, against the pre-merge baseline (mobile 93 / LCP 2.6s / desktop 99, `49a76bb`). LCP improved (the lite splash's 2.0s cap plus D19/2b's unchanged CSS-only hero-copy paint); TBT rose, attributed to the lite splash's own mount-effect script work running on mobile where nothing splash-related ran before (D19 rung 2 previously skipped the splash on mobile entirely). Owner accepts the trade rather than reverting the splash. **Post-launch work reprioritized:** `SelectedWork.tsx` hydration deferral (B5-medium) and `ClientEffects.tsx` idle deferral (B5-low) — both already-known, previously-lower-priority items — move to the top of §5's post-launch list as the TBT recovery pass, ahead of the font-preload micro-pass and the Wazen video asset pass. |
+
 *(New decisions get the next D-number with a one-line rationale.)*
 
 ---
@@ -203,6 +205,15 @@ repo via the asset pass — cleanup scope in D14.)*
 merged to `main` via merge commit `49a76bb`, deployed by Vercel's `main`
 auto-deploy to binaalabs.com. Binding production Lighthouse: mobile 93 /
 LCP 2.6s / desktop 99.**
+
+**Post-launch pass 1 live in production (2026-07-21)** — `feat/post-launch-1`
+merged to `main` via merge commit `e8a4731`: copy (analysis → audit),
+mobile motion pass (nav drawer, hero sweep, tap feedback), mobile lite
+splash (D23), mobile proof strip. Binding production Lighthouse mobile:
+**83 / LCP 2.5s / TBT 550ms / CLS 0.** LCP improved (2.6s → 2.5s); TBT
+regressed from the pre-merge baseline — the accepted trade for the lite
+splash's own script work on mobile (D23). CLS held at 0. TBT recovery is
+now the top post-launch item, below.
 
 > **Owner confirmation (2026-07-16):** Splash session-once behavior confirmed
 > by owner as built (survives refreshes within a session, replays on new
@@ -246,28 +257,29 @@ LCP 2.6s / desktop 99.**
 
 ### Post-launch work
 
-The redesign is live (`main` at `49a76bb`); nothing below is a merge blocker.
+The redesign is live (`main` at `49a76bb`, post-launch pass 1 at `e8a4731`);
+nothing below is a merge blocker.
 
-1. **Font-preload micro-pass** — trim remaining web-font load cost identified
-   post-launch.
-2. **`SelectedWork.tsx` hydration deferral** (audit finding B5-medium) — defer
+1. **TBT recovery (next pass, promoted after the D23 lite-splash trade):**
+   `SelectedWork.tsx` hydration deferral (audit finding B5-medium) — defer
    hydration of the below-fold case panels (idle-callback or
-   intersection-gated mount) to trim mobile TBT.
-3. **`ClientEffects.tsx` idle deferral** (audit finding B5-low) — defer the
-   `IntersectionObserver`/count-up `requestAnimationFrame` setup off the
-   hydration-critical tick (`requestIdleCallback`, or confirm via trace it's
-   already effectively deferred).
-4. ~~**Mobile lite splash**~~ — shipped (D23): 2.0s glow → text rise →
-   bloom. LCP re-measurement pending on the pushed preview.
-5. **Wazen video asset pass:** the 20–30s silent capture (seeded demo data
+   intersection-gated mount) — and `ClientEffects.tsx` idle deferral (audit
+   finding B5-low) — defer the `IntersectionObserver`/count-up
+   `requestAnimationFrame` setup off the hydration-critical tick
+   (`requestIdleCallback`, or confirm via trace it's already effectively
+   deferred). Target: claw back mobile TBT from the 550ms binding number
+   above without giving up the lite splash or its 2.5s LCP.
+2. **Font-preload micro-pass** — trim remaining web-font load cost identified
+   post-launch.
+3. **Wazen video asset pass:** the 20–30s silent capture (seeded demo data
    only) → `lib/work-video.ts`; real Almani frames (D7); logo SVG de-trace +
    dual-color variants (D14); real Wazen metric if the hero chip is revived
    (D16 dropped it).
-6. **Cube-to-mark morph** — owner-flagged follow-up polish idea for the
+4. **Cube-to-mark morph** — owner-flagged follow-up polish idea for the
    splash/logo transition, not yet scoped.
-7. **Slogan revisit** — owner-flagged follow-up on the splash/hero slogan
+5. **Slogan revisit** — owner-flagged follow-up on the splash/hero slogan
    copy, not yet scoped.
-8. **`/api/lead` (developer-owned):** implement the lead backend (or swap the
+6. **`/api/lead` (developer-owned):** implement the lead backend (or swap the
    marked stub in `Contact.tsx`) — until then submissions land in the honest
    failure state with the mailto fallback. Out of Claude scope per D5.
 
