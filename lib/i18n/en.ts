@@ -45,6 +45,9 @@ export const en = {
       "We move your operation fully online and automate the busywork. Custom-built, launched fast, yours to keep.",
     ctaPrimary: "Book Your Free Audit →",
     ctaSecondary: "See What We’ve Built",
+    // compact one-line mobile trust strip (<920px), shown under the CTAs
+    // before the full proof band; dedicated key, not a restyle of `proof`
+    mobileProof: "100% yours · Fixed price · AR + EN",
     proof: [
       { value: "100%", label: "Code and ownership stays yours" },
       { value: "AR + EN", label: "Bilingual, built for the Gulf" },

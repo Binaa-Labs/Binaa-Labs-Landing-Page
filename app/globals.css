@@ -1217,6 +1217,17 @@ html:not(.js) #splash {
   gap: var(--sp-3);
   margin-top: var(--sp-6);
 }
+/* mobile-only trust strip: compact single line under the CTAs, hidden on
+   desktop where the full proof band below already carries these signals.
+   No [data-reveal] on this element by design, so it is exempt from the
+   scroll-reveal system and paints with the rest of the hero copy. */
+.hero-mobile-proof {
+  margin-top: var(--sp-3);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
 /* stats fold-in: the slim proof band (replaces the Stats section) */
 .proof-band {
   display: grid;
@@ -1424,6 +1435,9 @@ html:not(.js) #splash {
     justify-content: start;
     gap: var(--sp-6);
     max-width: none;
+  }
+  .hero-mobile-proof {
+    display: none;
   }
 }
 

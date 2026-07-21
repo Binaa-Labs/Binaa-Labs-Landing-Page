@@ -47,6 +47,12 @@ export default function Hero() {
             </a>
           </div>
 
+          {/* mobile-only trust strip: no data-reveal, always visible at
+              first paint (part of the 3-second message, not the scroll
+              reveal system). Hidden ≥920px where the full proof band below
+              already carries these signals. */}
+          <p className="hero-mobile-proof">{h.mobileProof}</p>
+
           <div className="proof-band" data-reveal="" data-reveal-delay="240">
             {h.proof.map((p, i) => (
               <div className="proof" key={i}>
