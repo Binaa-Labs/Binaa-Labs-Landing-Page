@@ -18,7 +18,7 @@ export const en = {
       selectedWork: "Selected Work",
       howWeWork: "How We Work",
     },
-    cta: "Free Analysis",
+    cta: "Free Audit",
   },
   splash: {
     title: "Binaa Labs",
@@ -43,8 +43,11 @@ export const en = {
     highlights: ["WhatsApp Group", "Spreadsheet"],
     subtext:
       "We move your operation fully online and automate the busywork. Custom-built, launched fast, yours to keep.",
-    ctaPrimary: "Book Your Free Analysis →",
+    ctaPrimary: "Book Your Free Audit →",
     ctaSecondary: "See What We’ve Built",
+    // compact one-line mobile trust strip (<920px), shown under the CTAs
+    // before the full proof band; dedicated key, not a restyle of `proof`
+    mobileProof: "100% yours · Fixed price · AR + EN",
     proof: [
       { value: "100%", label: "Code and ownership stays yours" },
       { value: "AR + EN", label: "Bilingual, built for the Gulf" },
@@ -295,7 +298,7 @@ export const en = {
     steps: [
       {
         num: "01",
-        title: "Free analysis",
+        title: "Free audit",
         line: "We map your operation, show you a visual demo, and put one fixed price on the table.",
       },
       {
@@ -379,7 +382,7 @@ export const en = {
       freeLabel: "Free first step, no cost",
       freeText:
         "We map your system and show you a visual demo of your new setup, free, before you commit to anything.",
-      cta: "Book Your Free Analysis →",
+      cta: "Book Your Free Audit →",
     },
   },
   guarantee: {
@@ -388,7 +391,7 @@ export const en = {
     arabicSubline: "اعتمد قبل أن تدفع",
     body: "You never pay for work you have not seen. We show you a visual demo of every stage, and only bill that milestone once you approve it.",
     secondary:
-      "If the free analysis shows you nothing worth building, you walk away owing nothing.",
+      "If the free audit shows you nothing worth building, you walk away owing nothing.",
     terms: ["See it first", "Approve it", "Then we build"],
     signName: "Naser Shadid",
     signRole: "Founder & Product Lead",
@@ -441,7 +444,7 @@ export const en = {
       },
       {
         q: "What does the process actually look like?",
-        a: "Three steps: a free analysis with a visual demo, a build you watch through a working link, then launch with 12 months of support. You approve each stage before it is billed.",
+        a: "Three steps: a free audit with a visual demo, a build you watch through a working link, then launch with 12 months of support. You approve each stage before it is billed.",
       },
       {
         q: "How does the fixed price work?",
@@ -470,8 +473,8 @@ export const en = {
     ],
   },
   contact: {
-    label: "Free Analysis",
-    headline: "Get Your Free System Analysis",
+    label: "Free Audit",
+    headline: "Get Your Free System Audit",
     steps: [
       "Tell us how your business runs today.",
       "We map it and show you a visual demo.",
@@ -490,11 +493,11 @@ export const en = {
       project: "What are you building?",
       projectPlaceholder:
         "Tell us about your business and what you want to build or automate…",
-      cta: "Book My Free Analysis →",
+      cta: "Book My Free Audit →",
       submitting: "Sending…",
       sentTitle: "Request received",
       sentText:
-        "We’ll be in touch within 24 hours to set up your free analysis.",
+        "We’ll be in touch within 24 hours to set up your free audit.",
       sendAnother: "Send another →",
       failTitle: "Couldn’t send.",
       failText: "Nothing was lost; your message is still below.",
@@ -503,7 +506,7 @@ export const en = {
       errRequired: "Please fill in the required fields.",
       errEmail: "Please enter a valid email.",
       receiptCap: "What happens next",
-      receiptChips: ["24h response", "Free analysis", "No commitment"],
+      receiptChips: ["24h response", "Free audit", "No commitment"],
     },
   },
   footer: {

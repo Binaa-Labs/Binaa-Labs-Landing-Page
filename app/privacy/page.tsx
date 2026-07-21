@@ -51,7 +51,7 @@ export default function PrivacyEN() {
               When you fill in the contact form on our Site, you provide us with
               your name, email address, company name, phone number, and a
               description of your project. We use this solely to respond to your
-              enquiry and to provide the free system analysis you requested.
+              enquiry and to provide the free system audit you requested.
             </p>
 
             <h3>2.2 Information Collected Automatically</h3>
@@ -77,7 +77,7 @@ export default function PrivacyEN() {
             <h2>3. How We Use Your Information</h2>
             <p>We use the information we collect to:</p>
             <ul>
-              <li>Respond to your enquiries and deliver the free analysis you requested.</li>
+              <li>Respond to your enquiries and deliver the free audit you requested.</li>
               <li>Communicate with you about potential or ongoing projects.</li>
               <li>Improve the performance and content of the Site.</li>
               <li>Comply with applicable legal obligations.</li>

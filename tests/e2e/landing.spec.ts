@@ -174,7 +174,7 @@ test("splash never mounts under reduced motion", async ({
   await context.close();
 });
 
-test("splash never mounts on mobile viewports (D19, LCP rung 2)", async ({
+test("mobile shows the 2.0s lite splash on a fresh session, then reveals the hero (D19 rung 3)", async ({
   browser,
   baseURL,
 }) => {
@@ -183,13 +183,48 @@ test("splash never mounts on mobile viewports (D19, LCP rung 2)", async ({
     viewport: { width: 390, height: 844 },
   });
   const page = await context.newPage();
-  // fresh session — no seeding: even a first-ever visit must skip the splash
+  // fresh session — no seeding: even a first-ever visit gets the lite splash
   await page.goto("/");
 
-  // CSS layer hides it immediately; the matchMedia layer removes it
-  await expect(page.locator("#splash")).toBeHidden();
-  await expect(page.locator("#splash")).toHaveCount(0);
+  await expect(page.locator("#splash")).toBeVisible();
+  await expect(page.locator("#splash")).toHaveClass(/lite/);
+  // trimmed sibling: no cube canvas, no flare, no slogan line
+  await expect(page.locator("#splash .spl-canvas")).toHaveCount(0);
+  await expect(page.locator("#splash .spl-flare")).toHaveCount(0);
+  await expect(page.locator("#splash .spl-slogan")).toHaveCount(0);
+
+  // the hero is already painted underneath (D19/2b) even while the lite
+  // splash overlays it, so LCP is unaffected by what's drawn on top
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCSS(
+    "opacity",
+    "1"
+  );
+
+  // hard cap: gone within 2.2s with no input needed
+  await expect(page.locator("#splash")).toHaveCount(0, { timeout: 2200 });
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+
+  // session-once, same shared key as desktop: a reload doesn't replay it
+  await page.reload();
+  await expect(page.locator("#splash")).toHaveCount(0);
+
+  await context.close();
+});
+
+test("mobile lite splash skips instantly on any input", async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+  await page.goto("/");
+  await expect(page.locator("#splash")).toBeVisible();
+
+  await page.mouse.wheel(0, 120);
+  await expect(page.locator("#splash")).toHaveCount(0);
 
   await context.close();
 });
@@ -217,6 +252,71 @@ test("hero copy paints without waiting on hydration on mobile (D19, LCP rung 2b)
   await expect(page.locator(".hero-sub")).toHaveCSS("opacity", "1");
   await expect(page.locator(".hero-ctas")).toHaveCSS("opacity", "1");
   await expect(page.locator(".proof-band")).toHaveCSS("opacity", "1");
+
+  await context.close();
+});
+
+test("below-fold sections still reveal on scroll on mobile (D19/2b is hero-copy only)", async ({
+  browser,
+  baseURL,
+}) => {
+  // D19/2b turns off the JS-gated fade-in for .hero-copy [data-reveal] only
+  // (mobile LCP fix). Guard that the exclusion never widens to swallow the
+  // rest of the page's scroll reveals.
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+  await seedSplashSeen(page);
+  await page.goto("/");
+
+  const target = page.locator("#gap [data-reveal]").first();
+  await expect(target).toHaveCSS("opacity", "0");
+
+  await target.scrollIntoViewIfNeeded();
+  await expect(target).toHaveAttribute("data-revealed", "");
+  await expect(target).toHaveCSS("opacity", "1");
+
+  await context.close();
+});
+
+test("mobile nav drawer animates open, stays closed to keyboard and tap when collapsed", async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+  await seedSplashSeen(page);
+  await page.goto("/");
+
+  const burger = page.getByRole("button", { name: "Toggle menu" });
+  const firstLink = page.locator(".nav-mobile-link").first();
+
+  // collapsed: present in the DOM (for the CSS height animation) but not
+  // reachable by keyboard, and hidden from assistive tech
+  await expect(page.locator(".nav-mobile")).toHaveAttribute(
+    "aria-hidden",
+    "true"
+  );
+  await expect(firstLink).toHaveAttribute("tabindex", "-1");
+
+  await burger.click();
+
+  await expect(page.locator(".nav-mobile")).toHaveClass(/open/);
+  await expect(page.locator(".nav-mobile")).toHaveAttribute(
+    "aria-hidden",
+    "false"
+  );
+  await expect(firstLink).not.toHaveAttribute("tabindex", "-1");
+  await expect(firstLink).toHaveCSS("opacity", "1");
+
+  await burger.click();
+  await expect(page.locator(".nav-mobile")).not.toHaveClass(/open/);
+  await expect(firstLink).toHaveAttribute("tabindex", "-1");
 
   await context.close();
 });

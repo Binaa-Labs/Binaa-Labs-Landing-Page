@@ -167,13 +167,17 @@ export default function Nav() {
         </div>
       </nav>
 
-      {menuOpen && (
-        <div className="nav-mobile">
+      <div
+        className={"nav-mobile" + (menuOpen ? " open" : "")}
+        aria-hidden={!menuOpen}
+      >
+        <div className="nav-mobile-inner">
           {links.map((l) => (
             <a
               key={l.id}
               href={l.href}
               className="nav-mobile-link"
+              tabIndex={menuOpen ? undefined : -1}
               onClick={() => setMenuOpen(false)}
             >
               {l.label}
@@ -182,12 +186,13 @@ export default function Nav() {
           <a
             href="#contact"
             className="nav-mobile-cta"
+            tabIndex={menuOpen ? undefined : -1}
             onClick={() => setMenuOpen(false)}
           >
             {t.nav.cta}
           </a>
         </div>
-      )}
+      </div>
     </header>
   );
 }
