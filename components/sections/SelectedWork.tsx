@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSite } from "@/components/Providers";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import CaseVideo from "@/components/sections/CaseVideo";
@@ -18,8 +18,41 @@ export default function SelectedWork() {
   const wf = sw.wazenFrame;
   const af = sw.almaniFrame;
 
+  // B5-medium (TBT recovery, PROJECT.md D25): the dense schematic mock
+  // interiors (kpis/chart/table for Wazen, filters/parts-grid/table for
+  // Almani — dozens of mapped elements per panel, all decorative and
+  // non-interactive) are deferred off the initial hydration pass. Panel
+  // copy (heading/description/link) above is untouched and stays
+  // server-rendered. `.ui`'s existing `min-height: 300px` (globals.css)
+  // already reserves the placeholder's footprint; the 200px rootMargin
+  // (matching CaseVideo's own lazy-mount in this same section) mounts the
+  // real interior while it's still off-screen, so any residual reflow at
+  // narrow/edge viewport widths resolves before the panel is visible.
+  const sectionRef = useRef<HTMLElement>(null);
+  const [showSchematics, setShowSchematics] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    if (!("IntersectionObserver" in window)) {
+      setShowSchematics(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShowSchematics(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "200px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <section id="work" className="section bg-2 bt">
+    <section id="work" className="section bg-2 bt" ref={sectionRef}>
       <div className="wrap">
         <SectionLabel>{sw.label}</SectionLabel>
         <h2 className="section-title" data-reveal="" data-reveal-delay="60">
@@ -80,70 +113,78 @@ export default function SelectedWork() {
                     <span className="frame-url">{wf.url}</span>
                   </div>
                   {/* poster = the dense coach-dashboard schematic; the real
-                      capture replaces it via lib/work-video.ts at asset pass */}
-                  <div className="ui">
-                    <div className="ui-side">
-                      <span className="ui-brand">{wf.brand}</span>
-                      {wf.nav.map((n, i) => (
-                        <span
-                          key={i}
-                          className={"ui-nav" + (i === 0 ? " on" : "")}
-                        >
-                          {n}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="ui-main">
-                      <div className="ui-head">
-                        <span className="ui-h1">{wf.title}</span>
-                        <span className="ui-sub">{wf.period}</span>
-                      </div>
-                      <div className="kpis">
-                        {wf.kpis.map((k, i) => (
-                          <div className="kpi" key={i}>
-                            <b>{k.value}</b>
-                            <span>{k.label}</span>
-                          </div>
+                      capture replaces it via lib/work-video.ts at asset pass.
+                      Interior mounts lazily (see showSchematics above) — the
+                      "ui" class's own min-height reserves its space either way. */}
+                  {showSchematics ? (
+                    <div className="ui">
+                      <div className="ui-side">
+                        <span className="ui-brand">{wf.brand}</span>
+                        {wf.nav.map((n, i) => (
+                          <span
+                            key={i}
+                            className={"ui-nav" + (i === 0 ? " on" : "")}
+                          >
+                            {n}
+                          </span>
                         ))}
                       </div>
-                      <div className="chart">
-                        <div className="chart-cap">
-                          <span>{wf.chartCap}</span>
-                          <span>{wf.chartVal}</span>
+                      <div className="ui-main">
+                        <div className="ui-head">
+                          <span className="ui-h1">{wf.title}</span>
+                          <span className="ui-sub">{wf.period}</span>
                         </div>
-                        <div className="bars">
-                          {wf.chartBars.map((hgt, i) => (
-                            <i
-                              key={i}
-                              className={hgt >= 96 ? "hi" : undefined}
-                              style={{ height: `${hgt}%` }}
-                            />
+                        <div className="kpis">
+                          {wf.kpis.map((k, i) => (
+                            <div className="kpi" key={i}>
+                              <b>{k.value}</b>
+                              <span>{k.label}</span>
+                            </div>
                           ))}
                         </div>
-                        <div className="axis">
-                          {wf.chartAxis.map((a, i) => (
-                            <span key={i}>{a}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="tbl">
-                        <div className="tr th">
-                          {wf.tableHead.map((th, i) => (
-                            <span key={i}>{th}</span>
-                          ))}
-                        </div>
-                        {wf.tableRows.map((r, i) => (
-                          <div className="tr" key={i}>
-                            <span>{r.a}</span>
-                            <span>{r.b}</span>
-                            <span className={"pill" + (r.muted ? " mut" : "")}>
-                              {r.status}
-                            </span>
+                        <div className="chart">
+                          <div className="chart-cap">
+                            <span>{wf.chartCap}</span>
+                            <span>{wf.chartVal}</span>
                           </div>
-                        ))}
+                          <div className="bars">
+                            {wf.chartBars.map((hgt, i) => (
+                              <i
+                                key={i}
+                                className={hgt >= 96 ? "hi" : undefined}
+                                style={{ height: `${hgt}%` }}
+                              />
+                            ))}
+                          </div>
+                          <div className="axis">
+                            {wf.chartAxis.map((a, i) => (
+                              <span key={i}>{a}</span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="tbl">
+                          <div className="tr th">
+                            {wf.tableHead.map((th, i) => (
+                              <span key={i}>{th}</span>
+                            ))}
+                          </div>
+                          {wf.tableRows.map((r, i) => (
+                            <div className="tr" key={i}>
+                              <span>{r.a}</span>
+                              <span>{r.b}</span>
+                              <span
+                                className={"pill" + (r.muted ? " mut" : "")}
+                              >
+                                {r.status}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="ui" />
+                  )}
                 </div>
               </CaseVideo>
               {WAZEN_LOOP_SRC && (
@@ -202,64 +243,70 @@ export default function SelectedWork() {
                   <span className="dot" />
                   <span className="frame-url">{af.url}</span>
                 </div>
-                <div className="ui">
-                  <div className="ui-side">
-                    <span className="ui-brand">{af.brand}</span>
-                    {af.nav.map((n, i) => (
-                      <span
-                        key={i}
-                        className={"ui-nav" + (i === 0 ? " on" : "")}
-                      >
-                        {n}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="ui-main">
-                    <div className="ui-head">
-                      <span className="ui-h1">{af.title}</span>
-                      <span className="ui-sub">{af.period}</span>
-                    </div>
-                    <div className="filters">
-                      {af.filters.map((f, i) => (
-                        <span key={i} className={f.on ? "on" : undefined}>
-                          {f.label}
+                {showSchematics ? (
+                  <div className="ui">
+                    <div className="ui-side">
+                      <span className="ui-brand">{af.brand}</span>
+                      {af.nav.map((n, i) => (
+                        <span
+                          key={i}
+                          className={"ui-nav" + (i === 0 ? " on" : "")}
+                        >
+                          {n}
                         </span>
                       ))}
                     </div>
-                    <div className="cat-grid">
-                      {af.parts.map((p, i) => (
-                        <div className="part" key={i}>
-                          <div className="part-img">
-                            <PartGlyph i={i} />
-                          </div>
-                          <span className="part-name">{p.name}</span>
-                          <div className="part-foot">
-                            <span className="part-price">{p.price}</span>
-                            <span className={"pill" + (p.muted ? " mut" : "")}>
-                              {p.pill}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="tbl">
-                      <div className="tr th">
-                        {af.tableHead.map((th, i) => (
-                          <span key={i}>{th}</span>
+                    <div className="ui-main">
+                      <div className="ui-head">
+                        <span className="ui-h1">{af.title}</span>
+                        <span className="ui-sub">{af.period}</span>
+                      </div>
+                      <div className="filters">
+                        {af.filters.map((f, i) => (
+                          <span key={i} className={f.on ? "on" : undefined}>
+                            {f.label}
+                          </span>
                         ))}
                       </div>
-                      {af.tableRows.map((r, i) => (
-                        <div className="tr" key={i}>
-                          <span>{r.a}</span>
-                          <span>{r.b}</span>
-                          <span className={"pill" + (r.muted ? " mut" : "")}>
-                            {r.status}
-                          </span>
+                      <div className="cat-grid">
+                        {af.parts.map((p, i) => (
+                          <div className="part" key={i}>
+                            <div className="part-img">
+                              <PartGlyph i={i} />
+                            </div>
+                            <span className="part-name">{p.name}</span>
+                            <div className="part-foot">
+                              <span className="part-price">{p.price}</span>
+                              <span
+                                className={"pill" + (p.muted ? " mut" : "")}
+                              >
+                                {p.pill}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="tbl">
+                        <div className="tr th">
+                          {af.tableHead.map((th, i) => (
+                            <span key={i}>{th}</span>
+                          ))}
                         </div>
-                      ))}
+                        {af.tableRows.map((r, i) => (
+                          <div className="tr" key={i}>
+                            <span>{r.a}</span>
+                            <span>{r.b}</span>
+                            <span className={"pill" + (r.muted ? " mut" : "")}>
+                              {r.status}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="ui" />
+                )}
               </div>
               <span className="panel-caption">{al.caption}</span>
             </div>
