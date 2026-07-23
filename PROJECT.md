@@ -6,7 +6,7 @@
 > repo conventions live in `CLAUDE.md`. Every pass updates this file in the same
 > commit — if a decision isn't written here, it didn't happen.
 
-Last updated: 2026-07-21 · Status: **Post-launch pass 1 live in production 2026-07-21** (`feat/post-launch-1` merged to `main` at `e8a4731`; binding production Lighthouse mobile: 83 / LCP 2.5s / TBT 550ms / CLS 0. TBT rose from the pre-merge baseline as the accepted trade for the mobile lite splash (D23)). **Post-launch pass 2 (TBT recovery) built on `feat/post-launch-2`, not yet merged** (D25): `SelectedWork.tsx` and `ClientEffects.tsx` hydration deferral landed; `npm run check` clean, Playwright 27/28 passed (1 pre-existing skip), manual CLS 0 across EN/AR × mobile/desktop. Pending: owner's mobile Lighthouse run on the pushed preview before merge.
+Last updated: 2026-07-23 · Status: **Post-launch pass 2 (TBT recovery) live in production 2026-07-23** (`feat/post-launch-2` merged to `main` at `c75b552`; binding production Lighthouse mobile: **98 / LCP 2.4s / TBT 40ms / CLS 0** (desktop unchanged), against the D24 pre-pass baseline (mobile 83 / LCP 2.5s / TBT 550ms / CLS 0). D25's intersection-gated hydration deferral recovered essentially all of the D23 lite-splash TBT trade while keeping the splash and its 2.5s-class LCP. Post-launch work remaining is now all optional/low-value or blocked on external inputs, §5.
 
 ---
 
@@ -188,7 +188,7 @@ Off-token stragglers found in the audit: OG card colors (`#2C2611` gradient,
 
 | **D24** | *(2026-07-21, owner)* **`feat/post-launch-1` merged to `main` (`e8a4731`); TBT regression from D23 accepted as the lite-splash trade.** Post-merge binding production Lighthouse mobile: **83 / LCP 2.5s / TBT 550ms / CLS 0**, against the pre-merge baseline (mobile 93 / LCP 2.6s / desktop 99, `49a76bb`). LCP improved (the lite splash's 2.0s cap plus D19/2b's unchanged CSS-only hero-copy paint); TBT rose, attributed to the lite splash's own mount-effect script work running on mobile where nothing splash-related ran before (D19 rung 2 previously skipped the splash on mobile entirely). Owner accepts the trade rather than reverting the splash. **Post-launch work reprioritized:** `SelectedWork.tsx` hydration deferral (B5-medium) and `ClientEffects.tsx` idle deferral (B5-low) — both already-known, previously-lower-priority items — move to the top of §5's post-launch list as the TBT recovery pass, ahead of the font-preload micro-pass and the Wazen video asset pass.
 
-| **D25** | *(2026-07-21, owner, TBT recovery pass, `feat/post-launch-2`)* **B5-medium/B5-low deferral approach: intersection-gated for both, not idle-callback.** (a) **`SelectedWork.tsx` (B5-medium):** the dense schematic mock interiors (Wazen's kpis/chart/table, Almani's filters/parts-grid/table — dozens of mapped, non-interactive elements per panel) no longer render on the initial hydration pass; a single `IntersectionObserver` on the `#work` section (200px rootMargin, matching `CaseVideo.tsx`'s existing lazy-video-mount in this same section) flips a `showSchematics` state that swaps a bare placeholder `<div className="ui" />` for the real interior. Panel headings, descriptions, meta rows and links (Almani's real link included) are untouched, still server-rendered, still hydrate immediately. **Intersection-gated chosen over idle-callback** for two reasons: it matches the codebase's own precedent one component away, and because Lighthouse's mobile trace never scrolls, the deferred work falls entirely outside the FCP-TTI window it measures (an idle-callback fallback would still likely fire inside that window). **CLS:** `.ui`'s existing `min-height: 300px` (`globals.css`) is the reservation; measurement (Playwright, viewport widths 320-1920px) found it holds exactly except two narrow bands (mobile <420px and a ~920px layout-breakpoint sliver) where Wazen's interior needs up to ~332px. Rather than hand-tune per-width CSS for a continuous function, the 200px rootMargin is relied on as the actual CLS guard: the swap completes while the panel is still off-screen, and CLS by spec only counts shifts to elements already painted in the viewport. Verified via a `PerformanceObserver`-based scroll-through script (not committed) across EN/AR × mobile/desktop: **CLS 0 in all four, 53/53 `[data-reveal]` elements fire, both panels' schematics mount on scroll approach.** (b) **`ClientEffects.tsx` (B5-low), reasoning confirmed yes it competes:** its `useEffect` body (document-wide `querySelectorAll`, an `IntersectionObserver` over every `[data-reveal]` on the page, magnetic-button listeners) previously ran as part of the same passive-effects flush React schedules immediately after the initial hydration commit, landing inside the FCP-TTI window TBT is measured over. Fix: the effect now only schedules that setup via `requestIdleCallback` (`setTimeout` fallback for Safari), with a bounded 150ms timeout, chosen to stay well under the hero's `--dur-slow` (600ms) entrance so the desktop hero reveal (still IO-dependent per D19/2b; mobile hero is CSS-only and unaffected) is not perceptibly delayed even under sustained load. Cleanup correctly cancels a pending idle callback/timeout on unmount before it fires. **Verification:** `npm run check` clean; Playwright 27/28 passed (the 1 failure on first run, `intro splash plays once per session`, reproduced as a dev-server cold-start flake unrelated to either changed file — isolated re-run and a full clean re-run both passed; 1 test is an expected mobile-viewport skip); manual scroll-through (script above) confirmed count-ups complete, all reveals fire, screenshots of `#work` at 1440/390 after scroll-settle are pixel-identical to production. No CSS changes were needed for either fix. |
+| **D25** | *(2026-07-21, owner, TBT recovery pass, `feat/post-launch-2`)* **B5-medium/B5-low deferral approach: intersection-gated for both, not idle-callback.** (a) **`SelectedWork.tsx` (B5-medium):** the dense schematic mock interiors (Wazen's kpis/chart/table, Almani's filters/parts-grid/table — dozens of mapped, non-interactive elements per panel) no longer render on the initial hydration pass; a single `IntersectionObserver` on the `#work` section (200px rootMargin, matching `CaseVideo.tsx`'s existing lazy-video-mount in this same section) flips a `showSchematics` state that swaps a bare placeholder `<div className="ui" />` for the real interior. Panel headings, descriptions, meta rows and links (Almani's real link included) are untouched, still server-rendered, still hydrate immediately. **Intersection-gated chosen over idle-callback** for two reasons: it matches the codebase's own precedent one component away, and because Lighthouse's mobile trace never scrolls, the deferred work falls entirely outside the FCP-TTI window it measures (an idle-callback fallback would still likely fire inside that window). **CLS:** `.ui`'s existing `min-height: 300px` (`globals.css`) is the reservation; measurement (Playwright, viewport widths 320-1920px) found it holds exactly except two narrow bands (mobile <420px and a ~920px layout-breakpoint sliver) where Wazen's interior needs up to ~332px. Rather than hand-tune per-width CSS for a continuous function, the 200px rootMargin is relied on as the actual CLS guard: the swap completes while the panel is still off-screen, and CLS by spec only counts shifts to elements already painted in the viewport. Verified via a `PerformanceObserver`-based scroll-through script (not committed) across EN/AR × mobile/desktop: **CLS 0 in all four, 53/53 `[data-reveal]` elements fire, both panels' schematics mount on scroll approach.** (b) **`ClientEffects.tsx` (B5-low), reasoning confirmed yes it competes:** its `useEffect` body (document-wide `querySelectorAll`, an `IntersectionObserver` over every `[data-reveal]` on the page, magnetic-button listeners) previously ran as part of the same passive-effects flush React schedules immediately after the initial hydration commit, landing inside the FCP-TTI window TBT is measured over. Fix: the effect now only schedules that setup via `requestIdleCallback` (`setTimeout` fallback for Safari), with a bounded 150ms timeout, chosen to stay well under the hero's `--dur-slow` (600ms) entrance so the desktop hero reveal (still IO-dependent per D19/2b; mobile hero is CSS-only and unaffected) is not perceptibly delayed even under sustained load. Cleanup correctly cancels a pending idle callback/timeout on unmount before it fires. **Verification:** `npm run check` clean; Playwright 27/28 passed (the 1 failure on first run, `intro splash plays once per session`, reproduced as a dev-server cold-start flake unrelated to either changed file — isolated re-run and a full clean re-run both passed; 1 test is an expected mobile-viewport skip); manual scroll-through (script above) confirmed count-ups complete, all reveals fire, screenshots of `#work` at 1440/390 after scroll-settle are pixel-identical to production. No CSS changes were needed for either fix. *(Amended 2026-07-23, owner:)* **Merged to `main` at `c75b552`.** Owner's mobile Lighthouse run on the pushed preview came back **98 / LCP 2.4s / TBT 40ms / CLS 0** (desktop unchanged) against the D24 baseline (83 / LCP 2.5s / TBT 550ms / CLS 0) — TBT recovered from 550ms to 40ms, essentially the full D23 lite-splash trade clawed back, with the splash and its LCP gain both kept. |
 
 *(New decisions get the next D-number with a one-line rationale.)*
 
@@ -214,8 +214,17 @@ mobile motion pass (nav drawer, hero sweep, tap feedback), mobile lite
 splash (D23), mobile proof strip. Binding production Lighthouse mobile:
 **83 / LCP 2.5s / TBT 550ms / CLS 0.** LCP improved (2.6s → 2.5s); TBT
 regressed from the pre-merge baseline — the accepted trade for the lite
-splash's own script work on mobile (D23). CLS held at 0. TBT recovery is
-now the top post-launch item, below.
+splash's own script work on mobile (D23). CLS held at 0.
+
+**Post-launch pass 2 live in production (2026-07-23)** — `feat/post-launch-2`
+merged to `main` via merge commit `c75b552`: `SelectedWork.tsx` and
+`ClientEffects.tsx` below-fold hydration deferral, the TBT recovery pass
+(D25). Binding production Lighthouse mobile: **98 / LCP 2.4s / TBT 40ms /
+CLS 0** (desktop unchanged). TBT recovered from 550ms to 40ms; LCP also
+improved slightly (2.5s → 2.4s). The lite splash (D23) and its script work
+are untouched, so this is a net win with no trade this time. Remaining
+post-launch work (§ below) is now all optional/low-value or blocked on an
+external input.
 
 > **Owner confirmation (2026-07-16):** Splash session-once behavior confirmed
 > by owner as built (survives refreshes within a session, replays on new
@@ -259,28 +268,25 @@ now the top post-launch item, below.
 
 ### Post-launch work
 
-The redesign is live (`main` at `49a76bb`, post-launch pass 1 at `e8a4731`);
-nothing below is a merge blocker.
+The redesign is live (`main` at `49a76bb`, post-launch pass 1 at `e8a4731`,
+post-launch pass 2 / TBT recovery at `c75b552`); nothing below is a merge
+blocker. TBT recovery (D25, ex-item 1) shipped and is closed out; production
+mobile Lighthouse now reads 98 / LCP 2.4s / TBT 40ms / CLS 0 (§ status line).
+Everything remaining is optional/low-value at that score or blocked on an
+input the owner or another developer supplies.
 
-1. **TBT recovery (D25) — built on `feat/post-launch-2`, awaiting the owner's
-   mobile Lighthouse run before merge:** `SelectedWork.tsx` hydration
-   deferral (audit finding B5-medium) and `ClientEffects.tsx` idle deferral
-   (audit finding B5-low) both landed, intersection-gated (D25 has the full
-   reasoning and verification). Target was clawing back mobile TBT from the
-   550ms D24 binding number without giving up the lite splash or its 2.5s
-   LCP; the binding Lighthouse number itself is still pending (next step:
-   push, then owner runs mobile Lighthouse on the preview).
-2. **Font-preload micro-pass** — trim remaining web-font load cost identified
-   post-launch.
-3. **Wazen video asset pass:** the 20–30s silent capture (seeded demo data
+1. **Font-preload micro-pass** — trim remaining web-font load cost identified
+   post-launch. Optional: low marginal value now that mobile Performance is
+   98.
+2. **Wazen video asset pass:** the 20–30s silent capture (seeded demo data
    only) → `lib/work-video.ts`; real Almani frames (D7); logo SVG de-trace +
    dual-color variants (D14); real Wazen metric if the hero chip is revived
-   (D16 dropped it).
-4. **Cube-to-mark morph** — owner-flagged follow-up polish idea for the
+   (D16 dropped it). Waiting on the asset from the owner.
+3. **Cube-to-mark morph** — owner-flagged follow-up polish idea for the
    splash/logo transition, not yet scoped.
-5. **Slogan revisit** — owner-flagged follow-up on the splash/hero slogan
+4. **Slogan revisit** — owner-flagged follow-up on the splash/hero slogan
    copy, not yet scoped.
-6. **`/api/lead` (developer-owned):** implement the lead backend (or swap the
+5. **`/api/lead` (developer-owned):** implement the lead backend (or swap the
    marked stub in `Contact.tsx`) — until then submissions land in the honest
    failure state with the mailto fallback. Out of Claude scope per D5.
 
